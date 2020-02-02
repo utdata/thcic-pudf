@@ -1,0 +1,98 @@
+---
+title: "Cesarean delivery rates"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+> If we look by PUBLIC_HEALTH_REGION then we'll need to clean up that data. there are NA's.
+
+Working out Cesarean delivery rates by hospital (and later quarter)
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+library(janitor)
+```
+
+## Import the deliveries file
+
+```{r}
+deliveries <- read_rds("data-processed/ahrq_del_ucmp.rds")
+
+deliveries_cnt <- deliveries %>% nrow()
+paste("Total uncomplicated deliveries:", deliveries_cnt)
+```
+
+## Set up the Cesarean values
+
+These are from AHRQ Inpatient Quality Indicator 21 (IQI 21) Cesarean Delivery Rate, Uncomplicated
+
+Number of Cesarean deliveries among cases meeting the inclusion and exclusion rules for the denominator. Cesarean deliveries are identified by either:
+
+- MS-DRG codes for Cesarean delivery (PRCSE2G* ) or
+- any-listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP* ) and without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P* ).
+
+We can use the first version.
+
+```{r}
+csection <- deliveries %>% 
+  filter(
+    MS_DRG %in% c("765", "766")
+  )
+
+csection_cnt <- csection %>% nrow()
+paste("Total Cesarean deliveries:", csection_cnt)
+```
+
+
+## Total Cesarean rate
+
+```{r}
+csection_rate <- csection_cnt / deliveries_cnt 
+
+paste("Total Uncomplicated Cesarean rate:", csection_rate %>% round(2))
+```
+
+## Cesarean rate per hospital
+
+Get deliveries per hospital
+
+```{r}
+del_hosp <- deliveries %>% 
+  count(PROVIDER_NAME, PUBLIC_HEALTH_REGION) %>% 
+  rename(DCNT = n)
+
+del_hosp %>% head()
+```
+
+Get csection per hospital
+
+```{r}
+csec_hosp <- csection %>% 
+  count(PROVIDER_NAME, PUBLIC_HEALTH_REGION) %>% 
+  rename(CCNT = n)
+
+csec_hosp %>% head()
+```
+
+## Join the hospital results together
+
+
+```{r}
+inner_join(del_hosp, csec_hosp) %>% 
+  mutate(
+    CRATE = (CCNT / DCNT) * 100,
+    CRATE = round(CRATE, 2)
+  ) %>%
+  arrange(CRATE %>% desc()) %>% 
+  filter(DCNT >= 100)
+
+```
+
+## Complete
+
+```{r}
+beepr::beep(4)
+```
+

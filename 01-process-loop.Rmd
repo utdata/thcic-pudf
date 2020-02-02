@@ -1,0 +1,250 @@
+---
+title: "THCIC deliveries processing"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+The purpose of this notebook is to process multiple quarters of [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) into a single data file of deliveries without complications. This requires importing and applying several filtering options.
+
+We are using AHRQ's [Inpatient Quality Indicator 21 (IQI 21) Cesarean Delivery Rate, Uncomplicated](resources/IQI_21_Cesarean_Delivery_Rate_Uncomplicated.pdf) method, so in this notebook we'll be applying the "DENOMINATOR" rules to identify deliveries and filter out complications and missing/nonrelevant rows. One addition is to filter by women of normal child-bearing age: 15-49.
+
+The output is all uncomplicated deliveries, which we can then analyzed in future files.
+
+Of note, there is another notebook `01-process-test` that uses the same filtering criteria but prints examples at various stages for manual checking.
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(fs)
+library(tidyverse)
+```
+
+## Creating files lists
+
+I have a set of test data that grabs the first 10,000 rows from the first quarter of 2016-2018.
+
+```{r}
+# set up test data
+test_data_dir <- "data-test"
+test_tsv_files <- dir_ls(test_data_dir, recurse = TRUE, regexp = "test_base1")
+test_tsv_files
+```
+
+Production data
+
+```{r}
+# set up production data
+data_dir <- "data-raw"
+tsv_files <- dir_ls(data_dir, recurse = TRUE, regexp = "PUDF_base1_")
+
+# peek at the captured file list
+tsv_files
+```
+
+## Function to filter for deliveries
+
+For processing this data, I build functions to apply difference AHRG filtering to each file before binding them into a single tibble. In some cases the processing filters multiple columns for multiple conditions.
+
+The functions are set up first, then used later in the processing loop.
+
+### Filter to birth deliveries
+
+In this case, we are looking at all columns with "DIAG" in name for values in the `delivery_icd` list, which comes from "DELOCMD*" in our IQI 21 reference.
+
+
+```{r deliveries}
+# Discharges with an ICD-10-CM diagnosis code for birth delivery outcome (DELOCMD* ).
+delivery_icd <- c(
+  "Z370",
+  "Z371",
+  "Z372",
+  "Z373",
+  "Z374",
+  "Z3750",
+  "Z3751",
+  "Z3752",
+  "Z3753",
+  "Z3754",
+  "Z3759",
+  "Z3760",
+  "Z3761",
+  "Z3762",
+  "Z3763",
+  "Z3764",
+  "Z3769",
+  "Z377",
+  "Z379"
+)
+
+filter_del <- function(.data) {
+  .data %>%
+    filter_at(
+      vars(
+        matches("_DIAG"),
+        -starts_with("POA")
+      ),
+      any_vars(
+        . %in% delivery_icd
+      )
+    )
+}
+
+```
+
+## Exclusions from the deliveries
+
+The AHRG IQI 21 requires excluding some complicated delivery cases:
+
+- with any listed ICD-10-CM diagnosis codes for abnormal presentation, fetal death, or multiple gestation (Appendix A: PRCSECD) and
+- with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)
+
+### Get PRCSECD list
+
+We first need the list of PRCSECD codes from IQI_Appendix_A.pdf: "Abnormal presentation, fetal death and multiple gestation diagnosis codes: (PRCSECD)."
+
+The list of codes was extracted from the PDF and cleaned in OpenRefine to get full list. Details in the `procedures/iqi-appendex-a` folder.
+
+#### Import list of PRCSECD codes
+
+```{r}
+# read in the file
+prcsecd <- read_csv("procedures/iqi-appendex-a/IQI_Appendix_A.csv")
+
+# number of codes
+prcsecd %>% nrow()
+
+# turn it into a list
+prcsecd_list <- prcsecd %>% as_vector()
+```
+
+#### Filter out deliveries based on PRCSECD codes
+
+When we are looking for a negative, we have to consider "all_vars" instead of "any_vars".
+
+```{r prcsecd}
+
+filter_prcsecd <- function(.data) {
+  .data %>%
+    filter_at(
+      vars(
+        contains("_DIAG"),
+        -starts_with("POA")
+      ),
+      all_vars(
+        !(. %in% prcsecd_list)
+      )
+    )
+}
+```
+
+### Filter out blank cells per Appendix A
+
+Again, from AHRQ's IQI 21 definition:
+
+"with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)."
+
+In base1, the fields are `SEX_CODE`, `PAT_AGE`, `DISCHARGE` for both quarter and year, and `PRINC_DIAG_CODE`.
+
+```{r clean}
+
+filter_appendix_a <- function(.data) {
+  .data %>% 
+      filter(
+      SEX_CODE == "F",
+      PAT_AGE != "`",
+      RACE != "`",
+      !is.na(DISCHARGE),
+      !is.na(PRINC_DIAG_CODE)
+    )
+}
+
+```
+
+
+### Child-bearing age
+
+Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest filtering deliveries to women of normal child-bearing age, 15-49.
+
+The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs).
+
+This function filters for those values.
+
+```{r age}
+# list of child-bearing age codes
+age_list <- c(
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "23"
+)
+
+function_age <- function(.data) {
+
+  .data %>% 
+    filter(PAT_AGE %in% age_list)
+}
+```
+
+
+## Import and process
+
+This is the workhorse process to loop through the files and combine the data. It brings in each file and then applies the filtering functions.
+
+At this time, our analysis utilizes only one (PUDF_base1) of several files in the release for each quarter. The raw data is never changed.
+
+Of note:
+
+- There is a trailing tab on each row, which brings in an unnecssary column. This is removed with `col_skip()`, though you will see them as `problems()` in the import output. Those problems are resolved with the `col_skip()` function.
+- We set default type as chars because some cols will appear as logical because of the datatype sniffer with readr. We reset necessary cols as `as.numeric` where necessary.
+
+Import warnings are supressed. The show some import errors liked `Missing column names filled in: 'X167'` from extra tabs in raw file.
+
+```{r process, echo=T, results='hide', message=F, warning=F}
+# warnings supressed.
+
+# create the tibble
+data <- tibble()
+
+# set the files list
+# use test_tsv_files for testing
+files <- tsv_files
+
+for (file in files) {
+  c <- read_tsv(
+    file,
+    col_types = cols(
+      .default = col_character(),
+      X168 = col_skip(),
+      X167 = col_skip()
+    )
+  ) %>% 
+  mutate_at(
+    vars(contains("_CHARGES")), as.numeric
+  ) %>%
+  filter_del() %>% 
+  filter_prcsecd() %>% 
+  filter_appendix_a %>% 
+  function_age
+  data <- bind_rows(data, c)
+}
+
+data %>% nrow()
+```
+
+## Write file
+
+We write a single file of the uncomplicated deliveries.
+
+```{r write}
+data %>% write_rds("data-processed/ahrq_del_ucmp.rds")
+
+# A klaxon to indicate the processing is complete
+beepr::beep(4)
+
+```
+

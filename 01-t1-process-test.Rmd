@@ -1,0 +1,258 @@
+---
+title: "AHRQ Deliveries process testing"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+The purpose of this notebook is to process test data from multiple quarters of [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) into a single data file of deliveries without complications. This requires importing and applying several filtering options.
+
+The methods in this notebook are used in `01-process-loop` to process multiple years of data. This notebook cannot support that amount of data, but was used to check various steps in the filtering process for the main script.
+
+Please see the `01-process-loop` for more additional details.
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(fs)
+library(tidyverse)
+```
+
+## Set up import
+
+We search through the `data` folder to build a list files to import into this notebook. The test data was created using the first 10,000 rows from one quarter of three years, 2016-2018.
+
+```{r}
+# set up test data
+test_data_dir <- "data-test"
+test_tsv_files <- dir_ls(test_data_dir, recurse = TRUE, regexp = "test_base1")
+test_tsv_files
+```
+
+## Import the base1 files
+
+At this time, our analysis utilizes only one (PUDF_base1) of several files in the release for each quarter.
+
+Of note:
+
+- There is a trailing tab on each row, whic brings in an unnecssary column. This is removed with `col_skip()`. The `EMERGENCY_DEPT_FLAG` col was introduced in 2017, so we have to remove two differnet "last columns".
+- We set default type as chars because some cols will appear as logical. We reset necessary cols as numbers where necessary.
+
+```{r import, echo=T, results='hide', message=F, warning=F}
+# warnings are suppressed, so check problems()
+# add/remove test_ as necessary
+base1 <- test_tsv_files %>%
+  map_dfr(
+    read_tsv,
+    col_types = cols(
+      .default = col_character(),
+      X168 = col_skip(),
+      X167 = col_skip()
+    )
+  ) %>% 
+  mutate_at(
+    vars(contains("_CHARGES")), as.numeric
+  )
+
+
+# number of rows
+base1 %>% nrow()
+
+# klaxon for import complete
+# beepr::beep(3)
+
+## peek at columns and types
+# base1 %>% glimpse()
+```
+
+## Filtering for deliveries
+
+### Filtering muliple columns, multiple conditions
+
+The logic here looks through a number of columns for a number of ICD codes.
+
+In ths case, we are looking at all columns with "DIAG" in name for values in the `delivery_icd` list, which comes from "DELOCMD*" in our IQI 21 reference.
+
+First we'll test our logic to find the columns:
+
+```{r}
+base1 %>% 
+  select(
+    matches("_DIAG"),
+    -starts_with("POA")
+    ) %>% 
+  names()
+```
+
+
+```{r deliveries}
+# Discharges with an ICD-10-CM diagnosis code for birth delivery outcome (DELOCMD* ).
+delivery_icd <- c(
+  "Z370",
+  "Z371",
+  "Z372",
+  "Z373",
+  "Z374",
+  "Z3750",
+  "Z3751",
+  "Z3752",
+  "Z3753",
+  "Z3754",
+  "Z3759",
+  "Z3760",
+  "Z3761",
+  "Z3762",
+  "Z3763",
+  "Z3764",
+  "Z3769",
+  "Z377",
+  "Z379"
+)
+
+del <- base1 %>% 
+  filter_at(
+    vars(
+      matches("_DIAG"),
+      -starts_with("POA")
+    ),
+    any_vars(
+      . %in% delivery_icd
+    )
+  )
+
+del %>% nrow()
+```
+
+We peek here at the resulting frame to eyeball codes.
+
+```{r}
+del %>% 
+  select(
+    matches("_DIAG"),
+    -starts_with("POA")
+  ) %>% head(10)
+
+```
+
+## Exclusions from the deliveries
+
+From IQI 21 ... Exclude cases:
+
+- with any listed ICD-10-CM diagnosis codes for abnormal presentation, fetal death, or multiple gestation (Appendix A: PRCSECD) and
+- with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)
+
+### Get PRCSECD list
+
+We first need the list of PRCSECD codes from IQI_Appendix_A.pdf: "Abnormal presentation, fetal death and multiple gestation diagnosis codes: (PRCSECD)."
+
+The list of codes was extracted from the PDF and cleaned in OpenRefine to get full list. Details in `procedures/iqi-appendex-a` folder.
+
+### Import list of PRCSECD codes
+
+```{r}
+# read in the file
+prcsecd <- read_csv("procedures/iqi-appendex-a/IQI_Appendix_A.csv")
+
+# number of codes
+prcsecd %>% nrow()
+
+# turn it into a list
+prcsecd_list <- prcsecd %>% as_vector()
+```
+
+### Filter out deliveries based on PRCSECD codes
+
+When we are looking for a negative, we have to consider "all_vars" instead of "any_vars".
+
+```{r prcsecd}
+
+del_ucmp <- del %>% 
+  filter_at(
+    vars(
+      contains("_DIAG"),
+      -starts_with("POA")
+    ),
+    all_vars(
+      !(. %in% prcsecd_list)
+    )
+  )
+
+del_ucmp %>% nrow()
+```
+
+### Filter out blank cells per Appendix A
+
+"with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)."
+
+In base1, the fields are `SEX_CODE`, `PAT_AGE`, `DISCHARGE` for both quarter and year, and `PRINC_DIAG_CODE`.
+
+```{r clean}
+
+del_ucmp_cln <- del_ucmp %>% 
+  filter(
+    SEX_CODE == "F",
+    PAT_AGE != "`",
+    RACE != "`",
+    !is.na(DISCHARGE),
+    !is.na(PRINC_DIAG_CODE)
+  )
+
+del_ucmp_cln %>% nrow()
+```
+
+### Child-bearing age
+
+Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest to filter deliveries to women of normal child-bearing age.
+
+We'll look here how those ages break down in the cleaned file:
+
+```{r}
+del_ucmp_cln %>% 
+  count(PAT_AGE)
+```
+
+The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs).
+
+Here we will filter for those values.
+
+```{r age}
+# list of child-bearing age codes
+age_list <- c(
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "23"
+)
+del_ucmp_cln_age <- del_ucmp_cln %>% 
+  filter(PAT_AGE %in% age_list)
+
+del_ucmp_cln_age %>% nrow()
+```
+
+Peeking at records outside the child-bearing age list.
+
+```{r}
+# set up not in
+`%ni%` <- Negate(`%in%`)
+
+del_ucmp_cln %>% 
+  filter(PAT_AGE %ni% age_list) %>% 
+  select(PAT_AGE) %>% 
+  count(PAT_AGE)
+```
+
+
+## Write file
+
+```{r}
+del_ucmp_cln_age %>% nrow()
+del_ucmp_cln_age %>% write_rds("data-test/ahrq_del_ucmp_ttest.rds")
+
+beepr::beep(4)
+
+```
+
