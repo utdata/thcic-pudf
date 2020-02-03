@@ -6,16 +6,23 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
+Problems, potential problems and caveats
+
 > If we look by PUBLIC_HEALTH_REGION then we'll need to clean up that data. there are NA's.
+> PROVIDER_NAME may change over time. "CHRISTUS Southeast Texas - St Elizabeth" is an example.
 
 Working out Cesarean delivery rates by hospital (and later quarter)
 
 ```{r setup, echo=T, results='hide', message=F, warning=F}
 library(tidyverse)
 library(janitor)
+library(readxl)
 ```
 
-## Import the deliveries file
+## Import needed files
+
+- deliveries processed from 01-process-loop.
+- facilities from 1q2018 facilities file
 
 ```{r}
 deliveries <- read_rds("data-processed/ahrq_del_ucmp.rds")
@@ -33,62 +40,161 @@ Number of Cesarean deliveries among cases meeting the inclusion and exclusion ru
 - MS-DRG codes for Cesarean delivery (PRCSE2G* ) or
 - any-listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP* ) and without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P* ).
 
-We can use the first version.
+Here we create CBIRTH using the first method using MS-DRG.
 
 ```{r}
-csection <- deliveries %>% 
-  filter(
-    MS_DRG %in% c("765", "766")
-  )
-
-csection_cnt <- csection %>% nrow()
-paste("Total Cesarean deliveries:", csection_cnt)
-```
-
-
-## Total Cesarean rate
-
-```{r}
-csection_rate <- csection_cnt / deliveries_cnt 
-
-paste("Total Uncomplicated Cesarean rate:", csection_rate %>% round(2))
-```
-
-## Cesarean rate per hospital
-
-Get deliveries per hospital
-
-```{r}
-del_hosp <- deliveries %>% 
-  count(PROVIDER_NAME, PUBLIC_HEALTH_REGION) %>% 
-  rename(DCNT = n)
-
-del_hosp %>% head()
-```
-
-Get csection per hospital
-
-```{r}
-csec_hosp <- csection %>% 
-  count(PROVIDER_NAME, PUBLIC_HEALTH_REGION) %>% 
-  rename(CCNT = n)
-
-csec_hosp %>% head()
-```
-
-## Join the hospital results together
-
-
-```{r}
-inner_join(del_hosp, csec_hosp) %>% 
+deliveries <- deliveries %>% 
   mutate(
-    CRATE = (CCNT / DCNT) * 100,
-    CRATE = round(CRATE, 2)
-  ) %>%
-  arrange(CRATE %>% desc()) %>% 
-  filter(DCNT >= 100)
+    CBIRTH = ifelse(
+      MS_DRG %in% c("765", "766"), "Y", "N"
+    )
+  )
+```
+
+Overall Cesarean rate for the data set.
+
+```{r}
+deliveries %>%
+  tabyl(CBIRTH) %>%
+  rename(CNT = n, PRCT = percent)%>%
+  adorn_pct_formatting()
+```
+
+To be thorough, I would like to create a new Cesarean measure using the second method described by AHRQ:
+
+- any-listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP* ) and without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P* ).
+
+This is a little more involved and I haven't figured it out yet.
+
+```{r}
+prcsecp <- c(
+  "10D00Z0", "10D00Z1", "10D00Z2"
+)
+
+prcse2p <- c(
+  "10A00ZZ", "10A03ZZ", "10A04ZZ"
+)
+
+# vector of procedure columns
+surg_proc <- deliveries %>% 
+  select(contains("SURG_PROC_CODE")) %>% names()
+
+# filters deliveries by surg_proc with prcsecp values
+deliveries %>% 
+  filter_at(
+    vars(surg_proc),
+    any_vars(. %in% prcsecp)
+  ) %>% 
+  select(surg_proc) %>% 
+  head()
+
+# looks through only one column for precsecp and sets it
+# but I need to look through all of them.
+deliveries %>% 
+  mutate(
+    CBIRTH2 = if_else(
+      PRINC_SURG_PROC_CODE %in% prcsecp,
+      "Y", "F"
+    )
+  ) %>% 
+  count(CBIRTH2)
 
 ```
+
+
+## Cesarean rate per hospital, all data
+
+```{r}
+crate_all <- deliveries %>% 
+  group_by(PROVIDER_NAME, CBIRTH) %>% 
+  summarize(CNT = n()) %>% 
+  pivot_wider(names_from = CBIRTH, values_from = CNT) %>% 
+  filter(N >= 100) %>% 
+  mutate(
+    CRATE = round((Y / (N+Y)) * 100,1)
+  ) %>% 
+  arrange(CRATE %>% desc())
+
+crate_all
+```
+
+> There are some issues here with PROVIDER_NAME, as perhaps they changed over time. I might need to use the THCIC_ID and then use the 2018 facility names.
+
+
+
+## Cesarean rates by hospital, quarter
+
+```{r}
+crate_q <- deliveries %>% 
+  group_by(DISCHARGE, PROVIDER_NAME, CBIRTH) %>% 
+  summarize(CNT = n()) %>% 
+  pivot_wider(names_from = CBIRTH, values_from = CNT) %>% 
+  filter(N >= 100) %>% 
+  mutate(
+    CRATE = round((Y / (N+Y)) * 100,1)
+  ) %>% 
+  arrange(CRATE %>% desc())
+
+crate_q %>% head(2)
+
+```
+
+Make a list of specific hospitals we'll track
+
+```{r}
+deliveries %>% 
+  filter(
+    str_detect(PROVIDER_NAME, "Laredo")
+  ) %>%
+  select(PROVIDER_NAME) %>% 
+  distinct()
+```
+
+
+```{r}
+st_list <- c(
+  "Doctors Hospital-Laredo",
+  "Laredo Medical Center"
+)
+```
+
+,
+  "Fort Duncan Regional Medical Center",
+  "Mission Regional Medical Center",
+  "The Hospitals of Providence Memorial Campus",
+  "Starr County Memorial Hospital",
+  "The Hospitals of Providence Sierra Campus",
+  "Valley Baptist Medical Center-Brownsville",
+  "Valley Regional Medical Center"
+
+Track some hospitals over time
+
+```{r}
+plot_data <- crate_q %>% 
+  filter(
+    PROVIDER_NAME %in% st_list
+  ) %>% 
+  select(DISCHARGE, PROVIDER_NAME, CRATE)
+
+plot_data %>% 
+  ggplot(aes(DISCHARGE, CRATE)) +
+  geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
+  expand_limits(y = c(0,60)) +
+  theme(legend.position="bottom", legend.box = "vertical") +
+  guides(col = guide_legend(nrow = 2)) +
+  labs(title = "Cesarean Rate for Laredo hospitals", x = "Quarter of discharge", y = "Percent of deliveries as Cesarean")
+
+```
+
+
+## Working with PAT_COUNTY
+
+### Get county fips
+
+```{r}
+counties <- read_excel("resources/PHR_MSA_County_masterlist.xlsx") %>% clean_names()
+```
+
 
 ## Complete
 

@@ -68,3 +68,18 @@ facility <- read_tsv(
 
 facility %>% glimpse()
 ```
+
+
+```{r}
+facility_list <- facility %>% 
+  select(THCIC_ID, PROVIDER_NAME) %>% 
+  arrange(PROVIDER_NAME)
+
+facility_list %>% write_csv("data-processed/facility-list.csv")
+```
+
+```{r}
+facility_list %>% 
+  filter(str_detect(PROVIDER_NAME, "Eliza"))
+```
+
