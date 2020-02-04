@@ -17,7 +17,7 @@ I ran a one-time test on the looped processes against the test data for comparis
 library(tidyverse)
 ```
 
-Read in each test rds and note the number of rows.
+Read in each test rds and note the number of rows. The result should be the same for both.
 
 ```{r}
 ttst <- read_rds("data-test/ahrq_del_ucmp_ttest.rds")
@@ -26,9 +26,9 @@ ptst <- read_rds("data-test/ahrq_del_ucmp_ptest.rds")
 ptst %>% nrow()
 ```
 
-I once had a problem with the age filtering in the no-loop file, so this is checking that. There should not be any values here.
+I once had a problem with the age filtering in the no-loop file, so this checks that. There should be zero rows returned here.
 
-```{r}
+```{r echo=F, message=F}
 ttst %>% anti_join(ptst) %>% 
   select(PAT_AGE)
 ```
