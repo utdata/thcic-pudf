@@ -17,6 +17,8 @@ Working out Cesarean delivery rates by hospital (and later quarter)
 library(tidyverse)
 library(janitor)
 library(readxl)
+library(DT)
+library(plotly)
 ```
 
 ## Import needed files
@@ -30,6 +32,15 @@ deliveries <- read_rds("data-processed/ahrq_del_ucmp.rds")
 deliveries_cnt <- deliveries %>% nrow()
 paste("Total uncomplicated deliveries:", deliveries_cnt)
 ```
+
+```{r}
+deliveries %>% 
+  select(THCIC_ID, PROVIDER_NAME) %>% 
+  distinct() %>% 
+  arrange(PROVIDER_NAME) %>% 
+  write_csv("data-processed/facility-list.csv")
+```
+
 
 ## Set up the Cesarean values
 
@@ -60,49 +71,9 @@ deliveries %>%
   adorn_pct_formatting()
 ```
 
-To be thorough, I would like to create a new Cesarean measure using the second method described by AHRQ:
-
-- any-listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP* ) and without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P* ).
-
-This is a little more involved and I haven't figured it out yet.
-
-```{r}
-prcsecp <- c(
-  "10D00Z0", "10D00Z1", "10D00Z2"
-)
-
-prcse2p <- c(
-  "10A00ZZ", "10A03ZZ", "10A04ZZ"
-)
-
-# vector of procedure columns
-surg_proc <- deliveries %>% 
-  select(contains("SURG_PROC_CODE")) %>% names()
-
-# filters deliveries by surg_proc with prcsecp values
-deliveries %>% 
-  filter_at(
-    vars(surg_proc),
-    any_vars(. %in% prcsecp)
-  ) %>% 
-  select(surg_proc) %>% 
-  head()
-
-# looks through only one column for precsecp and sets it
-# but I need to look through all of them.
-deliveries %>% 
-  mutate(
-    CBIRTH2 = if_else(
-      PRINC_SURG_PROC_CODE %in% prcsecp,
-      "Y", "F"
-    )
-  ) %>% 
-  count(CBIRTH2)
-
-```
 
 
-## Cesarean rate per hospital, all data
+## Cesarean rate per hospital, 2016-2018
 
 ```{r}
 crate_all <- deliveries %>% 
@@ -115,7 +86,11 @@ crate_all <- deliveries %>%
   ) %>% 
   arrange(CRATE %>% desc())
 
-crate_all
+# writing out for use in separate file
+crate_all %>% write_rds("data-processed/create_all.rds")
+
+crate_all %>% 
+  datatable()
 ```
 
 > There are some issues here with PROVIDER_NAME, as perhaps they changed over time. I might need to use the THCIC_ID and then use the 2018 facility names.
@@ -153,19 +128,20 @@ deliveries %>%
 
 ```{r}
 st_list <- c(
-  "Doctors Hospital-Laredo",
-  "Laredo Medical Center"
+	"Doctors Hospital-Laredo",
+	"Laredo Medical Center",
+	"Doctors Hospital-Renaissance",
+	"Edinburg Regional Medical Center",
+	"Valley Regional Medical Center",
+	"Citizens Medical Center",
+	"University Hospital",
+	"Yoakum Community Hospital",
+	"Yoakum County Hospital",
+	"DeTar Hospital-Navarro",
+	"DeTar Hospital-North"
 )
 ```
 
-,
-  "Fort Duncan Regional Medical Center",
-  "Mission Regional Medical Center",
-  "The Hospitals of Providence Memorial Campus",
-  "Starr County Memorial Hospital",
-  "The Hospitals of Providence Sierra Campus",
-  "Valley Baptist Medical Center-Brownsville",
-  "Valley Regional Medical Center"
 
 Track some hospitals over time
 
@@ -176,13 +152,15 @@ plot_data <- crate_q %>%
   ) %>% 
   select(DISCHARGE, PROVIDER_NAME, CRATE)
 
-plot_data %>% 
+crate_all_plot <- plot_data %>% 
   ggplot(aes(DISCHARGE, CRATE)) +
   geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
   expand_limits(y = c(0,60)) +
   theme(legend.position="bottom", legend.box = "vertical") +
-  guides(col = guide_legend(nrow = 2)) +
-  labs(title = "Cesarean Rate for Laredo hospitals", x = "Quarter of discharge", y = "Percent of deliveries as Cesarean")
+  guides(col = guide_legend(nrow = 4)) +
+  labs(title = "Cesarean Rate for S. Texas hospitals", x = "Quarter of discharge", y = "Percent of deliveries as Cesarean")
+
+crate_all_plot
 
 ```
 
@@ -193,6 +171,55 @@ plot_data %>%
 
 ```{r}
 counties <- read_excel("resources/PHR_MSA_County_masterlist.xlsx") %>% clean_names()
+```
+
+
+To be thorough, I would like to create a new Cesarean measure using the second method described by AHRQ:
+
+- any-listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP* ) and without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P* ).
+
+This is a little more involved and I haven't quite figured it out yet.
+
+```{r}
+prcsecp <- c(
+  "10D00Z0", "10D00Z1", "10D00Z2"
+)
+
+prcse2p <- c(
+  "10A00ZZ", "10A03ZZ", "10A04ZZ"
+)
+
+# vector of procedure columns
+surg_proc <- deliveries %>% 
+  select(contains("SURG_PROC_CODE")) %>% names()
+
+# filters deliveries by surg_proc with prcsecp values
+deliveries %>% 
+  filter_at(
+    vars(surg_proc),
+    any_vars(. %in% prcsecp)
+  ) %>% 
+  select(surg_proc) %>% 
+  head()
+
+# looks through only one column for precsecp and sets it
+# but I need to look through all of them.
+deliveries %>% 
+  mutate(
+    CBIRTH2 = if_else(
+      PRINC_SURG_PROC_CODE %in% prcsecp,
+      "Y", "F"
+    )
+  ) %>% 
+  count(CBIRTH2)
+
+# deliveries %>% 
+#   mutate(
+#     CBIRTH2 = if_else(
+#       surg_proc %in% prcsecp, "Y", "F"
+#     )
+#   )
+
 ```
 
 
