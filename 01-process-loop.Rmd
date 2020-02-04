@@ -236,6 +236,14 @@ for (file in files) {
 data %>% nrow()
 ```
 
+## Remove the 2015 records
+
+```{r}
+data <- data %>% 
+  filter(substr(DISCHARGE, 1, 4) != "2015")
+```
+
+
 ## Write file
 
 We write a single file of the uncomplicated deliveries.

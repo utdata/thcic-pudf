@@ -19,6 +19,7 @@ library(janitor)
 library(readxl)
 library(DT)
 library(plotly)
+library(lubridate)
 ```
 
 ## Import needed files
@@ -33,12 +34,24 @@ deliveries_cnt <- deliveries %>% nrow()
 paste("Total uncomplicated deliveries:", deliveries_cnt)
 ```
 
+### Makes a facilites list file for use later
+
 ```{r}
 deliveries %>% 
   select(THCIC_ID, PROVIDER_NAME) %>% 
   distinct() %>% 
   arrange(PROVIDER_NAME) %>% 
   write_csv("data-processed/facility-list.csv")
+```
+
+### Creates a YR and YEAR column for use later.
+
+```{r}
+deliveries <- deliveries %>% 
+  mutate(
+    YR = substr(DISCHARGE, 1, 4),
+    YEAR = ymd(YR,truncated = 2L)
+  )
 ```
 
 
@@ -71,9 +84,7 @@ deliveries %>%
   adorn_pct_formatting()
 ```
 
-
-
-## Cesarean rate per hospital, 2016-2018
+### Cesarean rate per hospital, 2016-2018
 
 ```{r}
 crate_all <- deliveries %>% 
@@ -95,9 +106,7 @@ crate_all %>%
 
 > There are some issues here with PROVIDER_NAME, as perhaps they changed over time. I might need to use the THCIC_ID and then use the 2018 facility names.
 
-
-
-## Cesarean rates by hospital, quarter
+### Cesarean rates by hospital, by quarter
 
 ```{r}
 crate_q <- deliveries %>% 
@@ -109,21 +118,28 @@ crate_q <- deliveries %>%
     CRATE = round((Y / (N+Y)) * 100,1)
   ) %>% 
   arrange(CRATE %>% desc())
-
-crate_q %>% head(2)
-
 ```
 
-Make a list of specific hospitals we'll track
+### Cesarean rates by hospital, by year
 
 ```{r}
-deliveries %>% 
-  filter(
-    str_detect(PROVIDER_NAME, "Laredo")
-  ) %>%
-  select(PROVIDER_NAME) %>% 
-  distinct()
+crate_y <- deliveries %>% 
+  group_by(YR, PROVIDER_NAME, CBIRTH) %>% 
+  summarize(CNT = n()) %>% 
+  pivot_wider(names_from = CBIRTH, values_from = CNT) %>% 
+  filter(N >= 100) %>%
+  mutate(
+    CRATE = round((Y / (N+Y)) * 100,1)
+  ) %>% 
+  arrange(CRATE %>% desc())
+
+crate_y
 ```
+
+
+### Hospitals we want to track
+
+Make a list of specific hospitals we'll track. I'm noticing some of these don't show in plots because they have fewer than 100 births.
 
 
 ```{r}
@@ -143,24 +159,67 @@ st_list <- c(
 ```
 
 
-Track some hospitals over time
+### Our hospitals by quarter
 
 ```{r}
-plot_data <- crate_q %>% 
+crate_q_data <- crate_q %>% 
   filter(
     PROVIDER_NAME %in% st_list
   ) %>% 
   select(DISCHARGE, PROVIDER_NAME, CRATE)
 
-crate_all_plot <- plot_data %>% 
+crate_q_plot <- crate_q_data %>% 
   ggplot(aes(DISCHARGE, CRATE)) +
   geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
   expand_limits(y = c(0,60)) +
   theme(legend.position="bottom", legend.box = "vertical") +
-  guides(col = guide_legend(nrow = 4)) +
+  guides(col = guide_legend(nrow = 5)) +
   labs(title = "Cesarean Rate for S. Texas hospitals", x = "Quarter of discharge", y = "Percent of deliveries as Cesarean")
 
-crate_all_plot
+crate_q_plot
+
+```
+
+Let's try this using plotly.
+
+> this is not figured out yet.
+
+```{r}
+
+crate_y_data <- crate_y %>% 
+  filter(
+    PROVIDER_NAME %in% st_list
+  )
+
+crate_y_data %>% 
+  plot_ly(
+    x = ~YR,
+    y = ~CRATE,
+    color = ~PROVIDER_NAME,
+    type = "scatter",
+    mode = "lines"
+  ) %>% 
+  layout(title = "Cesareans by year")
+
+
+```
+
+
+
+
+## Our hospitals by year
+
+```{r}
+
+crate_y_plot <- crate_y_data %>% 
+  ggplot(aes(YR, CRATE)) +
+  geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
+  expand_limits(y = c(0,60)) +
+  theme(legend.position="bottom", legend.box = "vertical") +
+  guides(col = guide_legend(nrow = 6)) +
+  labs(title = "Cesarean Rate for S. Texas hospitals", x = "Year of discharge", y = "Percent of deliveries as Cesarean")
+
+crate_y_plot
 
 ```
 
@@ -173,6 +232,7 @@ crate_all_plot
 counties <- read_excel("resources/PHR_MSA_County_masterlist.xlsx") %>% clean_names()
 ```
 
+## Alternat method to find Cesarean births
 
 To be thorough, I would like to create a new Cesarean measure using the second method described by AHRQ:
 
