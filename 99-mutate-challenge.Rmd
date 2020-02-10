@@ -1,5 +1,5 @@
 ---
-title: "multi-column, multi-value mutate challenge"
+title: "Multi-column, multi-value mutate challenge"
 output:
   html_document:
     df_print: paged
@@ -25,7 +25,7 @@ starwars %>%
 ```
 
 
-## create my comparison lists
+## Create my comparison lists
 
 ```{r}
 list_cols <- starwars %>% select(name, eye_color) %>% names()
@@ -59,7 +59,7 @@ starwars %>%
   count(my_col)
 ```
 
-## loop attempt within case_when
+## Loop attempt within case_when
 
 Without the `TRUE ~ FALSE` setting, this provides an error: "No cases provided". Something is wrong with my loop, or that is not a good place for one.
 
@@ -88,7 +88,7 @@ starwars %>%
   count(my_col)
 ```
 
-## function attempt
+## Function attempt
 
 This function works for one column, but not many columns. It needs some kind of loop to evaluate each column. I have not been able to figure out how to do a loop within the `case_when` function.
 
