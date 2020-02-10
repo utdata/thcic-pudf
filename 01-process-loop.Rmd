@@ -6,6 +6,8 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
+> I eventually want to define all AHRQ process lists in 01-process-lists
+
 The purpose of this notebook is to process multiple quarters of [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) into a single data file of deliveries without complications. This requires importing and applying several filtering options.
 
 We are using AHRQ's [Inpatient Quality Indicator 21 (IQI 21) Cesarean Delivery Rate, Uncomplicated](resources/IQI_21_Cesarean_Delivery_Rate_Uncomplicated.pdf) method, so in this notebook we'll be applying the "DENOMINATOR" rules to identify deliveries and filter out complications and missing/nonrelevant rows. One addition is to filter by women of normal child-bearing age: 15-49.

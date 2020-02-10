@@ -10,6 +10,7 @@ Problems, potential problems and caveats
 
 > If we look by PUBLIC_HEALTH_REGION then we'll need to clean up that data. there are NA's.
 > PROVIDER_NAME may change over time. "CHRISTUS Southeast Texas - St Elizabeth" is an example.
+> I want to eventually define all AHRQ ICD-10 lists in 01-process-lists.
 
 Working out Cesarean delivery rates by hospital (and later quarter)
 

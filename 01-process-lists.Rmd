@@ -1,0 +1,193 @@
+---
+title: "Process various data lists"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+> Move these files to a published directory!!!
+
+This THCIC analysis will need various lists of columns and ICD-10 codes. This notebook will define them and write them to rds where they can be use in later analysis.
+
+Of note, to turn a single-column rds import into a vector, use the following:
+
+```txt
+new_list <- read_rds("data-processed/filename.rds") %>% as_vector()
+```
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+library(janitor)
+```
+
+## THCIC column lists
+
+The diagnostic and surgical procedure columns from the THCIC data are frequently used in `case_when()` statements and other vectors. This writes them to csv and rds for use later.
+
+### Import test data for column generation
+
+```{r}
+testdata <- read_rds("data-test/ahrq_del_ucmp_ptest.rds")
+```
+
+### Diagnostic columns
+
+```{r}
+cols_diag <- testdata %>% 
+  select(contains("_DIAG"), -starts_with("POA")) %>%
+  names() %>% 
+  tibble::enframe(name = NULL) %>% 
+  rename(col_names = value)
+
+cols_diag %>% 
+  write_csv("data-processed/cols_diag.csv")
+
+cols_diag %>% 
+  write_rds("data-processed/cols_diag.rds")
+  
+```
+
+### Surgical procedure columns
+
+```{r}
+cols_surg <- testdata %>% 
+  select(contains("SURG_PROC_CODE")) %>%
+  names() %>% 
+  tibble::enframe(name = NULL) %>% 
+  rename(col_names = value)
+
+cols_surg %>% 
+  write_csv("data-processed/cols_surg.csv")
+
+cols_surg %>% 
+  write_rds("data-processed/cols_surg.rds")
+```
+
+## AHRQ lists
+
+These can come from IQI 33 or IQI 21. Some are in both.
+
+> I need to reconcile 33 vs 21 and note here.
+
+### Cesarean delivery MS-DRG codes: (PRCSE2G)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated
+
+```{r}
+# MS-DRG codes for Cesarean delivery (PRCSE2G*)
+prcse2g_list <- c(
+  "765",
+  "766"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prcse2g = value)
+
+prcse2g_list %>% 
+  write_rds("data-processed/ahrq_prcse2g.rds")
+
+prcse2g_list
+```
+
+### Hysterotomy procedure codes: (PRCSE2P)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated
+
+```{r}
+prcse2p_list <- c(
+  "10A00ZZ",
+  "10A03ZZ",
+  "10A04ZZ"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prcse2p = value)
+
+prcse2p_list %>% 
+  write_rds("data-processed/ahrq_prcse2p.rds")
+
+prcse2p_list
+```
+
+
+### Cesarean delivery procedure codes: (PRCSECP)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated
+
+```{r}
+prcsecp_list <- c(
+  "10D00Z0",
+  "10D00Z1",
+  "10D00Z2"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prcsecp = value)
+
+prcsecp_list %>% 
+  write_rds("data-processed/ahrq_prcsecp.rds")
+
+prcsecp_list
+```
+
+
+### Outcome of delivery diagnosis codes: (DELOCMD)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated
+
+```{r}
+delocmd_list <- c(
+  "Z370",
+  "Z371",
+  "Z372",
+  "Z373",
+  "Z374",
+  "Z3750",
+  "Z3751",
+  "Z3752",
+  "Z3753",
+  "Z3754",
+  "Z3759",
+  "Z3760",
+  "Z3761",
+  "Z3762",
+  "Z3763",
+  "Z3764",
+  "Z3769",
+  "Z377",
+  "Z379"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(delocmd = value)
+
+delocmd_list %>% 
+  write_rds("data-processed/ahrq_delocmd.rds")
+
+delocmd_list
+```
+
+
+### Previous Cesarean delivery diagnosis codes: (PRVBACD)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated
+
+- with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD*)
+
+```{r}
+prvbacd_list <- c(
+  "O3421",
+  "O34211",
+  "O34212",
+  "O34219",
+  "O6641"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prvbacd = value)
+
+prvbacd_list %>% 
+  write_rds("data-processed/ahrq_prvbacd.rds")
+
+prvbacd_list
+```
+
+
+
+
