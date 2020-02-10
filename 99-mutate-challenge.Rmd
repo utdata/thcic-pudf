@@ -1,0 +1,130 @@
+---
+title: "multi-column, multi-value mutate challenge"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+```
+
+I'm trying to define an efficient solution for the following problem:
+
+Create a new column with a T/F value based on looking through multiple columns for a collection of values. If the value is present in any of the columns, make it TRUE. If not, make it FALSE.
+
+I'm using starwars data to define the problem, which might make this appear like an illogial operation. In my real data, the columns I'm looking through contain similar strings. The data is too large (about 1Mx167) to reshape, so I'm trying to find a function or loop that will allow me to cycle through each column to look for the list of values. A function or loop would also be welcome because I have to do this with different columns and values at different times. (Otherwise, I would just use multiple and long `case_when` statements.)
+
+For this example, I want to set the `my_col` value to be TRUE if any of these values ("Luke Skywalker", "Darth Vader", "blue") appear in EITHER the `name` or `eye_color` columns.
+
+
+```{r}
+starwars %>% 
+  select(name, eye_color)
+```
+
+
+## create my comparison lists
+
+```{r}
+list_cols <- starwars %>% select(name, eye_color) %>% names()
+list_values <- c("Luke Skywalker", "Darth Vader", "blue")
+```
+
+## A filter to show the desired rows to be deemed TRUE
+
+These are the cols I'm trying to capture. There should be 20.
+
+```{r}
+starwars %>% 
+  select(name, eye_color) %>% 
+  filter(name %in% list_values | eye_color %in% list_values)
+```
+
+
+## The long case_when version
+
+This technically works, but there are many more than two columns to consider in my target data.
+
+```{r}
+starwars %>% 
+  mutate(
+    my_col = case_when(
+      name %in% list_values ~ TRUE,
+      eye_color %in% list_values ~ TRUE,
+      TRUE ~ FALSE
+    )
+  ) %>%
+  count(my_col)
+```
+
+## loop attempt within case_when
+
+Without the `TRUE ~ FALSE` setting, this provides an error: "No cases provided". Something is wrong with my loop, or that is not a good place for one.
+
+```{r}
+starwars %>% 
+  mutate(
+    my_col = case_when(
+      for (colitem in list_cols) {
+        colitem %in% list_values ~ TRUE
+      },
+      TRUE ~ FALSE
+    )
+  ) %>%
+  count(my_col)
+```
+
+## A different angle using rowSums
+
+This rowSums attempt must aggregate the values in some way, or only affect the first or last value found, which makes some kinda of sense given `rowSums`. Other than there are 87 rows returned.
+
+```{r}
+starwars %>% 
+  mutate(
+      my_col = rowSums(select(., list_cols) == list_values) > 0
+    ) %>% 
+  count(my_col)
+```
+
+## function attempt
+
+This function works for one column, but not many columns. It needs some kind of loop to evaluate each column. I have not been able to figure out how to do a loop within the `case_when` function.
+
+```{r}
+mutate_function <- function(fdata, fvalue) {
+  fdata %>% 
+    select(name, eye_color) %>% 
+    mutate(my_col = case_when(
+      eye_color %in% list_values ~ TRUE,
+      TRUE ~ FALSE
+    ))
+}
+
+mutate_function(starwars, list_values)
+```
+
+
+## Let's try ifelse
+
+Stacking multiple if/else does not work because previously changed values will be changed back since the previous condition is no longer evaluated.
+
+```{r}
+
+starwars %>% 
+  select(name, eye_color) %>% 
+  mutate(
+    my_col = ifelse(
+      name %in% list_values, TRUE, FALSE
+    )
+  ) %>% 
+  mutate(
+    my_col = ifelse(
+      eye_color %in% list_values, TRUE, FALSE
+    )
+  ) %>% 
+  count(my_col)
+
+```
+

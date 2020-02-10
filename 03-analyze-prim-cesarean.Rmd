@@ -1,0 +1,224 @@
+---
+title: "Cesarean delivery rates"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+This analysis of the Primary Cesarean Delivery Rate, Uncomplicated, as defined by [AHRQ IQI 33](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf) from 2019.
+
+### NUMERATOR
+
+Discharges, among cases meeting the inclusion and exclusion rules for the denominator, with either:
+- MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P* ) or
+- any-listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP* ) without any-listed ICD- 10-PCS procedure codes for hysterotomy (PRCSE2P* ).
+
+### DENOMINATOR
+
+All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery (DELOCMD* ).
+
+#### DENOMINATOR EXCLUSIONS
+
+Exclude cases:
+- with any-listed ICD-10-CM diagnosis codes for abnormal presentation, preterm, fetal death, or multiple gestation (Appendix A: PRCSECD)
+- with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD* )
+- with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)
+
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+library(janitor)
+library(readxl)
+library(DT)
+library(plotly)
+library(lubridate)
+```
+
+
+## Import of deliveries
+
+We start with data that has already been through some "denominator" exclusions, including filtered for PRCSECD codes and any missing data. This was handled in `01-process-loop`, so we import that resulting file. Important to note with this analysis is these cases do have patients with previous cesareans, so those will have to be filtered out in later steps.
+
+```{r imports}
+del <- read_rds("data-test/ahrq_del_ucmp_ptest.rds")
+
+del %>% nrow()
+```
+
+## Set up various ICD-10 lists
+
+These are lists from the IQI 33 reference used for filtering and such.
+
+```{r lists}
+# Previous Cesarean delivery diagnosis codes: (PRVBACD)
+prvbacd_list <- c(
+  "O3421",
+  "O34211",
+  "O34212",
+  "O34219",
+  "O6641"
+)
+
+# MS-DRG codes for Cesarean delivery (PRCSE2G*)
+prcse2g <- c("765", "766")
+
+# without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P*) 
+prcse2p <- c("10A00ZZ", "10A03ZZ", "10A04ZZ")
+
+# This selects our DIAGNOSTIC columns
+diag_cols <- del %>% 
+  select(contains("_DIAG"), -starts_with("POA")) %>%
+  names()
+```
+
+For this analysis, we need to exclude outcomes "with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD*)". This prvcad_list comes from the AHRQ specification.
+
+```{r nprv}
+del_nprv <- del %>% 
+  filter_at(
+    vars(diag_cols),
+    all_vars(
+      !(. %in% prvbacd_list)
+    )
+  )
+
+del_nprv %>% nrow()
+
+del_nprv
+```
+
+This completes our "DENOMINATOR" set of data.
+
+## Set up processing functions
+
+To code our remaining files for those that are a primary csection, we will use a function to look through a series of columns for a number of diagnostic codes, and then code columns accordingly.
+
+```{r}
+
+check_col <- del_nprv %>%
+  select(matches('^(RECORD|PAT_ZIP)')) %>% names()
+
+check_list <- c(
+  "120160016911",
+  "120160016912",
+  "78602"
+)
+
+del_nprv %>% 
+  mutate(
+    PCBIRTH = case_when(
+      RECORD_ID %in% check_list ~ TRUE,
+      PAT_ZIP %in% check_list ~ TRUE,
+      TRUE ~ FALSE
+    )
+  ) %>%
+  count(PCBIRTH)
+
+del_nprv %>% 
+  mutate(
+    PCBIRTH = case_when(
+      for (col in check_col) {
+        col %in% check_list ~ TRUE
+      }
+    )
+  ) %>% 
+  count(PCBIRTH)
+
+starwars
+```
+
+
+
+## Marking births considered 
+
+Discharges, among cases meeting the inclusion and exclusion rules for the denominator, with either:
+
+- MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P* ) or
+- any-listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP* ) without any-listed ICD- 10-PCS procedure codes for hysterotomy (PRCSE2P* ).
+
+after prcse2g: 144,381.
+
+
+
+
+```{r}
+diag_cols <- del %>% 
+  select(
+      contains("_DIAG"),
+      -starts_with("POA")
+  ) %>% names()
+
+
+del_nprv %>% 
+  mutate(
+    PCBIRTH = rowSums(select(., diag_cols) == "10A00ZZ") > 0
+    # has.4 = rowSums(select(., mtcars_cols) == 4) > 0
+  )
+  
+# del_prmr_csr <- mutate(
+#     PCBIRTH = ifelse(
+#       MS_DRG %in% prcse2g, "Y", "N"
+#     )
+#   )
+
+```
+
+## Some processing tests with mtcars
+
+Bad choice because
+
+https://stackoverflow.com/questions/57512813/dplyr-create-new-boolean-variable-from-any-vars-filter-condition
+https://stackoverflow.com/questions/47464512/r-mutate-over-multiple-columns-to-create-a-new-column
+
+```{r}
+
+mtcars %>% 
+  arrange(mpg)
+
+# there are 7 cars with 6 cyl
+mtcars %>%
+  filter(cyl == 6)
+
+# there are 2 cars with 19.2 mpg, one with 6 cyl, one with 8
+mtcars %>% 
+  filter(mpg == 19.2)
+
+# there are 8 rows with either.
+# these are the rows I want as TRUE
+mtcars %>% 
+  filter(mpg == 19.2 | cyl == 6)
+
+# set the cols to look at
+mtcars_cols <- mtcars %>% 
+  select(matches('^(mp|cy)')) %>% names()
+
+# set the values to look at
+mtcars_numbs <- c(19.2, 6)
+
+# result is 8 vars with either value in either col.
+# this is a successful filter of the data
+out1 <- mtcars %>% 
+    filter_at(vars(mtcars_cols), any_vars(
+        . %in% mtcars_numbs
+        )
+      )
+
+# shows set wtih all 6 cyl, plus one 8cyl 21.9 mpg
+out1 %>% 
+  select(mpg, cyl)
+
+# This attempts to apply the filter list to the cols,
+# but I only get 6 rows as true
+# I tried to change == to %in& but that errors
+out2 <- mtcars %>%
+    mutate(
+      myset = rowSums(select(., mtcars_cols) == mtcars_numbs) > 0
+    )
+
+# only 6 rows returned. 
+out2 %>% 
+  filter(myset == T)
+
+```
+

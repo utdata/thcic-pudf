@@ -150,12 +150,12 @@ In base1, the fields are `SEX_CODE`, `PAT_AGE`, `DISCHARGE` for both quarter and
 filter_appendix_a <- function(.data) {
   .data %>% 
       filter(
-      SEX_CODE == "F",
-      PAT_AGE != "`",
-      RACE != "`",
-      !is.na(DISCHARGE),
-      !is.na(PRINC_DIAG_CODE)
-    )
+        SEX_CODE == "F",
+        PAT_AGE != "`",
+        RACE != "`",
+        !is.na(DISCHARGE),
+        !is.na(PRINC_DIAG_CODE)
+      )
 }
 
 ```
