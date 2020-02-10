@@ -19,4 +19,5 @@ TheUniversity of Texas at Austin
 - [01-t2-process-compare](https://utdata.github.io/thcic-pudf/01-t2-process-compare.html) compare the results of the loop script to the test script when both are processed using test data.
 - [02-analyze-cesarean](https://utdata.github.io/thcic-pudf/02-analyze-cesarean.html) is the analysis of cesareans vs all births.
 - [03-viz-crate](https://utdata.github.io/thcic-pudf/03-viz-crate.html) is an interactive table of the Cesarean rates for a three-year period, 2016-2018.
-
+- [99-explore-other](https://utdata.github.io/thcic-pudf/99-explore-other.html)
+- [99-mutate-challenge](https://utdata.github.io/thcic-pudf/99-mutate-challenge.html)
