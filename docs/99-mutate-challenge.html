@@ -1581,7 +1581,8 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(tidyverse)</code></pre>
+<pre class="r"><code>library(tidyverse)
+library(data.table)</code></pre>
 <p>I’m trying to define an efficient solution for the following problem:</p>
 <p>Create a new column with a T/F value based on looking through multiple columns for a collection of values. If the value is present in any of the columns, make it TRUE. If not, make it FALSE.</p>
 <p>I’m using starwars data to define the problem, which might make this appear like an illogial operation. In my real data, the columns I’m looking through contain similar strings. The data is too large (about 1Mx167) to reshape, so I’m trying to find a function or loop that will allow me to cycle through each column to look for the list of values. A function or loop would also be welcome because I have to do this with different columns and values at different times. (Otherwise, I would just use multiple and long <code>case_when</code> statements.)</p>
@@ -1699,6 +1700,46 @@ mutate_function(starwars, list_values)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["my_col"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"FALSE","2":"68"},{"1":"TRUE","2":"19"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="sharon-machlis-function" class="section level2">
+<h2>Sharon Machlis function</h2>
+<p>Sharon Machlis offered this solution on News Nerdery and I think it will work, though I’ve yet to test it on the larger dataset. I really like the reusability of this solution. I’ve edit it for succinctness and to fit the flavor of this challenge.</p>
+<pre class="r"><code>multi_col_mutate &lt;- function(the_data, the_cols, the_values) {
+  myresults &lt;- the_data[the_cols]
+  numcol &lt;- ncol(myresults)
+  numrow &lt;- nrow(myresults)
+  myresults$mycol &lt;- NA
+    for (i in 1:numrow) {
+      myresults$mycol[i] &lt;- any(as_vector(myresults[i,1:numcol]) %in% the_values)
+    }
+  return(myresults)
+}
+
+newdf &lt;- multi_col_mutate(starwars, list_cols, list_values)
+
+newdf %&gt;% count(mycol)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["mycol"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"FALSE","2":"67"},{"1":"TRUE","2":"20"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="sharon-machlis-data.tables-idea" class="section level2">
+<h2>Sharon Machlis data.tables idea</h2>
+<p>I like the promise of speed that Sharon mentions in her News Nerdery post, but in this case I need to be able to pass in the list of columns, as there are 25+ of them in my real data and they change depending on use case. I need to learn how to do that.</p>
+<p>Clearly, I need to study <a href="https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html">data.table</a> more.</p>
+<pre class="r"><code>dt_my_values &lt;- c(&quot;Luke Skywalker&quot;, &quot;Darth Vader&quot;, &quot;blue&quot;)
+
+the_data &lt;- as.data.table(starwars)
+the_data &lt;- the_data[, .(name, eye_color)]
+myresults &lt;- the_data[, mycol := any(as_vector(.SD) %chin% dt_my_values), by = seq_len(nrow(the_data))]
+
+myresults %&gt;% count(mycol)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["mycol"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"FALSE","2":"67"},{"1":"TRUE","2":"20"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>

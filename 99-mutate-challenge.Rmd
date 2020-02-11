@@ -8,6 +8,7 @@ knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = e
 
 ```{r setup, echo=T, results='hide', message=F, warning=F}
 library(tidyverse)
+library(data.table)
 ```
 
 I'm trying to define an efficient solution for the following problem:
@@ -126,5 +127,43 @@ starwars %>%
   ) %>% 
   count(my_col)
 
+```
+
+## Sharon Machlis function
+
+Sharon Machlis offered this solution on News Nerdery and I think it will work, though I've yet to test it on the larger dataset. I really like the reusability of this solution. I've edit it for succinctness and to fit the flavor of this challenge.
+
+```{r}
+multi_col_mutate <- function(the_data, the_cols, the_values) {
+  myresults <- the_data[the_cols]
+  numcol <- ncol(myresults)
+  numrow <- nrow(myresults)
+  myresults$mycol <- NA
+    for (i in 1:numrow) {
+      myresults$mycol[i] <- any(as_vector(myresults[i,1:numcol]) %in% the_values)
+    }
+  return(myresults)
+}
+
+newdf <- multi_col_mutate(starwars, list_cols, list_values)
+
+newdf %>% count(mycol)
+```
+
+
+## Sharon Machlis data.tables idea
+
+I like the promise of speed that Sharon mentions in her News Nerdery post, but in this case I need to be able to pass in the list of columns, as there are 25+ of them in my real data and they change depending on use case. I need to learn how to do that.
+
+Clearly, I need to study  [data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html) more.
+
+```{r}
+dt_my_values <- c("Luke Skywalker", "Darth Vader", "blue")
+
+the_data <- as.data.table(starwars)
+the_data <- the_data[, .(name, eye_color)]
+myresults <- the_data[, mycol := any(as_vector(.SD) %chin% dt_my_values), by = seq_len(nrow(the_data))]
+
+myresults %>% count(mycol)
 ```
 
