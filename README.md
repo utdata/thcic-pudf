@@ -17,8 +17,8 @@ TheUniversity of Texas at Austin
 ### Data processing notebooks
 
 - [01-process-loop](https://utdata.github.io/thcic-pudf/01-process-loop.html) is the method used to find all uncomplicated deliveries
-- [01-t1-process-test](https://utdata.github.io/thcic-pudf/01-t1-process-test.html) shows the processing logic in more detail using test data. Used to test the logic.
-- [01-t2-process-compare](https://utdata.github.io/thcic-pudf/01-t2-process-compare.html) compare the results of the loop script to the test script when both are processed using test data.
+- [01-t1-process-test](https://utdata.github.io/thcic-pudf/01-t1-process-test.html) shows the processing logic in more detail using test data.
+- [01-t2-process-compare](https://utdata.github.io/thcic-pudf/01-t2-process-compare.html) compares the results of the loop script to the test script when both are processed using test data.
 
 ### Primary Cesareans study
 
