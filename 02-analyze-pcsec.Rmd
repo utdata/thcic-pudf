@@ -98,10 +98,11 @@ The AHRQ spec defines two ways to find this. This first is:
 
 "MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P*)."
 
-A way to handle this might be this:
-- Create a cesarean column based on MS-DRG codes. This is easy.
-- Create a column that is hysterotomy. This is more complicated because we have to look through each SURG_PROC column for any value in the prcse2p_list. Perhaps a long `case_when` could handle this. This is where our mutate challenge might come in.
-- Create our primary-csection column based on cesarean true and hysterotomy being false.
+How we handle this:
+
+- Create a cesarean column based on MS-DRG codes. This is an easy `if_else`.
+- Create a column that is hysterotomy. This is more complicated because we have to look through each SURG_PROC column for any value in the prcse2p_list.
+- Create our primary csection column based on cesarean true and hysterotomy being false.
 
 ### Create column for PRCSE2G or cesarean deliveries
 

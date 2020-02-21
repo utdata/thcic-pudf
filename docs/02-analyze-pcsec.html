@@ -1659,7 +1659,12 @@ del_nprv %&gt;% nrow()</code></pre>
 <h2>Code records for NUMERATOR</h2>
 <p>The AHRQ spec defines two ways to find this. This first is:</p>
 <p>&quot;MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P*).&quot;</p>
-<p>A way to handle this might be this: - Create a cesarean column based on MS-DRG codes. This is easy. - Create a column that is hysterotomy. This is more complicated because we have to look through each SURG_PROC column for any value in the prcse2p_list. Perhaps a long <code>case_when</code> could handle this. This is where our mutate challenge might come in. - Create our primary-csection column based on cesarean true and hysterotomy being false.</p>
+<p>How we handle this:</p>
+<ul>
+<li>Create a cesarean column based on MS-DRG codes. This is an easy <code>if_else</code>.</li>
+<li>Create a column that is hysterotomy. This is more complicated because we have to look through each SURG_PROC column for any value in the prcse2p_list.</li>
+<li>Create our primary csection column based on cesarean true and hysterotomy being false.</li>
+</ul>
 <div id="create-column-for-prcse2g-or-cesarean-deliveries" class="section level3">
 <h3>Create column for PRCSE2G or cesarean deliveries</h3>
 <p>Simple if_else statement.</p>
