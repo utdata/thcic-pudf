@@ -122,7 +122,7 @@ del_csec %>%
 
 ... "without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P)."
 
-It may not be surprising that there are zero results here as these are "Abortion of Products of Conception" procedures, which perhaps would not classify as a live birth, which is our first filtering.
+It is not surprising that there are zero results here as these are "Abortion of Products of Conception" procedures . Abortions are filtered out in the method used to define deliveries.
 
 > This is a code block that I would like to refactor as a loop through the `surg_cols` list.
 
@@ -177,16 +177,111 @@ del_pcsec <- del_csec %>%
     PCSEC = if_else((PRCSE2G == T & PRCSE2P == F), T, F)
   )
 
-del_pcsec %>% 
-  count(PCSEC)
+
 ```
 
-## Write file
+## Primary Cesarean rate statewide
+
+```{r pcsec_prc}
+del_pcsec %>% 
+  tabyl(PCSEC) %>% 
+  rename(count = n) %>% 
+  adorn_pct_formatting()
+```
+
+
+**The TRUE value above is the percentage of deliveries involving all low-risk mothers without prior cesareans that result in a cesarean section.**
+
+## Laredo Hospital Primary Cesarean section rate
+
+Filter for the Laredo hospitals.
+
+```{r pcsec_laredo_filter}
+laredo_pcsec <- del_pcsec %>% 
+  filter(
+     str_detect(PROVIDER_NAME, "Laredo")
+  )
+
+laredo_pcsec %>% 
+  count(PROVIDER_NAME)
+```
+
+### Three-year Rate for Laredo hospitals
+
+```{r pcsec_laredo_rate}
+laredo_pcsec %>% 
+  tabyl(PROVIDER_NAME, PCSEC) %>% 
+  adorn_percentages() %>% 
+  adorn_pct_formatting() %>% 
+  adorn_ns()
+```
+
+**The TRUE value above is the percentage of deliveries involving all low-risk mothers without prior cesareans that result in a cesarean section.**
+
+### Yearly rate for all hospitals
+
+Set up a tibble that has the yearly rate for each hospital.
+
+```{r pcsec_rate_yr_all}
+pcsec_rate_yr_all <- del_pcsec %>% 
+  group_by(YR, PROVIDER_NAME, PCSEC) %>% 
+  summarize(CNT = n()) %>% 
+  pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
+  rename(
+    NPCSEC_CNT = "FALSE",
+    PCSEC_CNT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = NPCSEC_CNT + PCSEC_CNT
+  ) %>% 
+  filter(TOTAL >= 100) %>% 
+  mutate(
+    PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
+  ) %>%
+    arrange(PCRATE %>% desc())
+
+# peek at table
+pcsec_rate_yr_all %>% head()
+```
+
+### Laredo hospital rates per year
+
+```{r pcsec_rate_yr_lar}
+pcsec_rate_yr_lar <- pcsec_rate_yr_all %>% 
+  filter(
+    str_detect(PROVIDER_NAME, "Laredo")
+  )
+```
+
+### Table of Laredo hospital primary Cesarean Rates by year
+
+```{r pcsec_rate_yr_lar_table}
+pcsec_rate_yr_lar %>% 
+  arrange(YR) %>% 
+  select(YR, PROVIDER_NAME, PCRATE) %>% 
+  pivot_wider(names_from = YR, values_from = PCRATE)
+```
+
+### Chart of Laredo hospital primary Cesarean Rates by year
+
+```{r pcsec_rate_yr_lar_plot}
+pcsec_rate_yr_lar %>% 
+  ggplot(aes(YR, PCRATE)) +
+  geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
+  expand_limits(y = c(0,40)) +
+  theme(legend.position="bottom", legend.box = "vertical") +
+  labs(title = "Primary Cesarean rate by year", x = "YEAR", y = "Primary Cesarean Rate")
+
+```
+
+## Write files
+
+We write some dataframes to rds for later use.
 
 ```{r write}
 del_pcsec %>% write_rds("data-processed/pcsec.rds")
 
-del_pcsec %>% nrow()
+pcsec_rate_yr_all %>% write_rds("data-processed/pcsec_rate_yr_all.rds")
 
 # A klaxon to indicate the processing is complete
 beepr::beep(4)
