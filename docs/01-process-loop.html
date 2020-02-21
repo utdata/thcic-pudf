@@ -1780,7 +1780,9 @@ data %&gt;%
 <p>We write a single file of the uncomplicated deliveries.</p>
 <pre class="r"><code>data %&gt;% write_rds(&quot;data-processed/ahrq_del_ucmp.rds&quot;)
 
-# A klaxon to indicate the processing is complete
+data %&gt;% nrow()</code></pre>
+<pre><code>## [1] 993414</code></pre>
+<pre class="r"><code># A klaxon to indicate the processing is complete
 beepr::beep(4)</code></pre>
 </div>
 

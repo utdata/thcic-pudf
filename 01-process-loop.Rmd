@@ -225,9 +225,6 @@ We are using only year 2016-2018.
 ```{r}
 data <- data %>% 
   filter(YR %in% c("2016", "2017", "2018"))
-
-data %>% 
-  nrow()
 ```
 
 ## Write file
@@ -236,6 +233,8 @@ We write a single file of the uncomplicated deliveries.
 
 ```{r write}
 data %>% write_rds("data-processed/ahrq_del_ucmp.rds")
+
+data %>% nrow()
 
 # A klaxon to indicate the processing is complete
 beepr::beep(4)
