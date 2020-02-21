@@ -27,7 +27,7 @@ TheUniversity of Texas at Austin
 
 ### All Cesareans study
 
-- [02-analyze-csec](https://utdata.github.io/thcic-pudf/02-analyze-csec.html) is the analysis of cesareans vs all uncomplicated births.
+- [02-analyze-csec](https://utdata.github.io/thcic-pudf/02-analyze-csec.html) is the analysis of Cesareans vs all uncomplicated births.
 - [03-viz-crate](https://utdata.github.io/thcic-pudf/03-viz-crate.html) is an interactive table of the Cesarean rates for a three-year period, 2016-2018.
 
 ### Other notebooks

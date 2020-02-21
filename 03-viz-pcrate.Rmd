@@ -6,10 +6,10 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
-- The PCRATE is the percentage of primary Cesarean deliveries among all uncomplicated deliveries, minus those with previous Cesarean procedures. This is based on the AHRQ 33 spec.
+- The PCRATE is the percentage of Primary Cesarean deliveries among all uncomplicated deliveries (minus those with previous Cesarean procedures). This is based on the AHRQ 33 spec.
 - NPCSEC_CNT are deliveries that were not Primary Cesarean. PCSEC_CNT are those that are.
 
-The listed is filtered to exclude hospitals with fewer than 100 TOTAL deliveries.
+The list is filtered to exclude hospitals with fewer than 100 TOTAL deliveries.
 
 ```{r setup, echo=F, results='hide', message=F, warning=F}
 library(tidyverse)
