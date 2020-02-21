@@ -6,8 +6,6 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
-> I eventually want to define all AHRQ process lists in 01-process-lists
-
 The purpose of this notebook is to process multiple quarters of [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) into a single data file of deliveries without complications. This requires importing and applying several filtering options.
 
 We are using AHRQ's [Inpatient Quality Indicator 21 (IQI 21) Cesarean Delivery Rate, Uncomplicated](resources/IQI_21_Cesarean_Delivery_Rate_Uncomplicated.pdf) method, so in this notebook we'll be applying the "DENOMINATOR" rules to identify deliveries and filter out complications and missing/nonrelevant rows. One addition is to filter by women of normal child-bearing age: 15-49.
@@ -45,38 +43,17 @@ tsv_files
 
 ## Function to filter for deliveries
 
-For processing this data, I build functions to apply difference AHRG filtering to each file before binding them into a single tibble. In some cases the processing filters multiple columns for multiple conditions.
+For processing this data, I build functions to apply difference AHRQ filtering to each file before binding them into a single tibble. In some cases the processing filters multiple columns for multiple conditions.
 
 The functions are set up first, then used later in the processing loop.
 
 ### Filter to birth deliveries
 
-In this case, we are looking at all columns with "DIAG" in name for values in the `delivery_icd` list, which comes from "DELOCMD*" in our IQI 21 reference.
+In this case, we are looking at all columns with "DIAG" in name for values in the `delivery_icd` list, which comes from "DELOCMD" in our IQI 21 or IQI 33 reference.
 
 
 ```{r deliveries}
-# Discharges with an ICD-10-CM diagnosis code for birth delivery outcome (DELOCMD* ).
-delivery_icd <- c(
-  "Z370",
-  "Z371",
-  "Z372",
-  "Z373",
-  "Z374",
-  "Z3750",
-  "Z3751",
-  "Z3752",
-  "Z3753",
-  "Z3754",
-  "Z3759",
-  "Z3760",
-  "Z3761",
-  "Z3762",
-  "Z3763",
-  "Z3764",
-  "Z3769",
-  "Z377",
-  "Z379"
-)
+delocmd_list <- read_rds("procedures-lists/ahrq_delocmd.rds") %>% .$delocmd
 
 filter_del <- function(.data) {
   .data %>%
@@ -86,7 +63,7 @@ filter_del <- function(.data) {
         -starts_with("POA")
       ),
       any_vars(
-        . %in% delivery_icd
+        . %in% delocmd_list
       )
     )
 }
@@ -95,14 +72,14 @@ filter_del <- function(.data) {
 
 ## Exclusions from the deliveries
 
-The AHRG IQI 21 requires excluding some complicated delivery cases:
+The AHRQ IQI 21 and IQI 33 requires excluding some complicated delivery cases:
 
 - with any listed ICD-10-CM diagnosis codes for abnormal presentation, fetal death, or multiple gestation (Appendix A: PRCSECD) and
 - with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)
 
 ### Get PRCSECD list
 
-We first need the list of PRCSECD codes from IQI_Appendix_A.pdf: "Abnormal presentation, fetal death and multiple gestation diagnosis codes: (PRCSECD)."
+We first need the list of PRCSECD codes from `resources/IQI_Appendix_A_2019.pdf`: "Abnormal presentation, fetal death and multiple gestation diagnosis codes: (PRCSECD)."
 
 The list of codes was extracted from the PDF and cleaned in OpenRefine to get full list. Details in the `procedures/iqi-appendex-a` folder.
 
@@ -116,12 +93,12 @@ prcsecd <- read_csv("procedures/iqi-appendex-a/IQI_Appendix_A.csv")
 prcsecd %>% nrow()
 
 # turn it into a list
-prcsecd_list <- prcsecd %>% as_vector()
+prcsecd_list <- prcsecd %>% .$codes
 ```
 
 #### Filter out deliveries based on PRCSECD codes
 
-When we are looking for a negative, we have to consider "all_vars" instead of "any_vars".
+In defining this function we are filtering for the codes, but retaining the remainder. So, to the filter for the negative, we have to consider "all_vars" instead of "any_vars".
 
 ```{r prcsecd}
 
@@ -159,9 +136,7 @@ filter_appendix_a <- function(.data) {
         !is.na(PRINC_DIAG_CODE)
       )
 }
-
 ```
-
 
 ### Child-bearing age
 
@@ -172,30 +147,17 @@ The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes
 This function filters for those values.
 
 ```{r age}
-# list of child-bearing age codes
-age_list <- c(
-  "05",
-  "06",
-  "07",
-  "08",
-  "09",
-  "10",
-  "11",
-  "12",
-  "23"
-)
+age_list <- read_rds("procedures-lists/utoha_age.rds") %>% .$age
 
 function_age <- function(.data) {
-
   .data %>% 
     filter(PAT_AGE %in% age_list)
 }
 ```
 
-
 ## Import and process
 
-This is the workhorse process to loop through the files and combine the data. It brings in each file and then applies the filtering functions.
+This is the workhorse process to loop through the files and combine the data. It brings in each file and then applies the filtering functions and the appends the results.
 
 At this time, our analysis utilizes only one (PUDF_base1) of several files in the release for each quarter. The raw data is never changed.
 
@@ -204,7 +166,7 @@ Of note:
 - There is a trailing tab on each row, which brings in an unnecssary column. This is removed with `col_skip()`, though you will see them as `problems()` in the import output. Those problems are resolved with the `col_skip()` function.
 - We set default type as chars because some cols will appear as logical because of the datatype sniffer with readr. We reset necessary cols as `as.numeric` where necessary.
 
-Import warnings are supressed. The show some import errors liked `Missing column names filled in: 'X167'` from extra tabs in raw file.
+Import warnings are supressed. The hides import errors like `Missing column names filled in: 'X167'` from extra tabs in raw files.
 
 ```{r process, echo=T, results='hide', message=F, warning=F}
 # warnings supressed.
@@ -238,13 +200,35 @@ for (file in files) {
 data %>% nrow()
 ```
 
-## Remove the 2015 records
+The result of this is `data` which is our combined and filtered data.
+
+## Add year column
+
+In the resulting file we add a YR column for convenience to use in later analysis.
 
 ```{r}
 data <- data %>% 
-  filter(substr(DISCHARGE, 1, 4) != "2015")
+  mutate(
+    YR = substr(DISCHARGE, 1, 4)
+  )
+
+data %>% 
+  count(YR)
 ```
 
+## Remove other years
+
+Because of a reporting lag, there are years in the original data that we are not using for our analysis. At some point in 2015 there was a switch from ICD-9 to ICD-10 coding, so going eariler would require some conversions. Not impossible, but not in scope at this time to ease complication.
+
+We are using only year 2016-2018. 
+
+```{r}
+data <- data %>% 
+  filter(YR %in% c("2016", "2017", "2018"))
+
+data %>% 
+  nrow()
+```
 
 ## Write file
 

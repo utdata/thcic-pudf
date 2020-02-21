@@ -133,7 +133,12 @@ starwars %>%
 
 Sharon Machlis offered this solution on News Nerdery and I think it will work, though I've yet to test it on the larger dataset. I really like the reusability of this solution. I've edit it for succinctness and to fit the flavor of this challenge.
 
+> I think I've figured out a flaw in this, and again because I have a poor example. My dataframe will have more columns than just those considered in the filter and this spits out just those considered within the filter. Also, it is super slow.
+
 ```{r}
+list_cols <- starwars %>% select(name, eye_color) %>% names()
+list_values <- c("Luke Skywalker", "Darth Vader", "blue")
+
 multi_col_mutate <- function(the_data, the_cols, the_values) {
   myresults <- the_data[the_cols]
   numcol <- ncol(myresults)
@@ -157,13 +162,20 @@ I like the promise of speed that Sharon mentions in her News Nerdery post, but i
 
 Clearly, I need to study  [data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html) more.
 
+More info from Sharon
+
+the_data_subset <- the_data[, ..my_cols]
+my_results <- the_data_subset[, mycol := any(as_vector(.SD) %chin% my_values), by = seq_len(nrow(the_data))]
+full_data <- merge(the_data, my_results, by.x = my_cols, by.y = my_cols, all.x = TRUE, all.y = TRUE)
+
 ```{r}
 dt_my_values <- c("Luke Skywalker", "Darth Vader", "blue")
 
-the_data <- as.data.table(starwars)
-the_data <- the_data[, .(name, eye_color)]
-myresults <- the_data[, mycol := any(as_vector(.SD) %chin% dt_my_values), by = seq_len(nrow(the_data))]
-
-myresults %>% count(mycol)
+dt_data <- as.data.table(starwars)
+# dt_data[name %in% dt_my_values]
+# dt_data <- dt_data[, .(name, eye_color)]
+dt_results <- dt_data[, mycol := any(as_vector(.SD) %chin% dt_my_values)]
+dt_results
+dt_results %>% count(mycol)
 ```
 

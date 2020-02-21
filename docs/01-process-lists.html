@@ -1583,7 +1583,12 @@ $(document).ready(function () {
 
 <p>This THCIC analysis will need various lists of columns and ICD-10 codes. This notebook will define them and write them to rds where they can be use in later analysis.</p>
 <p>Of note, to turn a single-column rds import into a vector, use the following:</p>
-<pre class="txt"><code>new_list &lt;- read_rds(&quot;data-processed/filename.rds&quot;) %&gt;% as_vector()</code></pre>
+<pre class="txt"><code>new_list &lt;- read_rds(&quot;procedures-lists/filename.rds&quot;) %&gt;% pull(col_name_from_df)
+
+# or
+
+new_list &lt;- read_rds(&quot;procedures-lists/filename.rds&quot;) %&gt;% .%col_name_from_df
+</code></pre>
 <pre class="r"><code>library(tidyverse)
 library(janitor)</code></pre>
 <div id="thcic-column-lists" class="section level2">
@@ -1595,42 +1600,41 @@ library(janitor)</code></pre>
 </div>
 <div id="diagnostic-columns" class="section level3">
 <h3>Diagnostic columns</h3>
+<p>Values are all the names of diagnostics columns from the data in a singe tibble with column named <code>diag</code>.</p>
 <pre class="r"><code>cols_diag &lt;- testdata %&gt;% 
   select(contains(&quot;_DIAG&quot;), -starts_with(&quot;POA&quot;)) %&gt;%
   names() %&gt;% 
   tibble::enframe(name = NULL) %&gt;% 
-  rename(col_names = value)
+  rename(diag = value)
 
 cols_diag %&gt;% 
-  write_csv(&quot;data-processed/cols_diag.csv&quot;)
+  write_csv(&quot;procedures-lists/cols_diag.csv&quot;)
 
 cols_diag %&gt;% 
-  write_rds(&quot;data-processed/cols_diag.rds&quot;)</code></pre>
+  write_rds(&quot;procedures-lists/cols_diag.rds&quot;)</code></pre>
 </div>
 <div id="surgical-procedure-columns" class="section level3">
 <h3>Surgical procedure columns</h3>
+<p>Values are all the names of surgical procedure columns from the data in a singe tibble with column named <code>surg</code>.</p>
 <pre class="r"><code>cols_surg &lt;- testdata %&gt;% 
   select(contains(&quot;SURG_PROC_CODE&quot;)) %&gt;%
   names() %&gt;% 
   tibble::enframe(name = NULL) %&gt;% 
-  rename(col_names = value)
+  rename(surg = value)
 
 cols_surg %&gt;% 
-  write_csv(&quot;data-processed/cols_surg.csv&quot;)
+  write_csv(&quot;procedures-lists/cols_surg.csv&quot;)
 
 cols_surg %&gt;% 
-  write_rds(&quot;data-processed/cols_surg.rds&quot;)</code></pre>
+  write_rds(&quot;procedures-lists/cols_surg.rds&quot;)</code></pre>
 </div>
 </div>
 <div id="ahrq-lists" class="section level2">
 <h2>AHRQ lists</h2>
 <p>These can come from IQI 33 or IQI 21. Some are in both.</p>
-<blockquote>
-<p>I need to reconcile 33 vs 21 and note here.</p>
-</blockquote>
 <div id="cesarean-delivery-ms-drg-codes-prcse2g" class="section level3">
 <h3>Cesarean delivery MS-DRG codes: (PRCSE2G)</h3>
-<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated</p>
+<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.</p>
 <pre class="r"><code># MS-DRG codes for Cesarean delivery (PRCSE2G*)
 prcse2g_list &lt;- c(
   &quot;765&quot;,
@@ -1640,7 +1644,7 @@ prcse2g_list &lt;- c(
   rename(prcse2g = value)
 
 prcse2g_list %&gt;% 
-  write_rds(&quot;data-processed/ahrq_prcse2g.rds&quot;)
+  write_rds(&quot;procedures-lists/ahrq_prcse2g.rds&quot;)
 
 prcse2g_list</code></pre>
 <div data-pagedtable="false">
@@ -1651,7 +1655,7 @@ prcse2g_list</code></pre>
 </div>
 <div id="hysterotomy-procedure-codes-prcse2p" class="section level3">
 <h3>Hysterotomy procedure codes: (PRCSE2P)</h3>
-<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated</p>
+<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.</p>
 <pre class="r"><code>prcse2p_list &lt;- c(
   &quot;10A00ZZ&quot;,
   &quot;10A03ZZ&quot;,
@@ -1661,7 +1665,7 @@ prcse2g_list</code></pre>
   rename(prcse2p = value)
 
 prcse2p_list %&gt;% 
-  write_rds(&quot;data-processed/ahrq_prcse2p.rds&quot;)
+  write_rds(&quot;procedures-lists/ahrq_prcse2p.rds&quot;)
 
 prcse2p_list</code></pre>
 <div data-pagedtable="false">
@@ -1672,7 +1676,7 @@ prcse2p_list</code></pre>
 </div>
 <div id="cesarean-delivery-procedure-codes-prcsecp" class="section level3">
 <h3>Cesarean delivery procedure codes: (PRCSECP)</h3>
-<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated</p>
+<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.</p>
 <pre class="r"><code>prcsecp_list &lt;- c(
   &quot;10D00Z0&quot;,
   &quot;10D00Z1&quot;,
@@ -1682,7 +1686,7 @@ prcse2p_list</code></pre>
   rename(prcsecp = value)
 
 prcsecp_list %&gt;% 
-  write_rds(&quot;data-processed/ahrq_prcsecp.rds&quot;)
+  write_rds(&quot;procedures-lists/ahrq_prcsecp.rds&quot;)
 
 prcsecp_list</code></pre>
 <div data-pagedtable="false">
@@ -1693,7 +1697,7 @@ prcsecp_list</code></pre>
 </div>
 <div id="outcome-of-delivery-diagnosis-codes-delocmd" class="section level3">
 <h3>Outcome of delivery diagnosis codes: (DELOCMD)</h3>
-<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated</p>
+<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.</p>
 <pre class="r"><code>delocmd_list &lt;- c(
   &quot;Z370&quot;,
   &quot;Z371&quot;,
@@ -1719,7 +1723,7 @@ prcsecp_list</code></pre>
   rename(delocmd = value)
 
 delocmd_list %&gt;% 
-  write_rds(&quot;data-processed/ahrq_delocmd.rds&quot;)
+  write_rds(&quot;procedures-lists/ahrq_delocmd.rds&quot;)
 
 delocmd_list</code></pre>
 <div data-pagedtable="false">
@@ -1745,7 +1749,7 @@ delocmd_list</code></pre>
   rename(prvbacd = value)
 
 prvbacd_list %&gt;% 
-  write_rds(&quot;data-processed/ahrq_prvbacd.rds&quot;)
+  write_rds(&quot;procedures-lists/ahrq_prvbacd.rds&quot;)
 
 prvbacd_list</code></pre>
 <div data-pagedtable="false">

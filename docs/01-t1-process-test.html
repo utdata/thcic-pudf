@@ -1804,6 +1804,13 @@ del_ucmp_cln %&gt;%
 </div>
 </div>
 </div>
+<div id="add-convenience-columns-for-dates" class="section level2">
+<h2>Add convenience columns for dates</h2>
+<pre class="r"><code>del_ucmp_cln_age &lt;- del_ucmp_cln_age %&gt;% 
+  mutate(
+    YR = substr(DISCHARGE, 1, 4)
+  )</code></pre>
+</div>
 <div id="write-file" class="section level2">
 <h2>Write file</h2>
 <pre class="r"><code>del_ucmp_cln_age %&gt;% nrow()</code></pre>

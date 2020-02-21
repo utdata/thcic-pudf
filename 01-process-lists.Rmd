@@ -6,14 +6,17 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
-> Move these files to a published directory!!!
-
 This THCIC analysis will need various lists of columns and ICD-10 codes. This notebook will define them and write them to rds where they can be use in later analysis.
 
 Of note, to turn a single-column rds import into a vector, use the following:
 
 ```txt
-new_list <- read_rds("data-processed/filename.rds") %>% as_vector()
+new_list <- read_rds("procedures-lists/filename.rds") %>% pull(col_name_from_df)
+
+# or
+
+new_list <- read_rds("procedures-lists/filename.rds") %>% .$col_name_from_df
+
 ```
 
 ```{r setup, echo=T, results='hide', message=F, warning=F}
@@ -33,105 +36,49 @@ testdata <- read_rds("data-test/ahrq_del_ucmp_ptest.rds")
 
 ### Diagnostic columns
 
+Values are all the names of diagnostics columns from the data in a singe tibble with column named `diag`. 
+
 ```{r}
 cols_diag <- testdata %>% 
   select(contains("_DIAG"), -starts_with("POA")) %>%
   names() %>% 
   tibble::enframe(name = NULL) %>% 
-  rename(col_names = value)
+  rename(diag = value)
 
 cols_diag %>% 
-  write_csv("data-processed/cols_diag.csv")
+  write_csv("procedures-lists/cols_diag.csv")
 
 cols_diag %>% 
-  write_rds("data-processed/cols_diag.rds")
+  write_rds("procedures-lists/cols_diag.rds")
   
 ```
 
 ### Surgical procedure columns
+
+Values are all the names of surgical procedure columns from the data in a singe tibble with column named `surg`.
 
 ```{r}
 cols_surg <- testdata %>% 
   select(contains("SURG_PROC_CODE")) %>%
   names() %>% 
   tibble::enframe(name = NULL) %>% 
-  rename(col_names = value)
+  rename(surg = value)
 
 cols_surg %>% 
-  write_csv("data-processed/cols_surg.csv")
+  write_csv("procedures-lists/cols_surg.csv")
 
 cols_surg %>% 
-  write_rds("data-processed/cols_surg.rds")
+  write_rds("procedures-lists/cols_surg.rds")
 ```
 
 ## AHRQ lists
 
 These can come from IQI 33 or IQI 21. Some are in both.
 
-> I need to reconcile 33 vs 21 and note here.
 
-### Cesarean delivery MS-DRG codes: (PRCSE2G)
+### All deliveries (DELOCMD)
 
-As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated
-
-```{r}
-# MS-DRG codes for Cesarean delivery (PRCSE2G*)
-prcse2g_list <- c(
-  "765",
-  "766"
-) %>%  
-  tibble::enframe(name = NULL) %>% 
-  rename(prcse2g = value)
-
-prcse2g_list %>% 
-  write_rds("data-processed/ahrq_prcse2g.rds")
-
-prcse2g_list
-```
-
-### Hysterotomy procedure codes: (PRCSE2P)
-
-As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated
-
-```{r}
-prcse2p_list <- c(
-  "10A00ZZ",
-  "10A03ZZ",
-  "10A04ZZ"
-) %>%  
-  tibble::enframe(name = NULL) %>% 
-  rename(prcse2p = value)
-
-prcse2p_list %>% 
-  write_rds("data-processed/ahrq_prcse2p.rds")
-
-prcse2p_list
-```
-
-
-### Cesarean delivery procedure codes: (PRCSECP)
-
-As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated
-
-```{r}
-prcsecp_list <- c(
-  "10D00Z0",
-  "10D00Z1",
-  "10D00Z2"
-) %>%  
-  tibble::enframe(name = NULL) %>% 
-  rename(prcsecp = value)
-
-prcsecp_list %>% 
-  write_rds("data-processed/ahrq_prcsecp.rds")
-
-prcsecp_list
-```
-
-
-### Outcome of delivery diagnosis codes: (DELOCMD)
-
-As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated
+All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery (DELOCMD). In both IQI 33 or IQI 21.
 
 ```{r}
 delocmd_list <- c(
@@ -159,11 +106,102 @@ delocmd_list <- c(
   rename(delocmd = value)
 
 delocmd_list %>% 
-  write_rds("data-processed/ahrq_delocmd.rds")
+  write_rds("procedures-lists/ahrq_delocmd.rds")
 
 delocmd_list
 ```
 
+### Cesarean delivery MS-DRG codes: (PRCSE2G)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.
+
+```{r}
+# MS-DRG codes for Cesarean delivery (PRCSE2G*)
+prcse2g_list <- c(
+  "765",
+  "766"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prcse2g = value)
+
+prcse2g_list %>% 
+  write_rds("procedures-lists/ahrq_prcse2g.rds")
+
+prcse2g_list
+```
+
+### Hysterotomy procedure codes: (PRCSE2P)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.
+
+```{r}
+prcse2p_list <- c(
+  "10A00ZZ",
+  "10A03ZZ",
+  "10A04ZZ"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prcse2p = value)
+
+prcse2p_list %>% 
+  write_rds("procedures-lists/ahrq_prcse2p.rds")
+
+prcse2p_list
+```
+
+### Cesarean delivery procedure codes: (PRCSECP)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.
+
+```{r}
+prcsecp_list <- c(
+  "10D00Z0",
+  "10D00Z1",
+  "10D00Z2"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prcsecp = value)
+
+prcsecp_list %>% 
+  write_rds("procedures-lists/ahrq_prcsecp.rds")
+
+prcsecp_list
+```
+
+### Outcome of delivery diagnosis codes: (DELOCMD)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.
+
+```{r}
+delocmd_list <- c(
+  "Z370",
+  "Z371",
+  "Z372",
+  "Z373",
+  "Z374",
+  "Z3750",
+  "Z3751",
+  "Z3752",
+  "Z3753",
+  "Z3754",
+  "Z3759",
+  "Z3760",
+  "Z3761",
+  "Z3762",
+  "Z3763",
+  "Z3764",
+  "Z3769",
+  "Z377",
+  "Z379"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(delocmd = value)
+
+delocmd_list %>% 
+  write_rds("procedures-lists/ahrq_delocmd.rds")
+
+delocmd_list
+```
 
 ### Previous Cesarean delivery diagnosis codes: (PRVBACD)
 
@@ -183,11 +221,39 @@ prvbacd_list <- c(
   rename(prvbacd = value)
 
 prvbacd_list %>% 
-  write_rds("data-processed/ahrq_prvbacd.rds")
+  write_rds("procedures-lists/ahrq_prvbacd.rds")
 
 prvbacd_list
 ```
 
+## Other lists used
 
+### Child-bearing age codes
+
+Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest filtering deliveries to women of normal child-bearing age, 15-49.
+
+The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs).
+
+```{r}
+age_list <- c(
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "23"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(age = value)
+
+age_list %>% 
+  write_rds("procedures-lists/utoha_age.rds")
+
+age_list
+
+```
 
 

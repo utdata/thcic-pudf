@@ -246,6 +246,16 @@ del_ucmp_cln %>%
 ```
 
 
+## Add convenience columns for dates
+
+```{r}
+del_ucmp_cln_age <- del_ucmp_cln_age %>% 
+  mutate(
+    YR = substr(DISCHARGE, 1, 4)
+  )
+```
+
+
 ## Write file
 
 ```{r}

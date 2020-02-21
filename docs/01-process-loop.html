@@ -1606,6 +1606,7 @@ tsv_files</code></pre>
 <pre><code>## data-raw/PUDF 1Q2016 tab-delimited/PUDF_base1_1q2016_tab.txt
 ## data-raw/PUDF 1Q2017 tab-delimited/PUDF_base1_1q2017_tab.txt
 ## data-raw/PUDF 1Q2018 tab-delimited/PUDF_base1_1q2018_tab.txt
+## data-raw/PUDF 1Q2019 tab-delimited/PUDF_base1_1q2019_tab.txt
 ## data-raw/PUDF 2Q2016 tab-delimited/PUDF_base1_2q2016_tab.txt
 ## data-raw/PUDF 2Q2017 tab-delimited/PUDF_base1_2q2017_tab.txt
 ## data-raw/PUDF 2Q2018 tab-delimited/PUDF_base1_2q2018_tab.txt
@@ -1613,37 +1614,17 @@ tsv_files</code></pre>
 ## data-raw/PUDF 3Q2017 tab-delimited/PUDF_base1_3q2017_tab.txt
 ## data-raw/PUDF 3Q2018 tab-delimited/PUDF_base1_3q2018_tab.txt
 ## data-raw/PUDF 4Q2016 tab-delimited/PUDF_base1_4q2016_tab.txt
-## data-raw/PUDF 4Q2017 tab-delimited/PUDF_base1_4q2017_tab.txt</code></pre>
+## data-raw/PUDF 4Q2017 tab-delimited/PUDF_base1_4q2017_tab.txt
+## data-raw/PUDF 4Q2018 tab-delimited/PUDF_base1_4q2018_tab.txt</code></pre>
 </div>
 <div id="function-to-filter-for-deliveries" class="section level2">
 <h2>Function to filter for deliveries</h2>
-<p>For processing this data, I build functions to apply difference AHRG filtering to each file before binding them into a single tibble. In some cases the processing filters multiple columns for multiple conditions.</p>
+<p>For processing this data, I build functions to apply difference AHRQ filtering to each file before binding them into a single tibble. In some cases the processing filters multiple columns for multiple conditions.</p>
 <p>The functions are set up first, then used later in the processing loop.</p>
 <div id="filter-to-birth-deliveries" class="section level3">
 <h3>Filter to birth deliveries</h3>
-<p>In this case, we are looking at all columns with “DIAG” in name for values in the <code>delivery_icd</code> list, which comes from &quot;DELOCMD*&quot; in our IQI 21 reference.</p>
-<pre class="r"><code># Discharges with an ICD-10-CM diagnosis code for birth delivery outcome (DELOCMD* ).
-delivery_icd &lt;- c(
-  &quot;Z370&quot;,
-  &quot;Z371&quot;,
-  &quot;Z372&quot;,
-  &quot;Z373&quot;,
-  &quot;Z374&quot;,
-  &quot;Z3750&quot;,
-  &quot;Z3751&quot;,
-  &quot;Z3752&quot;,
-  &quot;Z3753&quot;,
-  &quot;Z3754&quot;,
-  &quot;Z3759&quot;,
-  &quot;Z3760&quot;,
-  &quot;Z3761&quot;,
-  &quot;Z3762&quot;,
-  &quot;Z3763&quot;,
-  &quot;Z3764&quot;,
-  &quot;Z3769&quot;,
-  &quot;Z377&quot;,
-  &quot;Z379&quot;
-)
+<p>In this case, we are looking at all columns with “DIAG” in name for values in the <code>delivery_icd</code> list, which comes from “DELOCMD” in our IQI 21 or IQI 33 reference.</p>
+<pre class="r"><code>delocmd_list &lt;- read_rds(&quot;procedures-lists/ahrq_delocmd.rds&quot;) %&gt;% .$delocmd
 
 filter_del &lt;- function(.data) {
   .data %&gt;%
@@ -1653,7 +1634,7 @@ filter_del &lt;- function(.data) {
         -starts_with(&quot;POA&quot;)
       ),
       any_vars(
-        . %in% delivery_icd
+        . %in% delocmd_list
       )
     )
 }</code></pre>
@@ -1661,14 +1642,14 @@ filter_del &lt;- function(.data) {
 </div>
 <div id="exclusions-from-the-deliveries" class="section level2">
 <h2>Exclusions from the deliveries</h2>
-<p>The AHRG IQI 21 requires excluding some complicated delivery cases:</p>
+<p>The AHRQ IQI 21 and IQI 33 requires excluding some complicated delivery cases:</p>
 <ul>
 <li>with any listed ICD-10-CM diagnosis codes for abnormal presentation, fetal death, or multiple gestation (Appendix A: PRCSECD) and</li>
 <li>with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)</li>
 </ul>
 <div id="get-prcsecd-list" class="section level3">
 <h3>Get PRCSECD list</h3>
-<p>We first need the list of PRCSECD codes from IQI_Appendix_A.pdf: “Abnormal presentation, fetal death and multiple gestation diagnosis codes: (PRCSECD).”</p>
+<p>We first need the list of PRCSECD codes from <code>resources/IQI_Appendix_A_2019.pdf</code>: “Abnormal presentation, fetal death and multiple gestation diagnosis codes: (PRCSECD).”</p>
 <p>The list of codes was extracted from the PDF and cleaned in OpenRefine to get full list. Details in the <code>procedures/iqi-appendex-a</code> folder.</p>
 <div id="import-list-of-prcsecd-codes" class="section level4">
 <h4>Import list of PRCSECD codes</h4>
@@ -1682,11 +1663,11 @@ prcsecd &lt;- read_csv(&quot;procedures/iqi-appendex-a/IQI_Appendix_A.csv&quot;)
 prcsecd %&gt;% nrow()</code></pre>
 <pre><code>## [1] 264</code></pre>
 <pre class="r"><code># turn it into a list
-prcsecd_list &lt;- prcsecd %&gt;% as_vector()</code></pre>
+prcsecd_list &lt;- prcsecd %&gt;% .$codes</code></pre>
 </div>
 <div id="filter-out-deliveries-based-on-prcsecd-codes" class="section level4">
 <h4>Filter out deliveries based on PRCSECD codes</h4>
-<p>When we are looking for a negative, we have to consider “all_vars” instead of “any_vars”.</p>
+<p>In defining this function we are filtering for the codes, but retaining the remainder. So, to the filter for the negative, we have to consider “all_vars” instead of “any_vars”.</p>
 <pre class="r"><code>filter_prcsecd &lt;- function(.data) {
   .data %&gt;%
     filter_at(
@@ -1709,12 +1690,12 @@ prcsecd_list &lt;- prcsecd %&gt;% as_vector()</code></pre>
 <pre class="r"><code>filter_appendix_a &lt;- function(.data) {
   .data %&gt;% 
       filter(
-      SEX_CODE == &quot;F&quot;,
-      PAT_AGE != &quot;`&quot;,
-      RACE != &quot;`&quot;,
-      !is.na(DISCHARGE),
-      !is.na(PRINC_DIAG_CODE)
-    )
+        SEX_CODE == &quot;F&quot;,
+        PAT_AGE != &quot;`&quot;,
+        RACE != &quot;`&quot;,
+        !is.na(DISCHARGE),
+        !is.na(PRINC_DIAG_CODE)
+      )
 }</code></pre>
 </div>
 <div id="child-bearing-age" class="section level3">
@@ -1722,21 +1703,9 @@ prcsecd_list &lt;- prcsecd %&gt;% as_vector()</code></pre>
 <p>Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest filtering deliveries to women of normal child-bearing age, 15-49.</p>
 <p>The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs).</p>
 <p>This function filters for those values.</p>
-<pre class="r"><code># list of child-bearing age codes
-age_list &lt;- c(
-  &quot;05&quot;,
-  &quot;06&quot;,
-  &quot;07&quot;,
-  &quot;08&quot;,
-  &quot;09&quot;,
-  &quot;10&quot;,
-  &quot;11&quot;,
-  &quot;12&quot;,
-  &quot;23&quot;
-)
+<pre class="r"><code>age_list &lt;- read_rds(&quot;procedures-lists/utoha_age.rds&quot;) %&gt;% .$age
 
 function_age &lt;- function(.data) {
-
   .data %&gt;% 
     filter(PAT_AGE %in% age_list)
 }</code></pre>
@@ -1744,14 +1713,14 @@ function_age &lt;- function(.data) {
 </div>
 <div id="import-and-process" class="section level2">
 <h2>Import and process</h2>
-<p>This is the workhorse process to loop through the files and combine the data. It brings in each file and then applies the filtering functions.</p>
+<p>This is the workhorse process to loop through the files and combine the data. It brings in each file and then applies the filtering functions and the appends the results.</p>
 <p>At this time, our analysis utilizes only one (PUDF_base1) of several files in the release for each quarter. The raw data is never changed.</p>
 <p>Of note:</p>
 <ul>
 <li>There is a trailing tab on each row, which brings in an unnecssary column. This is removed with <code>col_skip()</code>, though you will see them as <code>problems()</code> in the import output. Those problems are resolved with the <code>col_skip()</code> function.</li>
 <li>We set default type as chars because some cols will appear as logical because of the datatype sniffer with readr. We reset necessary cols as <code>as.numeric</code> where necessary.</li>
 </ul>
-<p>Import warnings are supressed. The show some import errors liked <code>Missing column names filled in: 'X167'</code> from extra tabs in raw file.</p>
+<p>Import warnings are supressed. The hides import errors like <code>Missing column names filled in: 'X167'</code> from extra tabs in raw files.</p>
 <pre class="r"><code># warnings supressed.
 
 # create the tibble
@@ -1781,6 +1750,30 @@ for (file in files) {
 }
 
 data %&gt;% nrow()</code></pre>
+<p>The result of this is <code>data</code> which is our combined and filtered data.</p>
+</div>
+<div id="add-year-column" class="section level2">
+<h2>Add year column</h2>
+<p>In the resulting file we add a YR column for convenience to use in later analysis.</p>
+<pre class="r"><code>data &lt;- data %&gt;% 
+  mutate(
+    YR = substr(DISCHARGE, 1, 4)
+  )
+
+data %&gt;% 
+  count(YR)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["YR"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"2015","2":"3"},{"1":"2016","2":"342996"},{"1":"2017","2":"325829"},{"1":"2018","2":"324589"},{"1":"2019","2":"76468"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="remove-other-years" class="section level2">
+<h2>Remove other years</h2>
+<p>Because of a reporting lag, there are years in the original data that we are not using for our analysis. At some point in 2015 there was a switch from ICD-9 to ICD-10 coding, so going eariler would require some conversions. Not impossible, but not in scope at this time to ease complication.</p>
+<p>We are using only year 2016-2018.</p>
+<pre class="r"><code>data &lt;- data %&gt;% 
+  filter(YR %in% c(&quot;2016&quot;, &quot;2017&quot;, &quot;2018&quot;))</code></pre>
 </div>
 <div id="write-file" class="section level2">
 <h2>Write file</h2>
