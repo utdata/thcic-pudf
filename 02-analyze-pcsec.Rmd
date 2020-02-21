@@ -6,24 +6,28 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
+By Christian McDonald, Assistant Professor of Practice\
+School of Journalism, Moody College of Communication\
+University of Texas at Austin
+
 This analysis of the Primary Cesarean Delivery Rate, Uncomplicated, as defined by [AHRQ IQI 33](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf) from 2019:
 
 First-time Cesarean deliveries without a hysterotomy procedure per 1,000 deliveries. Excludes deliveries with complications (abnormal presentation, preterm delivery, fetal death, multiple gestation diagnoses, or breech procedure).
 
-We may have enough to not define as "per 1,000 deliveries".
+We have enough results to not define as "per 1,000 deliveries". We are using a simple rate: Primary Cesarean / All uncomplicated deliveries.
 
-## NUMERATOR
+## AHRQ definition
+
+### Numerator
 
 Discharges, among cases meeting the inclusion and exclusion rules for the denominator, with either:
 
 - MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P* ) or
 - any-listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP* ) without any-listed ICD- 10-PCS procedure codes for hysterotomy (PRCSE2P* ).
 
-## DENOMINATOR
+### Denominator
 
-All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery (DELOCMD* ).
-
-### DENOMINATOR EXCLUSIONS
+All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery (DELOCMD).
 
 Exclude cases:
 
@@ -74,9 +78,9 @@ prcse2p_list <- read_rds("procedures-lists/ahrq_prcse2p.rds") %>% .$prcse2p
 prvbacd_list <- read_rds("procedures-lists/ahrq_prvbacd.rds") %>% .$prvbacd
 ```
 
-## Filter deliveries to set DENOMINATOR
+## Filter deliveries to set denominator
 
-For this analysis, we need to additionally exclude outcomes "with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD*)". This prvbacd_list comes from the AHRQ specification.
+For this analysis, we need to additionally exclude outcomes "with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD)". This prvbacd_list comes from the AHRQ specification.
 
 ```{r nprv}
 del_nprv <- del %>% 
@@ -90,18 +94,18 @@ del_nprv <- del %>%
 del_nprv %>% nrow()
 ```
 
-This completes our "DENOMINATOR" set of data.
+This completes our "denominator" set of data. This is saved in `del_nprv`.
 
-## Code records for NUMERATOR
+## Code records for numberator
 
-The AHRQ spec defines two ways to find this. This first is:
+The AHRQ spec defines two ways to find this. We use the first listed:
 
-"MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P*)."
+"MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P)."
 
 How we handle this:
 
-- Create a cesarean column based on MS-DRG codes. This is an easy `if_else`.
-- Create a column that is hysterotomy. This is more complicated because we have to look through each SURG_PROC column for any value in the prcse2p_list.
+- Create a cesarean column `PRCSE2G` based on MS-DRG codes. This is an easy `if_else`.
+- Create a column `PRCSE2P` that are hysterotomy cases. This is more complicated because we have to look through each SURG_PROC column for any value in the prcse2p_list.
 - Create our primary csection column based on cesarean true and hysterotomy being false.
 
 ### Create column for PRCSE2G or cesarean deliveries
@@ -123,6 +127,8 @@ del_csec %>%
 ... "without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P)."
 
 It is not surprising that there are zero results here as these are "Abortion of Products of Conception" procedures . Abortions are filtered out in the method used to define deliveries.
+
+I did test the code against unfiltered data to ensure that it does catch the PRCSE2P codes.
 
 > This is a code block that I would like to refactor as a loop through the `surg_cols` list.
 
@@ -161,14 +167,14 @@ del_csec <- del_csec %>%
     )
   )
 
+# peek at results
 del_csec %>% 
   count(PRCSE2P)
-
 ```
 
 ### Create Primary Cesarean column
 
-Test if PRCSE2G is TRUE and PRCSE2P is FALSE.
+Create `PCSEC` and set as TRUE only if both PRCSE2G is TRUE and PRCSE2P is FALSE.
 
 ```{r pcsec}
 
@@ -176,11 +182,11 @@ del_pcsec <- del_csec %>%
   mutate(
     PCSEC = if_else((PRCSE2G == T & PRCSE2P == F), T, F)
   )
-
-
 ```
 
 ## Primary Cesarean rate statewide
+
+This compares all the cases and gives us a percentage of those that are Primary Cesarean births. **The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.**
 
 ```{r pcsec_prc}
 del_pcsec %>% 
@@ -189,10 +195,7 @@ del_pcsec %>%
   adorn_pct_formatting()
 ```
 
-
-**The TRUE value above is the percentage of deliveries involving all low-risk mothers without prior cesareans that result in a cesarean section.**
-
-## Laredo Hospital Primary Cesarean section rate
+## Laredo hospitals: Primary Cesarean rate
 
 Filter for the Laredo hospitals.
 
@@ -208,6 +211,8 @@ laredo_pcsec %>%
 
 ### Three-year Rate for Laredo hospitals
 
+**The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.**
+
 ```{r pcsec_laredo_rate}
 laredo_pcsec %>% 
   tabyl(PROVIDER_NAME, PCSEC) %>% 
@@ -215,8 +220,6 @@ laredo_pcsec %>%
   adorn_pct_formatting() %>% 
   adorn_ns()
 ```
-
-**The TRUE value above is the percentage of deliveries involving all low-risk mothers without prior cesareans that result in a cesarean section.**
 
 ### Yearly rate for all hospitals
 
@@ -239,12 +242,9 @@ pcsec_rate_yr_all <- del_pcsec %>%
     PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
   ) %>%
     arrange(PCRATE %>% desc())
-
-# peek at table
-pcsec_rate_yr_all %>% head()
 ```
 
-### Laredo hospital rates per year
+### Filter for Laredo hospitals
 
 ```{r pcsec_rate_yr_lar}
 pcsec_rate_yr_lar <- pcsec_rate_yr_all %>% 
@@ -253,7 +253,7 @@ pcsec_rate_yr_lar <- pcsec_rate_yr_all %>%
   )
 ```
 
-### Table of Laredo hospital primary Cesarean Rates by year
+### Table of Laredo hospitals Primary Cesarean Rates by year
 
 ```{r pcsec_rate_yr_lar_table}
 pcsec_rate_yr_lar %>% 
@@ -262,7 +262,7 @@ pcsec_rate_yr_lar %>%
   pivot_wider(names_from = YR, values_from = PCRATE)
 ```
 
-### Chart of Laredo hospital primary Cesarean Rates by year
+### Chart of Laredo hospitals Primary Cesarean Rates by year
 
 ```{r pcsec_rate_yr_lar_plot}
 pcsec_rate_yr_lar %>% 

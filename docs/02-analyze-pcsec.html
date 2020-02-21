@@ -1581,22 +1581,25 @@ $(document).ready(function () {
 </div>
 
 
+<p>By Christian McDonald, Assistant Professor of Practice<br />
+School of Journalism, Moody College of Communication<br />
+University of Texas at Austin</p>
 <p>This analysis of the Primary Cesarean Delivery Rate, Uncomplicated, as defined by <a href="https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf">AHRQ IQI 33</a> from 2019:</p>
 <p>First-time Cesarean deliveries without a hysterotomy procedure per 1,000 deliveries. Excludes deliveries with complications (abnormal presentation, preterm delivery, fetal death, multiple gestation diagnoses, or breech procedure).</p>
-<p>We may have enough to not define as “per 1,000 deliveries”.</p>
-<div id="numerator" class="section level2">
-<h2>NUMERATOR</h2>
+<p>We have enough results to not define as “per 1,000 deliveries”. We are using a simple rate: Primary Cesarean / All uncomplicated deliveries.</p>
+<div id="ahrq-definition" class="section level2">
+<h2>AHRQ definition</h2>
+<div id="numerator" class="section level3">
+<h3>Numerator</h3>
 <p>Discharges, among cases meeting the inclusion and exclusion rules for the denominator, with either:</p>
 <ul>
 <li>MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P* ) or</li>
 <li>any-listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP* ) without any-listed ICD- 10-PCS procedure codes for hysterotomy (PRCSE2P* ).</li>
 </ul>
 </div>
-<div id="denominator" class="section level2">
-<h2>DENOMINATOR</h2>
-<p>All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery (DELOCMD* ).</p>
-<div id="denominator-exclusions" class="section level3">
-<h3>DENOMINATOR EXCLUSIONS</h3>
+<div id="denominator" class="section level3">
+<h3>Denominator</h3>
+<p>All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery (DELOCMD).</p>
 <p>Exclude cases:</p>
 <ul>
 <li>with any-listed ICD-10-CM diagnosis codes for abnormal presentation, preterm, fetal death, or multiple gestation (Appendix A: PRCSECD)</li>
@@ -1641,8 +1644,8 @@ prcse2p_list &lt;- read_rds(&quot;procedures-lists/ahrq_prcse2p.rds&quot;) %&gt;
 prvbacd_list &lt;- read_rds(&quot;procedures-lists/ahrq_prvbacd.rds&quot;) %&gt;% .$prvbacd</code></pre>
 </div>
 <div id="filter-deliveries-to-set-denominator" class="section level2">
-<h2>Filter deliveries to set DENOMINATOR</h2>
-<p>For this analysis, we need to additionally exclude outcomes &quot;with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD*)&quot;. This prvbacd_list comes from the AHRQ specification.</p>
+<h2>Filter deliveries to set denominator</h2>
+<p>For this analysis, we need to additionally exclude outcomes “with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD)”. This prvbacd_list comes from the AHRQ specification.</p>
 <pre class="r"><code>del_nprv &lt;- del %&gt;% 
   filter_at(
     vars(diag_cols),
@@ -1653,16 +1656,16 @@ prvbacd_list &lt;- read_rds(&quot;procedures-lists/ahrq_prvbacd.rds&quot;) %&gt;
 
 del_nprv %&gt;% nrow()</code></pre>
 <pre><code>## [1] 793891</code></pre>
-<p>This completes our “DENOMINATOR” set of data.</p>
+<p>This completes our “denominator” set of data. This is saved in <code>del_nprv</code>.</p>
 </div>
-<div id="code-records-for-numerator" class="section level2">
-<h2>Code records for NUMERATOR</h2>
-<p>The AHRQ spec defines two ways to find this. This first is:</p>
-<p>&quot;MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P*).&quot;</p>
+<div id="code-records-for-numberator" class="section level2">
+<h2>Code records for numberator</h2>
+<p>The AHRQ spec defines two ways to find this. We use the first listed:</p>
+<p>“MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P).”</p>
 <p>How we handle this:</p>
 <ul>
-<li>Create a cesarean column based on MS-DRG codes. This is an easy <code>if_else</code>.</li>
-<li>Create a column that is hysterotomy. This is more complicated because we have to look through each SURG_PROC column for any value in the prcse2p_list.</li>
+<li>Create a cesarean column <code>PRCSE2G</code> based on MS-DRG codes. This is an easy <code>if_else</code>.</li>
+<li>Create a column <code>PRCSE2P</code> that are hysterotomy cases. This is more complicated because we have to look through each SURG_PROC column for any value in the prcse2p_list.</li>
 <li>Create our primary csection column based on cesarean true and hysterotomy being false.</li>
 </ul>
 <div id="create-column-for-prcse2g-or-cesarean-deliveries" class="section level3">
@@ -1685,6 +1688,7 @@ del_csec %&gt;%
 <h3>Create column based on hysterotomy</h3>
 <p>… “without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P).”</p>
 <p>It is not surprising that there are zero results here as these are “Abortion of Products of Conception” procedures . Abortions are filtered out in the method used to define deliveries.</p>
+<p>I did test the code against unfiltered data to ensure that it does catch the PRCSE2P codes.</p>
 <blockquote>
 <p>This is a code block that I would like to refactor as a loop through the <code>surg_cols</code> list.</p>
 </blockquote>
@@ -1721,6 +1725,7 @@ del_csec &lt;- del_csec %&gt;%
     )
   )
 
+# peek at results
 del_csec %&gt;% 
   count(PRCSE2P)</code></pre>
 <div data-pagedtable="false">
@@ -1731,7 +1736,7 @@ del_csec %&gt;%
 </div>
 <div id="create-primary-cesarean-column" class="section level3">
 <h3>Create Primary Cesarean column</h3>
-<p>Test if PRCSE2G is TRUE and PRCSE2P is FALSE.</p>
+<p>Create <code>PCSEC</code> and set as TRUE only if both PRCSE2G is TRUE and PRCSE2P is FALSE.</p>
 <pre class="r"><code>del_pcsec &lt;- del_csec %&gt;% 
   mutate(
     PCSEC = if_else((PRCSE2G == T &amp; PRCSE2P == F), T, F)
@@ -1740,6 +1745,7 @@ del_csec %&gt;%
 </div>
 <div id="primary-cesarean-rate-statewide" class="section level2">
 <h2>Primary Cesarean rate statewide</h2>
+<p>This compares all the cases and gives us a percentage of those that are Primary Cesarean births. <strong>The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.</strong></p>
 <pre class="r"><code>del_pcsec %&gt;% 
   tabyl(PCSEC) %&gt;% 
   rename(count = n) %&gt;% 
@@ -1749,10 +1755,9 @@ del_csec %&gt;%
 {"columns":[{"label":["PCSEC"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["count"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["percent"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"FALSE","2":"649510","3":"81.8%"},{"1":"TRUE","2":"144381","3":"18.2%"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p><strong>The TRUE value above is the percentage of deliveries involving all low-risk mothers without prior cesareans that result in a cesarean section.</strong></p>
 </div>
-<div id="laredo-hospital-primary-cesarean-section-rate" class="section level2">
-<h2>Laredo Hospital Primary Cesarean section rate</h2>
+<div id="laredo-hospitals-primary-cesarean-rate" class="section level2">
+<h2>Laredo hospitals: Primary Cesarean rate</h2>
 <p>Filter for the Laredo hospitals.</p>
 <pre class="r"><code>laredo_pcsec &lt;- del_pcsec %&gt;% 
   filter(
@@ -1768,6 +1773,7 @@ laredo_pcsec %&gt;%
 </div>
 <div id="three-year-rate-for-laredo-hospitals" class="section level3">
 <h3>Three-year Rate for Laredo hospitals</h3>
+<p><strong>The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.</strong></p>
 <pre class="r"><code>laredo_pcsec %&gt;% 
   tabyl(PROVIDER_NAME, PCSEC) %&gt;% 
   adorn_percentages() %&gt;% 
@@ -1778,7 +1784,6 @@ laredo_pcsec %&gt;%
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["PROVIDER_NAME"],"name":[1],"type":["chr"],"align":["left"]},{"label":["FALSE"],"name":[2],"type":["chr"],"align":["left"]},{"label":["TRUE"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"Doctors Hospital-Laredo","2":"69.0% (2576)","3":"31.0% (1159)","_rn_":"1"},{"1":"Laredo Medical Center","2":"75.6% (4965)","3":"24.4% (1605)","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p><strong>The TRUE value above is the percentage of deliveries involving all low-risk mothers without prior cesareans that result in a cesarean section.</strong></p>
 </div>
 <div id="yearly-rate-for-all-hospitals" class="section level3">
 <h3>Yearly rate for all hospitals</h3>
@@ -1798,25 +1803,17 @@ laredo_pcsec %&gt;%
   mutate(
     PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
   ) %&gt;%
-    arrange(PCRATE %&gt;% desc())
-
-# peek at table
-pcsec_rate_yr_all %&gt;% head()</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["YR"],"name":[1],"type":["chr"],"align":["left"]},{"label":["PROVIDER_NAME"],"name":[2],"type":["chr"],"align":["left"]},{"label":["NPCSEC_CNT"],"name":[3],"type":["int"],"align":["right"]},{"label":["PCSEC_CNT"],"name":[4],"type":["int"],"align":["right"]},{"label":["TOTAL"],"name":[5],"type":["int"],"align":["right"]},{"label":["PCRATE"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"2017","2":"Doctors Hospital-Laredo","3":"818","4":"422","5":"1240","6":"34.0"},{"1":"2016","2":"Mainland Medical Center","3":"111","4":"57","5":"168","6":"33.9"},{"1":"2016","2":"Valley Regional Medical Center","3":"965","4":"465","5":"1430","6":"32.5"},{"1":"2017","2":"The Hospitals of Providence Sierra Campus","3":"416","4":"199","5":"615","6":"32.4"},{"1":"2017","2":"Valley Regional Medical Center","3":"880","4":"422","5":"1302","6":"32.4"},{"1":"2018","2":"Valley Regional Medical Center","3":"947","4":"444","5":"1391","6":"31.9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+    arrange(PCRATE %&gt;% desc())</code></pre>
 </div>
-</div>
-<div id="laredo-hospital-rates-per-year" class="section level3">
-<h3>Laredo hospital rates per year</h3>
+<div id="filter-for-laredo-hospitals" class="section level3">
+<h3>Filter for Laredo hospitals</h3>
 <pre class="r"><code>pcsec_rate_yr_lar &lt;- pcsec_rate_yr_all %&gt;% 
   filter(
     str_detect(PROVIDER_NAME, &quot;Laredo&quot;)
   )</code></pre>
 </div>
-<div id="table-of-laredo-hospital-primary-cesarean-rates-by-year" class="section level3">
-<h3>Table of Laredo hospital primary Cesarean Rates by year</h3>
+<div id="table-of-laredo-hospitals-primary-cesarean-rates-by-year" class="section level3">
+<h3>Table of Laredo hospitals Primary Cesarean Rates by year</h3>
 <pre class="r"><code>pcsec_rate_yr_lar %&gt;% 
   arrange(YR) %&gt;% 
   select(YR, PROVIDER_NAME, PCRATE) %&gt;% 
@@ -1827,8 +1824,8 @@ pcsec_rate_yr_all %&gt;% head()</code></pre>
   </script>
 </div>
 </div>
-<div id="chart-of-laredo-hospital-primary-cesarean-rates-by-year" class="section level3">
-<h3>Chart of Laredo hospital primary Cesarean Rates by year</h3>
+<div id="chart-of-laredo-hospitals-primary-cesarean-rates-by-year" class="section level3">
+<h3>Chart of Laredo hospitals Primary Cesarean Rates by year</h3>
 <pre class="r"><code>pcsec_rate_yr_lar %&gt;% 
   ggplot(aes(YR, PCRATE)) +
   geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
