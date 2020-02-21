@@ -1,0 +1,46 @@
+---
+title: "Primary Cesarean delivery rates table, 2016-2018"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+- The PCRATE is the percentage of primary Cesarean deliveries among all uncomplicated deliveries, minus those with previous Cesarean procedures. This is based on the AHRQ 33 spec.
+- NPCSEC_CNT are deliveries that were not Primary Cesarean. PCSEC_CNT are those that are.
+
+The listed is filtered to exclude hospitals with fewer than 100 TOTAL deliveries.
+
+```{r setup, echo=F, results='hide', message=F, warning=F}
+library(tidyverse)
+library(DT)
+```
+
+```{r import, echo=F}
+pcsec_all <- read_rds("data-processed/pcsec.rds")
+```
+
+```{r reshape, echo=F}
+pcsec_reshape <- pcsec_all %>% 
+  group_by(PROVIDER_NAME, PCSEC) %>%
+  summarize(CNT = n()) %>%
+  pivot_wider(names_from = PCSEC, values_from = CNT) %>%
+  rename(
+    NPCSEC_CNT = "FALSE",
+    PCSEC_CNT = "TRUE"
+  ) %>%
+  mutate(
+    TOTAL = NPCSEC_CNT + PCSEC_CNT
+  ) %>%
+  filter(TOTAL >= 100) %>%
+  mutate(
+    PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
+  ) %>%
+  select(PROVIDER_NAME, TOTAL, NPCSEC_CNT, PCSEC_CNT, PCRATE) %>% 
+  arrange(PCRATE %>% desc())
+```
+
+```{r table, echo=F}
+pcsec_reshape %>% datatable()
+```
+

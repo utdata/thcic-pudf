@@ -17,7 +17,8 @@ library(DT)
 
 
 ```{r import, echo=F}
-crate_all <- read_rds("data-processed/crate_all.rds") %>% 
+crate_all <- read_rds("data-processed/crate_all.rds")
+crate_all %>% 
   rename(
     NOTCESAREAN = N,
     CESAREAN = Y)
