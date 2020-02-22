@@ -25,6 +25,10 @@ TheUniversity of Texas at Austin
 - [02-analyze-pcsec](https://utdata.github.io/thcic-pudf/02-analyze-pcsec.html) is the analysis of _primary_ cesareans vs all uncomplicated births.
 - [03-viz-pcrate](https://utdata.github.io/thcic-pudf/03-viz-pcrate.html) is an interactive table of the Primary Cesarean rates for a three-year period, 2016-2018.
 
+### Episiotomy study
+
+- [02-analyze-episiotomy](https://utdata.github.io/thcic-pudf/02-analyze-episiotomy.html)
+
 ### All Cesareans study
 
 - [02-analyze-csec](https://utdata.github.io/thcic-pudf/02-analyze-csec.html) is the analysis of Cesareans vs all uncomplicated births.
