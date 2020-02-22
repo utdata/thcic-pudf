@@ -108,7 +108,7 @@ delocmd_list <- c(
 delocmd_list %>% 
   write_rds("procedures-lists/ahrq_delocmd.rds")
 
-delocmd_list
+delocmd_list %>% nrow()
 ```
 
 ### Cesarean delivery MS-DRG codes: (PRCSE2G)
@@ -127,7 +127,7 @@ prcse2g_list <- c(
 prcse2g_list %>% 
   write_rds("procedures-lists/ahrq_prcse2g.rds")
 
-prcse2g_list
+prcse2g_list %>% nrow()
 ```
 
 ### Hysterotomy procedure codes: (PRCSE2P)
@@ -146,7 +146,7 @@ prcse2p_list <- c(
 prcse2p_list %>% 
   write_rds("procedures-lists/ahrq_prcse2p.rds")
 
-prcse2p_list
+prcse2p_list %>% nrow()
 ```
 
 ### Cesarean delivery procedure codes: (PRCSECP)
@@ -165,7 +165,7 @@ prcsecp_list <- c(
 prcsecp_list %>% 
   write_rds("procedures-lists/ahrq_prcsecp.rds")
 
-prcsecp_list
+prcsecp_list %>% nrow()
 ```
 
 ### Outcome of delivery diagnosis codes: (DELOCMD)
@@ -200,7 +200,7 @@ delocmd_list <- c(
 delocmd_list %>% 
   write_rds("procedures-lists/ahrq_delocmd.rds")
 
-delocmd_list
+delocmd_list %>% nrow()
 ```
 
 ### Previous Cesarean delivery diagnosis codes: (PRVBACD)
@@ -223,7 +223,7 @@ prvbacd_list <- c(
 prvbacd_list %>% 
   write_rds("procedures-lists/ahrq_prvbacd.rds")
 
-prvbacd_list
+prvbacd_list %>% nrow()
 ```
 
 ## Other lists used
@@ -252,8 +252,81 @@ age_list <- c(
 age_list %>% 
   write_rds("procedures-lists/utoha_age.rds")
 
-age_list
+age_list %>% nrow()
 
 ```
 
+## Leapfrog Episiotomy lists
+
+### Vaginal MS_DRG codes
+
+```{r}
+vag_msdrg_list <- c(
+  "767",
+  "768",
+  "774",
+  "775",
+  "796",
+  "797",
+  "798",
+  "805",
+  "806",
+  "807"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(vag_msdrg = value)
+
+vag_msdrg_list %>% 
+  write_rds("procedures-lists/lf_vag_msdrg.rds")
+
+vag_msdrg_list %>% nrow()
+```
+
+### Vaginal APR_DRG codes
+
+```{r}
+vag_aprdrg_list <- c(
+  "541",
+  "542",
+  "560"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(vag_aprdrg = value)
+
+vag_aprdrg_list %>% 
+  write_rds("procedures-lists/lf_vag_aprdrg.rds")
+
+vag_aprdrg_list %>% nrow()
+
+```
+
+### Exclusions
+
+```{r}
+vag_excl_list <- c(
+  "O660"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(vag_excl = value)
+
+vag_excl_list %>% 
+  write_rds("procedures-lists/lf_vag_excl.rds")
+
+vag_excl_list %>% nrow()
+```
+
+### Episiotomy
+
+```{r}
+epi_list <- c(
+  "0W8NXZZ"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(epi = value)
+
+epi_list %>% 
+  write_rds("procedures-lists/lf_epi.rds")
+
+epi_list %>% nrow()
+```
 

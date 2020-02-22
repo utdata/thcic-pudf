@@ -1,0 +1,140 @@
+---
+title: "Episiotomy rates for state, Laredo hospitals, 2016-2018"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+This analysis looks at Episiotomy rates using the [Texas Health Care Information Collection's Texas Inpatient Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm). The definition to calculate the rates comes from the [2019 Leapfrog Hospital Survey p103](https://www.leapfroggroup.org/sites/default/files/Files/2019HospitalSurvey_20190529_v8.0%20%28version%203%29.pdf).
+
+> To start this analysis, we'll use AHRQ's definition of an uncompliated delivery, then filter for the vaginal deliveries in Leapfrog's definition. At a future date, I'll use Leapfrog's definition against the original data and then compare.
+
+The Episitomy definition uses several lists of ICD-10 codes. Those codes are processed into dataframes in the 01-process-lists notebook so they can be pulled into this and other notebooks.
+
+## Setup and import
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+library(janitor)
+```
+
+```{r imports}
+### production data
+del <- read_rds("data-processed/ahrq_del_ucmp.rds")
+
+### testing data
+# del <- read_rds("data-test/ahrq_del_ucmp_ptest.rds")
+
+### single quarter unfiltered for testing
+# del <- read_tsv("data-raw/PUDF 1Q2018 tab-delimited/PUDF_base1_1q2018_tab.txt")
+
+del %>% nrow()
+```
+
+
+## Setting up the denominator
+
+Total number of vaginal deliveries during the reporting time period, with Excluded Populations removed.
+
+### Filter for vaginal deliveries
+
+The definition lists a number of `MS_DRG` and `APR_DRG` codes  that make up vaginal deliveries. The lists are defined in 01-process-lists and we pull them in here.
+
+```{r}
+vag_msdrg_list <- read_rds("procedures-lists/lf_vag_msdrg.rds") %>% .$vag_msdrg
+vag_msdrg_list
+vag_aprdrg_list <- read_rds("procedures-lists/lf_vag_aprdrg.rds") %>% .$vag_aprdrg
+vag_aprdrg_list
+```
+
+Filter our incoming data for vaginal deliveries. Because we have two lists to consider, we'll create a column in our data where the values match, then filter them out.
+
+```{r}
+del <- del %>% 
+  mutate(
+    VAG = case_when(
+      MS_DRG %in% vag_msdrg_list ~ TRUE,
+      APR_DRG %in% vag_aprdrg_list ~ TRUE,
+      TRUE ~ FALSE
+    )
+  )
+
+del %>% 
+  count(VAG)
+
+del_vag <- del %>% 
+  filter(VAG == T)
+
+```
+
+### Filter for exclusions
+
+The next step is to: Exclude any cases with the following ICD-10-CM diagnostic code in a primary or secondary field:
+
+- O66.0: Obstructed labor due to shoulder dystocia
+
+We have to bring in our list of diagnostic columns and then filter based on the exception code.
+
+```{r}
+
+diag_cols <- read_rds("procedures-lists/cols_diag.rds") %>% .$diag
+vag_excl_list <- read_rds("procedures-lists/lf_vag_excl.rds") %>% .$vag_excl
+vag_excl_list
+
+del_vag_ex <- del_vag %>% 
+  filter_at(
+    vars(diag_cols),
+    all_vars(
+      !(. %in% vag_excl_list)
+    )
+  ) 
+
+del_vag_ex %>% nrow()
+```
+
+### Set the episiotomy cases
+
+This creates a column for cases where Episiotomy is true. We have to look through all of the surgical procedure columns to check for the code.
+
+```{r}
+surg_cols <- read_rds("procedures-lists/cols_surg.rds") %>% .$surg
+epi_list <- read_rds("procedures-lists/lf_epi.rds") %>% .$epi
+epi_list
+
+del_epi <- del_vag_ex %>% 
+  mutate(
+    EPI = case_when(
+      PRINC_SURG_PROC_CODE %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_1 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_2 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_3 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_4 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_5 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_6 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_7 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_8 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_9 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_10 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_11 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_12 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_13 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_14 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_15 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_16 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_17 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_18 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_19 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_20 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_21 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_22 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_23 %in% epi_list ~ TRUE,
+      OTH_SURG_PROC_CODE_24 %in% epi_list ~ TRUE,
+      TRUE ~ FALSE
+    )
+  )
+
+del_epi %>% 
+  count(EPI)
+```
+
