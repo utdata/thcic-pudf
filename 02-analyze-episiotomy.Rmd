@@ -17,6 +17,7 @@ The Episitomy definition uses several lists of ICD-10 codes. Those codes are pro
 ```{r setup, echo=T, results='hide', message=F, warning=F}
 library(tidyverse)
 library(janitor)
+library(DT)
 ```
 
 ```{r imports}
@@ -95,10 +96,10 @@ del_vag_ex %>% nrow()
 
 ### Set the episiotomy cases
 
-This creates a column for cases where Episiotomy is true. We have to look through all of the surgical procedure columns to check for the code.
+This creates a column for cases where Episiotomy is true. We have to look through each of the surgical procedure columns to check for the code.
 
 ```{r}
-surg_cols <- read_rds("procedures-lists/cols_surg.rds") %>% .$surg
+# list of codes for episiotmy, which is really one: 0W8NXZZ
 epi_list <- read_rds("procedures-lists/lf_epi.rds") %>% .$epi
 epi_list
 
@@ -134,7 +135,94 @@ del_epi <- del_vag_ex %>%
     )
   )
 
-del_epi %>% 
-  count(EPI)
 ```
+
+## Statewide Episiotomy rate, 2016-2018
+
+We combine all three years of data to compare the percentage of Episiotomy cases. The **TRUE** value is the percentage of cases where an Episiotomy is performed.
+
+```{r}
+del_epi %>% 
+  tabyl(EPI) %>% 
+  rename(count = n) %>% 
+  adorn_pct_formatting()
+```
+
+## Episiotomy rate for Laredo hospitals
+
+```{r}
+# filter for laredo hospitals
+
+del_epi_lar <- del_epi %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo"))
+
+del_epi_lar %>% 
+  tabyl(PROVIDER_NAME, EPI) %>% 
+  adorn_percentages() %>% 
+  adorn_pct_formatting() %>% 
+  adorn_ns()
+```
+
+### Episiotomy rates by hospital, by year
+
+A look at the Episiotomy rates for hospitals by year. We create the rate using the EPI column we created above, then pivot to do the math.
+
+```{r}
+# pivot to crate the rate based on logical EPI column
+del_epi_yr_data <- del_epi %>% 
+  group_by(YR, PROVIDER_NAME, EPI) %>% 
+  summarise(
+    EPI_CNT = n()
+  ) %>% 
+  pivot_wider(names_from = EPI, values_from = EPI_CNT) %>% 
+  rename(
+    EPIF = "FALSE",
+    EPIT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = EPIF + EPIT,
+    EPIRATE = round((EPIT / TOTAL) * 100,1)
+  )
+
+# peek at the results
+del_epi_yr_data %>% head()
+
+# select, pivot to see years.
+del_epi_yr_table <- del_epi_yr_data %>% 
+  filter(TOTAL >= 100) %>% 
+  select(YR, PROVIDER_NAME, EPIRATE) %>% 
+  pivot_wider(names_from = YR, values_from = EPIRATE) %>% 
+  arrange(`2018` %>% desc())
+
+del_epi_yr_table %>% head()
+
+```
+
+### Episiotomy rates by year, Laredo hospitals
+
+```{r}
+# filter for Laredo
+del_epi_yr_table %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo"))
+```
+
+### Episiotomy rates by year, statewide and searchable
+
+```{r}
+
+del_epi_yr_table %>% datatable()
+
+```
+
+
+## Write files
+
+Writing out some data frames for use in other notebooks
+
+```{r}
+del_epi %>% write_rds("data-processed/epi.rds")
+
+beepr::beep(4)
+```
+
 
