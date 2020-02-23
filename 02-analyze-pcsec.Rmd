@@ -200,24 +200,47 @@ del_pcsec %>%
   adorn_pct_formatting()
 ```
 
-## Primary Cesarean rate Laredo hospitals
+### Table: Cesarean rate by hospital, combined years
 
-**The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.**
+Get Primary Cesarean rate by hospital from all years combined.
 
-```{r pcsec_laredo_rate}
-del_pcsec %>% 
-  filter(
-     str_detect(PROVIDER_NAME, "Laredo")
+```{r pcsec_rate_all}
+pcsec_rate_all <- del_pcsec %>% 
+  group_by(PROVIDER_NAME, PCSEC) %>% 
+  summarize(CNT = n()) %>% 
+  pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
+  rename(
+    NPCSEC_CNT = "FALSE",
+    PCSEC_CNT = "TRUE"
   ) %>% 
-  tabyl(PROVIDER_NAME, PCSEC) %>% 
-  adorn_percentages() %>% 
-  adorn_pct_formatting() %>% 
-  adorn_ns()
+  mutate(
+    TOTAL = NPCSEC_CNT + PCSEC_CNT
+  ) %>% 
+  filter(TOTAL >= 100) %>% 
+  mutate(
+    PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
+  ) %>%
+    arrange(PCRATE %>% desc())
+
+pcsec_rate_all %>% datatable()
 ```
 
-### Yearly rate for all hospitals
+### Mean, Median of Primary Cesarean Rate by hospitals
 
-Set up a tibble that has the yearly rate for each hospital.
+The mean and median rate based on the yearly rate for each hospital.
+
+```{r}
+pcsec_rate_all %>% 
+  ungroup() %>% 
+  summarise(
+    MEAN = round(mean(PCRATE),1),
+    MEDIAN = median(PCRATE)
+  )
+```
+
+### Table: Primary Cesarean rates, by hospital and year
+
+Hospitals with fewer than 100 total deliveries excluded.
 
 ```{r pcsec_rate_yr_all}
 pcsec_rate_yr_all <- del_pcsec %>% 
@@ -237,41 +260,41 @@ pcsec_rate_yr_all <- del_pcsec %>%
   ) %>%
     arrange(PCRATE %>% desc())
 
-pcsec_rate_yr_all %>% arrange(YR) %>% head()
-```
-
-### Mean, Median of Primary Cesarean Rate by hospitals
-
-The mean and median rate based on the yearly rate for each hospital.
-
-```{r}
-pcsec_rate_yr_all %>% 
-  ungroup() %>% 
-  summarise(
-    MEAN = round(mean(PCRATE),1),
-    MEDIAN = median(PCRATE)
-  )
-```
-
-### Pivot to compare Primary Cesarean rates by year
-
-```{r pcsec_rate_yr_table}
 pcsec_rate_yr_table <- pcsec_rate_yr_all %>% 
   arrange(YR) %>% 
   select(YR, PROVIDER_NAME, PCRATE) %>% 
   pivot_wider(names_from = YR, values_from = PCRATE) %>% 
   arrange(`2019` %>% desc())
+
+pcsec_rate_yr_table %>% datatable()
+
 ```
 
 
-### Filter for Laredo hospitals
+## Laredo hospitals
+
+## Primary Cesarean rate combined years, Laredo hospitals
+
+**The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.**
+
+```{r pcsec_laredo_rate}
+del_pcsec %>% 
+  filter(
+     str_detect(PROVIDER_NAME, "Laredo")
+  ) %>% 
+  tabyl(PROVIDER_NAME, PCSEC) %>% 
+  adorn_percentages() %>% 
+  adorn_pct_formatting() %>% 
+  adorn_ns()
+```
+
+## Primary Cesarean rate by year, Laredo hospitals
 
 ```{r pcsec_rate_yr_lar}
 pcsec_rate_yr_table %>% 
-  filter(
-    str_detect(PROVIDER_NAME, "Laredo")
-  )
+  filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
+
 
 ### Chart: Primary Cesarean Rates by year, Laredo
 
@@ -283,12 +306,6 @@ pcsec_rate_yr_all %>%
   expand_limits(y = c(0,40)) +
   theme(legend.position="bottom", legend.box = "vertical") +
   labs(title = "Primary Cesarean rate by year, Laredo", x = "YEAR", y = "Primary Cesarean Rate")
-```
-
-## Searchable table: Primary Cesarean rates by year
-
-```{r pcsec_rate_yr_dtable}
-pcsec_rate_yr_all %>% datatable()
 ```
 
 ### Chart: Primary Cesarean rates by quarter, Laredo

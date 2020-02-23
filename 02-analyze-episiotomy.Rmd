@@ -1,5 +1,5 @@
 ---
-title: "Episiotomy rates, 2016-2018"
+title: "Episiotomy rates, 2016-2q2019"
 output:
   html_document:
     df_print: paged
@@ -99,6 +99,8 @@ del_vag_ex <- del_vag %>%
 del_vag_ex %>% nrow()
 ```
 
+## Set the numerator
+
 ### Set the episiotomy cases
 
 This creates a column for cases where episiotomy is true. We have to look through each of the surgical procedure columns to check for the code.
@@ -144,9 +146,9 @@ del_epi <- del_vag_ex %>%
 
 ```
 
-## Statewide episiotomy rate, 2016-2018
+## Statewide episiotomy rate, 2016-2q2019
 
-We combine all three years of data to compare the percentage of episiotomy cases. The **TRUE** value is the percentage of cases where an episiotomy is performed.
+We combine all years of data to compare the percentage of episiotomy cases. The **TRUE** value is the percentage of cases where an episiotomy is performed.
 
 ```{r rate_state}
 del_epi %>% 
@@ -155,20 +157,46 @@ del_epi %>%
   adorn_pct_formatting()
 ```
 
-## Episiotomy rate for Laredo hospitals
+## Searchable table: Episiotomy rates by hospital, combined years
 
-```{r rate_laredo}
-# filter for laredo hospitals
+Hospitals with fewer than 100 deliveries excluded.
 
-del_epi_lar <- del_epi %>% 
-  filter(str_detect(PROVIDER_NAME, "Laredo"))
+```{r rate_combo_state_table}
+del_epi_data <- del_epi %>%
+  group_by(PROVIDER_NAME, EPI) %>% 
+  summarise(
+    EPI_CNT = n()
+  ) %>% 
+  pivot_wider(names_from = EPI, values_from = EPI_CNT) %>% 
+  rename(
+    EPIF = "FALSE",
+    EPIT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = EPIF + EPIT,
+    EPIRATE = round((EPIT / TOTAL) * 100,1)
+  ) %>% 
+  select(PROVIDER_NAME, TOTAL, EPIF, EPIT, EPIRATE) %>% 
+  filter(TOTAL >= 100) %>% 
+  arrange(EPIRATE %>% desc())
 
-del_epi_lar %>% 
-  tabyl(PROVIDER_NAME, EPI) %>% 
-  adorn_percentages() %>% 
-  adorn_pct_formatting() %>% 
-  adorn_ns()
+del_epi_data %>%   
+    datatable()
 ```
+
+### Mean, Median of episiotomy rates by hospital
+
+The mean/median taken from the episiotomy rate of each hospital.
+
+```{r stats_tx}
+del_epi_data %>% 
+  ungroup() %>% 
+  summarise(
+    MEAN = round(mean(EPIRATE, na.rm=TRUE),2),
+    MEDIAN = median(EPIRATE, na.rm=TRUE)
+  )
+```
+
 
 ### Episiotomy rates by hospital, by year
 
@@ -191,18 +219,32 @@ del_epi_yr_data <- del_epi %>%
     EPIRATE = round((EPIT / TOTAL) * 100,1)
   )
 
-# peek at the results
-del_epi_yr_data %>% head()
-
 # select, pivot to see years.
 del_epi_yr_table <- del_epi_yr_data %>% 
   filter(TOTAL >= 100) %>% 
   select(YR, PROVIDER_NAME, EPIRATE) %>% 
   pivot_wider(names_from = YR, values_from = EPIRATE) %>% 
   arrange(`2019` %>% desc())
+```
 
-del_epi_yr_table %>% head()
 
+
+
+## Laredo hospitals
+
+### Episiotomy rate combined year, Laredo hospitals
+
+From combined years of the data.
+
+```{r rate_laredo}
+# filter for laredo hospitals
+
+del_epi %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo")) %>% 
+  tabyl(PROVIDER_NAME, EPI) %>% 
+  adorn_percentages() %>% 
+  adorn_pct_formatting() %>% 
+  adorn_ns()
 ```
 
 ### Episiotomy rates by year, Laredo hospitals
@@ -214,15 +256,6 @@ The table above, filtered for Laredo.
 del_epi_yr_table %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
-
-### Episiotomy rates by year, statewide and searchable
-
-
-```{r datatable}
-del_epi_yr_table %>% datatable()
-
-```
-
 
 ## Write files
 
