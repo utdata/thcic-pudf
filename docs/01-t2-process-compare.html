@@ -1586,12 +1586,12 @@ $(document).ready(function () {
 <p>I ran a one-time test on the looped processes against the test data for comparison. Here I check to make sure the number of rows returned is the same.</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
 <p>Read in each test rds and note the number of rows. The result should be the same for both.</p>
-<pre class="r"><code>ttst &lt;- read_rds(&quot;data-test/ahrq_del_ucmp_ttest.rds&quot;)
+<pre class="r"><code>ttst &lt;- read_rds(&quot;data-test/ahrq_del_ucmp_loop_test.rds&quot;)
 ttst %&gt;% nrow()</code></pre>
-<pre><code>## [1] 1726</code></pre>
-<pre class="r"><code>ptst &lt;- read_rds(&quot;data-test/ahrq_del_ucmp_ptest.rds&quot;)
+<pre><code>## [1] 2461</code></pre>
+<pre class="r"><code>ptst &lt;- read_rds(&quot;data-test/ahrq_del_ucmp_single_test.rds&quot;)
 ptst %&gt;% nrow()</code></pre>
-<pre><code>## [1] 1726</code></pre>
+<pre><code>## [1] 2461</code></pre>
 <p>I once had a problem with the age filtering in the no-loop file, so this checks that. There should be zero rows returned here.</p>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">

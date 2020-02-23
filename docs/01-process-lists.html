@@ -1581,19 +1581,22 @@ $(document).ready(function () {
 </div>
 
 
-<p>This THCIC analysis will need various lists of columns and ICD-10 codes. This notebook will define them and write them to rds where they can be use in later analysis.</p>
+<p>By <strong>Christian McDonald</strong>, Assistant Professor of Practice<br />
+School of Journalism, Moody College of Communication<br />
+University of Texas at Austin</p>
+<p>This THCIC analysis will need various lists of columns and ICD-10 codes. This notebook defines them and write them to rds where they can be use in later analysis.</p>
 <p>Of note, to turn a single-column rds import into a vector, use the following:</p>
-<pre class="txt"><code>new_list &lt;- read_rds(&quot;procedures-lists/filename.rds&quot;) %&gt;% pull(col_name_from_df)
+<pre class="txt"><code>new_list &lt;- read_rds(&quot;procedures-lists/filename.rds&quot;) %&gt;% .$col_name_from_df
 
-# or
+or
 
-new_list &lt;- read_rds(&quot;procedures-lists/filename.rds&quot;) %&gt;% .%col_name_from_df
-</code></pre>
+new_list &lt;- read_rds(&quot;procedures-lists/filename.rds&quot;) %&gt;% pull(col_name_from_df)</code></pre>
 <pre class="r"><code>library(tidyverse)
 library(janitor)</code></pre>
 <div id="thcic-column-lists" class="section level2">
 <h2>THCIC column lists</h2>
-<p>The diagnostic and surgical procedure columns from the THCIC data are frequently used in <code>case_when()</code> statements and other vectors. This writes them to csv and rds for use later.</p>
+<p>The diagnostic and surgical procedure columns from the THCIC data are frequently used in <code>case_when()</code> statements and other vectors. This writes them to csv and rds for use later. We use my test data as a base point to find the columns.</p>
+<p>There is an example data dictionary in the <code>resources</code> directory of this repo, or avialable online labeled as <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">User Manual, 2019</a>.</p>
 <div id="import-test-data-for-column-generation" class="section level3">
 <h3>Import test data for column generation</h3>
 <pre class="r"><code>testdata &lt;- read_rds(&quot;data-test/ahrq_del_ucmp_ptest.rds&quot;)</code></pre>
@@ -1631,7 +1634,44 @@ cols_surg %&gt;%
 </div>
 <div id="ahrq-lists" class="section level2">
 <h2>AHRQ lists</h2>
-<p>These can come from IQI 33 or IQI 21. Some are in both.</p>
+<p>These can come from IQI 33 or IQI 21. Some are in both. In addition to the links below they available in the <code>resources</code> directory of this repo.</p>
+<ul>
+<li><a href="https://qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf">IQI 33 Primary Cesarean Delivery Rate, Uncomplicated</a></li>
+<li><a href="https://qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_21_Cesarean_Delivery_Rate_Uncomplicated.pdf">IQI 21 Cesarean Delivery Rate, Uncomplicated</a></li>
+</ul>
+<div id="all-deliveries-delocmd" class="section level3">
+<h3>All deliveries (DELOCMD)</h3>
+<p>All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery (DELOCMD). In both IQI 33 or IQI 21.</p>
+<pre class="r"><code>delocmd_list &lt;- c(
+  &quot;Z370&quot;,
+  &quot;Z371&quot;,
+  &quot;Z372&quot;,
+  &quot;Z373&quot;,
+  &quot;Z374&quot;,
+  &quot;Z3750&quot;,
+  &quot;Z3751&quot;,
+  &quot;Z3752&quot;,
+  &quot;Z3753&quot;,
+  &quot;Z3754&quot;,
+  &quot;Z3759&quot;,
+  &quot;Z3760&quot;,
+  &quot;Z3761&quot;,
+  &quot;Z3762&quot;,
+  &quot;Z3763&quot;,
+  &quot;Z3764&quot;,
+  &quot;Z3769&quot;,
+  &quot;Z377&quot;,
+  &quot;Z379&quot;
+) %&gt;%  
+  tibble::enframe(name = NULL) %&gt;% 
+  rename(delocmd = value)
+
+delocmd_list %&gt;% 
+  write_rds(&quot;procedures-lists/ahrq_delocmd.rds&quot;)
+
+delocmd_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 19</code></pre>
+</div>
 <div id="cesarean-delivery-ms-drg-codes-prcse2g" class="section level3">
 <h3>Cesarean delivery MS-DRG codes: (PRCSE2G)</h3>
 <p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.</p>
@@ -1646,12 +1686,8 @@ prcse2g_list &lt;- c(
 prcse2g_list %&gt;% 
   write_rds(&quot;procedures-lists/ahrq_prcse2g.rds&quot;)
 
-prcse2g_list</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["prcse2g"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"765"},{"1":"766"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+prcse2g_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 2</code></pre>
 </div>
 <div id="hysterotomy-procedure-codes-prcse2p" class="section level3">
 <h3>Hysterotomy procedure codes: (PRCSE2P)</h3>
@@ -1667,12 +1703,8 @@ prcse2g_list</code></pre>
 prcse2p_list %&gt;% 
   write_rds(&quot;procedures-lists/ahrq_prcse2p.rds&quot;)
 
-prcse2p_list</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["prcse2p"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"10A00ZZ"},{"1":"10A03ZZ"},{"1":"10A04ZZ"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+prcse2p_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 3</code></pre>
 </div>
 <div id="cesarean-delivery-procedure-codes-prcsecp" class="section level3">
 <h3>Cesarean delivery procedure codes: (PRCSECP)</h3>
@@ -1688,12 +1720,8 @@ prcse2p_list</code></pre>
 prcsecp_list %&gt;% 
   write_rds(&quot;procedures-lists/ahrq_prcsecp.rds&quot;)
 
-prcsecp_list</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["prcsecp"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"10D00Z0"},{"1":"10D00Z1"},{"1":"10D00Z2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+prcsecp_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 3</code></pre>
 </div>
 <div id="outcome-of-delivery-diagnosis-codes-delocmd" class="section level3">
 <h3>Outcome of delivery diagnosis codes: (DELOCMD)</h3>
@@ -1725,12 +1753,8 @@ prcsecp_list</code></pre>
 delocmd_list %&gt;% 
   write_rds(&quot;procedures-lists/ahrq_delocmd.rds&quot;)
 
-delocmd_list</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["delocmd"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"Z370"},{"1":"Z371"},{"1":"Z372"},{"1":"Z373"},{"1":"Z374"},{"1":"Z3750"},{"1":"Z3751"},{"1":"Z3752"},{"1":"Z3753"},{"1":"Z3754"},{"1":"Z3759"},{"1":"Z3760"},{"1":"Z3761"},{"1":"Z3762"},{"1":"Z3763"},{"1":"Z3764"},{"1":"Z3769"},{"1":"Z377"},{"1":"Z379"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+delocmd_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 19</code></pre>
 </div>
 <div id="previous-cesarean-delivery-diagnosis-codes-prvbacd" class="section level3">
 <h3>Previous Cesarean delivery diagnosis codes: (PRVBACD)</h3>
@@ -1751,12 +1775,106 @@ delocmd_list</code></pre>
 prvbacd_list %&gt;% 
   write_rds(&quot;procedures-lists/ahrq_prvbacd.rds&quot;)
 
-prvbacd_list</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["prvbacd"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"O3421"},{"1":"O34211"},{"1":"O34212"},{"1":"O34219"},{"1":"O6641"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+prvbacd_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 5</code></pre>
 </div>
+</div>
+<div id="other-lists-used" class="section level2">
+<h2>Other lists used</h2>
+<div id="child-bearing-age-codes" class="section level3">
+<h3>Child-bearing age codes</h3>
+<p>Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest filtering deliveries to women of normal child-bearing age, 15-49.</p>
+<p>The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs).</p>
+<pre class="r"><code>age_list &lt;- c(
+  &quot;05&quot;,
+  &quot;06&quot;,
+  &quot;07&quot;,
+  &quot;08&quot;,
+  &quot;09&quot;,
+  &quot;10&quot;,
+  &quot;11&quot;,
+  &quot;12&quot;,
+  &quot;23&quot;
+) %&gt;%  
+  tibble::enframe(name = NULL) %&gt;% 
+  rename(age = value)
+
+age_list %&gt;% 
+  write_rds(&quot;procedures-lists/utoha_age.rds&quot;)
+
+age_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 9</code></pre>
+</div>
+</div>
+<div id="leapfrog-episiotomy-lists" class="section level2">
+<h2>Leapfrog Episiotomy lists</h2>
+<p>These definitions come from <a href="https://www.leapfroggroup.org/sites/default/files/Files/2019HospitalSurvey_20190529_v8.0%20%28version%203%29.pdf">Leapfrog Hospital survey measure specifications</a>. There is also a copy in the <code>resources</code> directory of this repo.</p>
+<div id="vaginal-ms_drg-codes" class="section level3">
+<h3>Vaginal MS_DRG codes</h3>
+<pre class="r"><code>vag_msdrg_list &lt;- c(
+  &quot;767&quot;,
+  &quot;768&quot;,
+  &quot;774&quot;,
+  &quot;775&quot;,
+  &quot;796&quot;,
+  &quot;797&quot;,
+  &quot;798&quot;,
+  &quot;805&quot;,
+  &quot;806&quot;,
+  &quot;807&quot;
+) %&gt;%  
+  tibble::enframe(name = NULL) %&gt;% 
+  rename(vag_msdrg = value)
+
+vag_msdrg_list %&gt;% 
+  write_rds(&quot;procedures-lists/lf_vag_msdrg.rds&quot;)
+
+vag_msdrg_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 10</code></pre>
+</div>
+<div id="vaginal-apr_drg-codes" class="section level3">
+<h3>Vaginal APR_DRG codes</h3>
+<pre class="r"><code>vag_aprdrg_list &lt;- c(
+  &quot;541&quot;,
+  &quot;542&quot;,
+  &quot;560&quot;
+) %&gt;%  
+  tibble::enframe(name = NULL) %&gt;% 
+  rename(vag_aprdrg = value)
+
+vag_aprdrg_list %&gt;% 
+  write_rds(&quot;procedures-lists/lf_vag_aprdrg.rds&quot;)
+
+vag_aprdrg_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 3</code></pre>
+</div>
+<div id="vaginal-birth-exclusions" class="section level3">
+<h3>Vaginal birth exclusions</h3>
+<pre class="r"><code>vag_excl_list &lt;- c(
+  &quot;O660&quot;
+) %&gt;%  
+  tibble::enframe(name = NULL) %&gt;% 
+  rename(vag_excl = value)
+
+vag_excl_list %&gt;% 
+  write_rds(&quot;procedures-lists/lf_vag_excl.rds&quot;)
+
+vag_excl_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 1</code></pre>
+</div>
+<div id="episiotomy" class="section level3">
+<h3>Episiotomy</h3>
+<pre class="r"><code>epi_list &lt;- c(
+  &quot;0W8NXZZ&quot;
+) %&gt;%  
+  tibble::enframe(name = NULL) %&gt;% 
+  rename(epi = value)
+
+epi_list %&gt;% 
+  write_rds(&quot;procedures-lists/lf_epi.rds&quot;)
+
+epi_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 1</code></pre>
 </div>
 </div>
 

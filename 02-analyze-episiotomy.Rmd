@@ -1,12 +1,12 @@
 ---
-title: "Episiotomy rates for state, Laredo hospitals, 2016-2018"
+title: "Episiotomy rates, 2016-2018"
 output:
   html_document:
     df_print: paged
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
-By Christian McDonald, Assistant Professor of Practice\
+By **Christian McDonald**, Assistant Professor of Practice\
 School of Journalism, Moody College of Communication\
 University of Texas at Austin
 
@@ -29,7 +29,7 @@ library(DT)
 del <- read_rds("data-processed/ahrq_del_ucmp.rds")
 
 ### testing data
-# del <- read_rds("data-test/ahrq_del_ucmp_ptest.rds")
+# del <- read_rds("data-test/ahrq_del_ucmp_loop_test.rds")
 
 ### single quarter unfiltered for testing
 # del <- read_tsv("data-raw/PUDF 1Q2018 tab-delimited/PUDF_base1_1q2018_tab.txt")
@@ -45,7 +45,7 @@ Total number of vaginal deliveries during the reporting time period, with Exclud
 
 The definition lists a number of `MS_DRG` and `APR_DRG` codes  that make up vaginal deliveries. The lists are defined in 01-process-lists and we pull them in here.
 
-```{r}
+```{r lists_vag}
 vag_msdrg_list <- read_rds("procedures-lists/lf_vag_msdrg.rds") %>% .$vag_msdrg
 vag_msdrg_list
 vag_aprdrg_list <- read_rds("procedures-lists/lf_vag_aprdrg.rds") %>% .$vag_aprdrg
@@ -54,7 +54,7 @@ vag_aprdrg_list
 
 Filter our imported data for vaginal deliveries. Because we have two lists to consider, we'll create a column in our data where the values match, then filter them out.
 
-```{r}
+```{r col_vag}
 del <- del %>% 
   mutate(
     VAG = case_when(
@@ -81,7 +81,7 @@ The next step is to: Exclude any cases with the following ICD-10-CM diagnostic c
 
 We have to bring in our list of diagnostic columns and then filter based on the exception code. There is only one code `O660`, but we'll bring in from our processed lists anyway.
 
-```{r}
+```{r filter_vag}
 # import needed lists
 diag_cols <- read_rds("procedures-lists/cols_diag.rds") %>% .$diag
 vag_excl_list <- read_rds("procedures-lists/lf_vag_excl.rds") %>% .$vag_excl
@@ -105,7 +105,7 @@ This creates a column for cases where episiotomy is true. We have to look throug
 
 > I'd like to refactor this method, but at least it is easy to see and understand.
 
-```{r}
+```{r epi_col}
 # list of codes for episiotmy, which is really one: 0W8NXZZ
 epi_list <- read_rds("procedures-lists/lf_epi.rds") %>% .$epi
 epi_list
@@ -148,7 +148,7 @@ del_epi <- del_vag_ex %>%
 
 We combine all three years of data to compare the percentage of episiotomy cases. The **TRUE** value is the percentage of cases where an episiotomy is performed.
 
-```{r}
+```{r rate_state}
 del_epi %>% 
   tabyl(EPI) %>% 
   rename(count = n) %>% 
@@ -157,7 +157,7 @@ del_epi %>%
 
 ## Episiotomy rate for Laredo hospitals
 
-```{r}
+```{r rate_laredo}
 # filter for laredo hospitals
 
 del_epi_lar <- del_epi %>% 
@@ -174,7 +174,7 @@ del_epi_lar %>%
 
 A look at the episiotomy rates for hospitals by year. We create the rate using the EPI column we created above, then pivot to do the math. We pivot again to see the years nicely in a table.
 
-```{r}
+```{r by_year}
 # pivot to crate the rate based on logical EPI column
 del_epi_yr_data <- del_epi %>% 
   group_by(YR, PROVIDER_NAME, EPI) %>% 
@@ -199,7 +199,7 @@ del_epi_yr_table <- del_epi_yr_data %>%
   filter(TOTAL >= 100) %>% 
   select(YR, PROVIDER_NAME, EPIRATE) %>% 
   pivot_wider(names_from = YR, values_from = EPIRATE) %>% 
-  arrange(`2018` %>% desc())
+  arrange(`2019` %>% desc())
 
 del_epi_yr_table %>% head()
 
@@ -209,7 +209,7 @@ del_epi_yr_table %>% head()
 
 The table above, filtered for Laredo.
 
-```{r}
+```{r by_yr_laredo}
 # filter for Laredo
 del_epi_yr_table %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo"))
@@ -218,8 +218,7 @@ del_epi_yr_table %>%
 ### Episiotomy rates by year, statewide and searchable
 
 
-```{r}
-
+```{r datatable}
 del_epi_yr_table %>% datatable()
 
 ```

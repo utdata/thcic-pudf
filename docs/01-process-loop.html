@@ -1582,21 +1582,27 @@ $(document).ready(function () {
 
 
 <p>The purpose of this notebook is to process multiple quarters of <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">THCIC in-patient public use data files</a> into a single data file of deliveries without complications. This requires importing and applying several filtering options.</p>
-<p>We are using AHRQ’s <a href="resources/IQI_21_Cesarean_Delivery_Rate_Uncomplicated.pdf">Inpatient Quality Indicator 21 (IQI 21) Cesarean Delivery Rate, Uncomplicated</a> method, so in this notebook we’ll be applying the “DENOMINATOR” rules to identify deliveries and filter out complications and missing/nonrelevant rows. One addition is to filter by women of normal child-bearing age: 15-49.</p>
+<p>We are using AHRQ’s <a href="https://qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf">IQI 33 Primary Cesarean Delivery Rate, Uncomplicated</a> method, so in this notebook we’ll be applying the “DENOMINATOR” rules to identify deliveries and filter out complications and missing/nonrelevant rows. One addition is to filter by women of normal child-bearing age: 15-49, which was recommended by the Office of Health Affairs-Population Health at The University of Texas System.</p>
 <p>The output is all uncomplicated deliveries, which we can then analyzed in future files.</p>
 <p>Of note, there is another notebook <code>01-process-test</code> that uses the same filtering criteria but prints examples at various stages for manual checking.</p>
+<p>Also, there is another notebook <code>01-process-lists</code> where various AHRQ lists of ICD-10 and other codes are defined separately. Those values are written out to the <code>procedures-lists</code> folder as .rds and .csv files and then imported into this notebook and others. See that notebook to inspect the lists.</p>
 <pre class="r"><code>library(fs)
 library(tidyverse)</code></pre>
-<div id="creating-files-lists" class="section level2">
-<h2>Creating files lists</h2>
-<p>I have a set of test data that grabs the first 10,000 rows from the first quarter of 2016-2018.</p>
+<div id="data-sources" class="section level2">
+<h2>Data sources</h2>
+<div id="test-data" class="section level3">
+<h3>Test data</h3>
+<p>I have a set of test data that grabs the first 10,000 rows from the first quarter of 2016-2018. This is used to test the processing without the load of the production data, which is considerable.</p>
 <pre class="r"><code># set up test data
 test_data_dir &lt;- &quot;data-test&quot;
 test_tsv_files &lt;- dir_ls(test_data_dir, recurse = TRUE, regexp = &quot;test_base1&quot;)
 test_tsv_files</code></pre>
 <pre><code>## data-test/test_base1_1q2016.txt data-test/test_base1_1q2017.txt 
-## data-test/test_base1_1q2018.txt</code></pre>
-<p>Production data</p>
+## data-test/test_base1_1q2018.txt data-test/test_base1_1q2019.txt</code></pre>
+</div>
+<div id="production-data" class="section level3">
+<h3>Production data</h3>
+<p>Part of this process is to loop through all the matching files in the <code>data-raw</code> folder to process them. This sets up those directories.</p>
 <pre class="r"><code># set up production data
 data_dir &lt;- &quot;data-raw&quot;
 tsv_files &lt;- dir_ls(data_dir, recurse = TRUE, regexp = &quot;PUDF_base1_&quot;)
@@ -1610,6 +1616,7 @@ tsv_files</code></pre>
 ## data-raw/PUDF 2Q2016 tab-delimited/PUDF_base1_2q2016_tab.txt
 ## data-raw/PUDF 2Q2017 tab-delimited/PUDF_base1_2q2017_tab.txt
 ## data-raw/PUDF 2Q2018 tab-delimited/PUDF_base1_2q2018_tab.txt
+## data-raw/PUDF 2Q2019 tab-delimited/PUDF_base1_2q2019_tab.txt
 ## data-raw/PUDF 3Q2016 tab-delimited/PUDF_base1_3q2016_tab.txt
 ## data-raw/PUDF 3Q2017 tab-delimited/PUDF_base1_3q2017_tab.txt
 ## data-raw/PUDF 3Q2018 tab-delimited/PUDF_base1_3q2018_tab.txt
@@ -1617,13 +1624,14 @@ tsv_files</code></pre>
 ## data-raw/PUDF 4Q2017 tab-delimited/PUDF_base1_4q2017_tab.txt
 ## data-raw/PUDF 4Q2018 tab-delimited/PUDF_base1_4q2018_tab.txt</code></pre>
 </div>
+</div>
 <div id="function-to-filter-for-deliveries" class="section level2">
 <h2>Function to filter for deliveries</h2>
-<p>For processing this data, I build functions to apply difference AHRQ filtering to each file before binding them into a single tibble. In some cases the processing filters multiple columns for multiple conditions.</p>
+<p>For processing this data, I build functions to apply different AHRQ filtering to each file before binding them into a single tibble. In some cases the functions filters multiple columns for multiple variables.</p>
 <p>The functions are set up first, then used later in the processing loop.</p>
-<div id="filter-to-birth-deliveries" class="section level3">
-<h3>Filter to birth deliveries</h3>
-<p>In this case, we are looking at all columns with “DIAG” in name for values in the <code>delivery_icd</code> list, which comes from “DELOCMD” in our IQI 21 or IQI 33 reference.</p>
+<div id="filter-for-birth-deliveries" class="section level3">
+<h3>Filter for birth deliveries</h3>
+<p>In this case, we are looking at all the diagnostic columns for values in the <code>delivery_icd</code> list, which comes from “DELOCMD” in the AHRQ IQI 33 reference.</p>
 <pre class="r"><code>delocmd_list &lt;- read_rds(&quot;procedures-lists/ahrq_delocmd.rds&quot;) %&gt;% .$delocmd
 
 filter_del &lt;- function(.data) {
@@ -1642,7 +1650,7 @@ filter_del &lt;- function(.data) {
 </div>
 <div id="exclusions-from-the-deliveries" class="section level2">
 <h2>Exclusions from the deliveries</h2>
-<p>The AHRQ IQI 21 and IQI 33 requires excluding some complicated delivery cases:</p>
+<p>The IQI 33 spec requires excluding some complicated delivery cases:</p>
 <ul>
 <li>with any listed ICD-10-CM diagnosis codes for abnormal presentation, fetal death, or multiple gestation (Appendix A: PRCSECD) and</li>
 <li>with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)</li>
@@ -1654,7 +1662,7 @@ filter_del &lt;- function(.data) {
 <div id="import-list-of-prcsecd-codes" class="section level4">
 <h4>Import list of PRCSECD codes</h4>
 <pre class="r"><code># read in the file
-prcsecd &lt;- read_csv(&quot;procedures/iqi-appendex-a/IQI_Appendix_A.csv&quot;)</code></pre>
+prcsecd &lt;- read_csv(&quot;procedures-lists/IQI_Appendix_A.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   codes = col_character()
@@ -1684,7 +1692,7 @@ prcsecd_list &lt;- prcsecd %&gt;% .$codes</code></pre>
 </div>
 <div id="filter-out-blank-cells-per-appendix-a" class="section level3">
 <h3>Filter out blank cells per Appendix A</h3>
-<p>Again, from AHRQ’s IQI 21 definition:</p>
+<p>Again, from AHRQ’s IQI 33 definition:</p>
 <p>“with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing).”</p>
 <p>In base1, the fields are <code>SEX_CODE</code>, <code>PAT_AGE</code>, <code>DISCHARGE</code> for both quarter and year, and <code>PRINC_DIAG_CODE</code>.</p>
 <pre class="r"><code>filter_appendix_a &lt;- function(.data) {
@@ -1701,7 +1709,7 @@ prcsecd_list &lt;- prcsecd %&gt;% .$codes</code></pre>
 <div id="child-bearing-age" class="section level3">
 <h3>Child-bearing age</h3>
 <p>Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest filtering deliveries to women of normal child-bearing age, 15-49.</p>
-<p>The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs).</p>
+<p>The codes for the ages 15-49 include “05” through “12”. For HIV or drug patients it includes “23” (18-44 yrs).</p>
 <p>This function filters for those values.</p>
 <pre class="r"><code>age_list &lt;- read_rds(&quot;procedures-lists/utoha_age.rds&quot;) %&gt;% .$age
 
@@ -1713,14 +1721,14 @@ function_age &lt;- function(.data) {
 </div>
 <div id="import-and-process" class="section level2">
 <h2>Import and process</h2>
-<p>This is the workhorse process to loop through the files and combine the data. It brings in each file and then applies the filtering functions and the appends the results.</p>
-<p>At this time, our analysis utilizes only one (PUDF_base1) of several files in the release for each quarter. The raw data is never changed.</p>
+<p>This is the workhorse process to loop through the files and combine the data. It brings in each file and then applies the filtering functions above and then appends the results to the growing tibble.</p>
+<p>At this time, the analysis utilizes only one (PUDF_base1) of several files in the release for each quarter. The raw data is never changed.</p>
 <p>Of note:</p>
 <ul>
-<li>There is a trailing tab on each row, which brings in an unnecssary column. This is removed with <code>col_skip()</code>, though you will see them as <code>problems()</code> in the import output. Those problems are resolved with the <code>col_skip()</code> function.</li>
-<li>We set default type as chars because some cols will appear as logical because of the datatype sniffer with readr. We reset necessary cols as <code>as.numeric</code> where necessary.</li>
+<li>There is a trailing tab on each row in the data, which creates an unnecssary column. This is removed with <code>col_skip()</code> in the import statement, though it is still reported in the <code>problems()</code> function. Those problems are resolved with the <code>col_skip()</code> function.</li>
+<li>The import sets “col_character” as the default datatype because some columns were otherwise importing as “logical” by the datatype sniffer in readr. Numeric columns are later reset with <code>as.numeric</code> where necessary.</li>
 </ul>
-<p>Import warnings are supressed. The hides import errors like <code>Missing column names filled in: 'X167'</code> from extra tabs in raw files.</p>
+<p>Import warnings are supressed. This hides import errors like <code>Missing column names filled in: 'X167'</code> caused by the extra tabs in the raw files.</p>
 <pre class="r"><code># warnings supressed.
 
 # create the tibble
@@ -1750,7 +1758,7 @@ for (file in files) {
 }
 
 data %&gt;% nrow()</code></pre>
-<p>The result of this is <code>data</code> which is our combined and filtered data.</p>
+<p>The result of this function is <code>data</code>, which is our combined and filtered data.</p>
 </div>
 <div id="add-year-column" class="section level2">
 <h2>Add year column</h2>
@@ -1764,16 +1772,16 @@ data %&gt;%
   count(YR)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["YR"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"2015","2":"3"},{"1":"2016","2":"342996"},{"1":"2017","2":"325829"},{"1":"2018","2":"324589"},{"1":"2019","2":"76468"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["YR"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"2015","2":"3"},{"1":"2016","2":"342996"},{"1":"2017","2":"325829"},{"1":"2018","2":"324589"},{"1":"2019","2":"153996"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
 <div id="remove-other-years" class="section level2">
 <h2>Remove other years</h2>
 <p>Because of a reporting lag, there are years in the original data that we are not using for our analysis. At some point in 2015 there was a switch from ICD-9 to ICD-10 coding, so going eariler would require some conversions. Not impossible, but not in scope at this time to ease complication.</p>
-<p>We are using only year 2016-2018.</p>
+<p>We are using full years from 2016-2018 and a partial year 2019 through the 2nd quarter release.</p>
 <pre class="r"><code>data &lt;- data %&gt;% 
-  filter(YR %in% c(&quot;2016&quot;, &quot;2017&quot;, &quot;2018&quot;))</code></pre>
+  filter(YR %in% c(&quot;2016&quot;, &quot;2017&quot;, &quot;2018&quot;, &quot;2019&quot;))</code></pre>
 </div>
 <div id="write-file" class="section level2">
 <h2>Write file</h2>
@@ -1781,7 +1789,7 @@ data %&gt;%
 <pre class="r"><code>data %&gt;% write_rds(&quot;data-processed/ahrq_del_ucmp.rds&quot;)
 
 data %&gt;% nrow()</code></pre>
-<pre><code>## [1] 993414</code></pre>
+<pre><code>## [1] 1147410</code></pre>
 <pre class="r"><code># A klaxon to indicate the processing is complete
 beepr::beep(4)</code></pre>
 </div>

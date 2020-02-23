@@ -20,9 +20,9 @@ library(tidyverse)
 Read in each test rds and note the number of rows. The result should be the same for both.
 
 ```{r}
-ttst <- read_rds("data-test/ahrq_del_ucmp_ttest.rds")
+ttst <- read_rds("data-test/ahrq_del_ucmp_loop_test.rds")
 ttst %>% nrow()
-ptst <- read_rds("data-test/ahrq_del_ucmp_ptest.rds")
+ptst <- read_rds("data-test/ahrq_del_ucmp_single_test.rds")
 ptst %>% nrow()
 ```
 

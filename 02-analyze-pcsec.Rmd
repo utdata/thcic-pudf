@@ -6,13 +6,15 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
-By Christian McDonald, Assistant Professor of Practice\
+> There are issues here with 2019 data. There are zero Cesarean codes in my data, and I need to figure out why.
+
+By **Christian McDonald**, Assistant Professor of Practice\
 School of Journalism, Moody College of Communication\
 University of Texas at Austin
 
-This analysis of the Primary Cesarean Delivery Rate, Uncomplicated, as defined by [AHRQ IQI 33](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf) from 2019:
+This is an analysis of the Primary Cesarean Delivery Rate, Uncomplicated, as defined by [AHRQ IQI 33](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf) in 2019:
 
-First-time Cesarean deliveries without a hysterotomy procedure per 1,000 deliveries. Excludes deliveries with complications (abnormal presentation, preterm delivery, fetal death, multiple gestation diagnoses, or breech procedure).
+> First-time Cesarean deliveries without a hysterotomy procedure per 1,000 deliveries. Excludes deliveries with complications (abnormal presentation, preterm delivery, fetal death, multiple gestation diagnoses, or breech procedure).
 
 We have enough results to not define as "per 1,000 deliveries". We are using a simple rate: Primary Cesarean / All uncomplicated deliveries.
 
@@ -57,6 +59,12 @@ del <- read_rds("data-processed/ahrq_del_ucmp.rds")
 del %>% nrow()
 ```
 
+```{r}
+del %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo") & YR == "2019")
+```
+
+
 ## Set up various ICD-10 lists
 
 These are lists from the IQI 33 reference used for filtering and such. See 01-process-lists for definitions.
@@ -94,6 +102,14 @@ del_nprv <- del %>%
 del_nprv %>% nrow()
 ```
 
+test for laredo
+
+```{r}
+del_nprv %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo") & YR == "2019")
+
+```
+
 This completes our "denominator" set of data. This is saved in `del_nprv`.
 
 ## Code records for numberator
@@ -120,6 +136,20 @@ del_csec <- del_nprv %>%
 
 del_csec %>% 
   count(PRCSE2G)
+```
+
+test for Laredo
+
+```{r}
+prcse2g_list
+
+del %>% 
+  filter(YR == "2018") %>% 
+  count(MS_DRG)
+
+del %>% 
+  filter(YR == "2019") %>% 
+  count(MS_DRG)
 ```
 
 ### Create column based on hysterotomy
@@ -184,6 +214,7 @@ del_pcsec <- del_csec %>%
   )
 ```
 
+
 ## Primary Cesarean rate statewide
 
 This compares all the cases and gives us a percentage of those that are Primary Cesarean births. **The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.**
@@ -208,6 +239,16 @@ laredo_pcsec <- del_pcsec %>%
 laredo_pcsec %>% 
   count(PROVIDER_NAME)
 ```
+
+test for laredo
+
+```{r}
+del_pcsec %>% 
+  filter(YR == "2019" & PCSEC == F) %>% 
+  select(diag_cols)
+
+```
+
 
 ### Three-year Rate for Laredo hospitals
 
@@ -243,6 +284,38 @@ pcsec_rate_yr_all <- del_pcsec %>%
   ) %>%
     arrange(PCRATE %>% desc())
 ```
+
+Some testing for Laredo in 2019
+
+```{r}
+del_pcsec %>% 
+  group_by(YR, PROVIDER_NAME, PCSEC) %>% 
+  summarize(CNT = n())%>% 
+  pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
+  rename(
+    NPCSEC_CNT = "FALSE",
+    PCSEC_CNT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = NPCSEC_CNT + PCSEC_CNT
+  ) %>% 
+  # filter(TOTAL >= 100) %>% 
+  mutate(
+    PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
+  ) %>%
+  arrange(PCRATE %>% desc()) %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo"))
+```
+
+
+
+
+
+```{r}
+pcsec_rate_yr_all %>% arrange(YR)
+```
+
+
 
 ### Filter for Laredo hospitals
 
