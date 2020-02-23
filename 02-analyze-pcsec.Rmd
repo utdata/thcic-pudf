@@ -6,17 +6,15 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
-> There are issues here with 2019 data. There are zero Cesarean codes in my data, and I need to figure out why.
-
 By **Christian McDonald**, Assistant Professor of Practice\
 School of Journalism, Moody College of Communication\
 University of Texas at Austin
 
 This is an analysis of the Primary Cesarean Delivery Rate, Uncomplicated, as defined by [AHRQ IQI 33](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf) in 2019:
 
-> First-time Cesarean deliveries without a hysterotomy procedure per 1,000 deliveries. Excludes deliveries with complications (abnormal presentation, preterm delivery, fetal death, multiple gestation diagnoses, or breech procedure).
+"First-time Cesarean deliveries without a hysterotomy procedure per 1,000 deliveries. Excludes deliveries with complications (abnormal presentation, preterm delivery, fetal death, multiple gestation diagnoses, or breech procedure)."
 
-We have enough results to not define as "per 1,000 deliveries". We are using a simple rate: Primary Cesarean / All uncomplicated deliveries.
+This analysis has enough results to avoide defining as "per 1,000 deliveries". I use a simple rate: Primary Cesarean / All uncomplicated deliveries.
 
 ## AHRQ definition
 
@@ -40,30 +38,28 @@ Exclude cases:
 ```{r setup, echo=T, results='hide', message=F, warning=F}
 library(tidyverse)
 library(janitor)
+library(DT)
 ```
 
 ## Import of deliveries
 
-We start with data that has already been through some "denominator" exclusions, including filtered for PRCSECD codes and any missing data. This was handled in `01-process-loop`, so we import that resulting file. Important to note with this analysis is the imported cases _DO_ have patients with previous cesareans, so those will have to be filtered out in a later step.
+I start with data that has already been through some "denominator" exclusions, including filtered for PRCSECD codes and any missing data. This was handled in `01-process-loop`, so I import that resulting file. Important to note with this analysis is the imported cases _DO_ have patients with previous cesareans, so those will have to be filtered out in a later step.
 
 ```{r imports}
 ### production data
 del <- read_rds("data-processed/ahrq_del_ucmp.rds")
 
 ### testing data
-# del <- read_rds("data-test/ahrq_del_ucmp_ptest.rds")
+# del <- read_rds("data-test/ahrq_del_ucmp_loop_test.rds")
 
 ### single quarter unfiltered for testing
 # del <- read_tsv("data-raw/PUDF 1Q2018 tab-delimited/PUDF_base1_1q2018_tab.txt")
 
+### 2019 quarter unfiltered for testing
+# del <- read_tsv("data-raw/PUDF 1Q2019 tab-delimited/PUDF_base1_1q2019_tab.txt")
+
 del %>% nrow()
 ```
-
-```{r}
-del %>% 
-  filter(str_detect(PROVIDER_NAME, "Laredo") & YR == "2019")
-```
-
 
 ## Set up various ICD-10 lists
 
@@ -76,8 +72,8 @@ diag_cols <- read_rds("procedures-lists/cols_diag.rds") %>% .$diag
 # surgical procedure columns
 surg_cols <- read_rds("procedures-lists/cols_surg.rds") %>% .$surg
 
-# Cesarean delivery MS-DRG codes: (PRCSE2G)
-prcse2g_list <- read_rds("procedures-lists/ahrq_prcse2g.rds") %>% .$prcse2g
+# Cesarean delivery MS-DRG codes, updated
+prcse2g_v2_list <- read_rds("procedures-lists/ahrq_prcse2g_v2.rds") %>% .$prcse2g
 
 # Hysterotomy procedure codes: (PRCSE2P)
 prcse2p_list <- read_rds("procedures-lists/ahrq_prcse2p.rds") %>% .$prcse2p
@@ -88,7 +84,7 @@ prvbacd_list <- read_rds("procedures-lists/ahrq_prvbacd.rds") %>% .$prvbacd
 
 ## Filter deliveries to set denominator
 
-For this analysis, we need to additionally exclude outcomes "with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD)". This prvbacd_list comes from the AHRQ specification.
+For this analysis, I need to additionally exclude outcomes "with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD)". This prvbacd_list comes from the AHRQ specification.
 
 ```{r nprv}
 del_nprv <- del %>% 
@@ -102,27 +98,21 @@ del_nprv <- del %>%
 del_nprv %>% nrow()
 ```
 
-test for laredo
-
-```{r}
-del_nprv %>% 
-  filter(str_detect(PROVIDER_NAME, "Laredo") & YR == "2019")
-
-```
-
 This completes our "denominator" set of data. This is saved in `del_nprv`.
 
-## Code records for numberator
+## Code records for numerator
 
-The AHRQ spec defines two ways to find this. We use the first listed:
+The AHRQ spec defines two ways to find this. I use the first listed:
 
 "MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P)."
 
-How we handle this:
+> NOTE: In 2019, MS-DRG codes for Cesarean delivery changed and that is not reflected in the AHRQ June 2019 specification. See 01-process-lists for more information.
 
-- Create a cesarean column `PRCSE2G` based on MS-DRG codes. This is an easy `if_else`.
-- Create a column `PRCSE2P` that are hysterotomy cases. This is more complicated because we have to look through each SURG_PROC column for any value in the prcse2p_list.
-- Create our primary csection column based on cesarean true and hysterotomy being false.
+How I handle this:
+
+- Create a cesarean column updated `PRCSE2G` based on MS-DRG codes. This is an easy `if_else`.
+- Create a column `PRCSE2P` that are hysterotomy cases. This is more complicated because I have to look through each SURG_PROC column for any value in the prcse2p_v2_list.
+- Create a primary Cesarean column `PCSEC` based on Cesarean geing TRUE and hysterotomy being FALSE.
 
 ### Create column for PRCSE2G or cesarean deliveries
 
@@ -131,25 +121,11 @@ Simple if_else statement.
 ```{r csec}
 del_csec <- del_nprv %>% 
   mutate(
-    PRCSE2G = if_else(MS_DRG %in% prcse2g_list, T, F)
+    PRCSE2G = if_else(MS_DRG %in% prcse2g_v2_list, T, F)
   )
 
 del_csec %>% 
   count(PRCSE2G)
-```
-
-test for Laredo
-
-```{r}
-prcse2g_list
-
-del %>% 
-  filter(YR == "2018") %>% 
-  count(MS_DRG)
-
-del %>% 
-  filter(YR == "2019") %>% 
-  count(MS_DRG)
 ```
 
 ### Create column based on hysterotomy
@@ -163,7 +139,6 @@ I did test the code against unfiltered data to ensure that it does catch the PRC
 > This is a code block that I would like to refactor as a loop through the `surg_cols` list.
 
 ```{r hyst}
-
 #case_when version
 del_csec <- del_csec %>% 
   mutate(
@@ -214,7 +189,6 @@ del_pcsec <- del_csec %>%
   )
 ```
 
-
 ## Primary Cesarean rate statewide
 
 This compares all the cases and gives us a percentage of those that are Primary Cesarean births. **The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.**
@@ -226,36 +200,15 @@ del_pcsec %>%
   adorn_pct_formatting()
 ```
 
-## Laredo hospitals: Primary Cesarean rate
-
-Filter for the Laredo hospitals.
-
-```{r pcsec_laredo_filter}
-laredo_pcsec <- del_pcsec %>% 
-  filter(
-     str_detect(PROVIDER_NAME, "Laredo")
-  )
-
-laredo_pcsec %>% 
-  count(PROVIDER_NAME)
-```
-
-test for laredo
-
-```{r}
-del_pcsec %>% 
-  filter(YR == "2019" & PCSEC == F) %>% 
-  select(diag_cols)
-
-```
-
-
-### Three-year Rate for Laredo hospitals
+## Primary Cesarean rate Laredo hospitals
 
 **The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.**
 
 ```{r pcsec_laredo_rate}
-laredo_pcsec %>% 
+del_pcsec %>% 
+  filter(
+     str_detect(PROVIDER_NAME, "Laredo")
+  ) %>% 
   tabyl(PROVIDER_NAME, PCSEC) %>% 
   adorn_percentages() %>% 
   adorn_pct_formatting() %>% 
@@ -283,14 +236,67 @@ pcsec_rate_yr_all <- del_pcsec %>%
     PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
   ) %>%
     arrange(PCRATE %>% desc())
+
+pcsec_rate_yr_all %>% arrange(YR) %>% head()
 ```
 
-Some testing for Laredo in 2019
+### Mean, Median of Primary Cesarean Rate by hospitals
+
+The mean and median rate based on the yearly rate for each hospital.
 
 ```{r}
-del_pcsec %>% 
-  group_by(YR, PROVIDER_NAME, PCSEC) %>% 
-  summarize(CNT = n())%>% 
+pcsec_rate_yr_all %>% 
+  ungroup() %>% 
+  summarise(
+    MEAN = round(mean(PCRATE),1),
+    MEDIAN = median(PCRATE)
+  )
+```
+
+### Pivot to compare Primary Cesarean rates by year
+
+```{r pcsec_rate_yr_table}
+pcsec_rate_yr_table <- pcsec_rate_yr_all %>% 
+  arrange(YR) %>% 
+  select(YR, PROVIDER_NAME, PCRATE) %>% 
+  pivot_wider(names_from = YR, values_from = PCRATE) %>% 
+  arrange(`2019` %>% desc())
+```
+
+
+### Filter for Laredo hospitals
+
+```{r pcsec_rate_yr_lar}
+pcsec_rate_yr_table %>% 
+  filter(
+    str_detect(PROVIDER_NAME, "Laredo")
+  )
+```
+
+### Chart: Primary Cesarean Rates by year, Laredo
+
+```{r pcsec_rate_yr_lar_plot}
+pcsec_rate_yr_all %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo")) %>% 
+  ggplot(aes(YR, PCRATE)) +
+  geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
+  expand_limits(y = c(0,40)) +
+  theme(legend.position="bottom", legend.box = "vertical") +
+  labs(title = "Primary Cesarean rate by year, Laredo", x = "YEAR", y = "Primary Cesarean Rate")
+```
+
+## Searchable table: Primary Cesarean rates by year
+
+```{r pcsec_rate_yr_dtable}
+pcsec_rate_yr_all %>% datatable()
+```
+
+### Chart: Primary Cesarean rates by quarter, Laredo
+
+```{r plot_pcrate_q_lar}
+pcsec_rate_qr_all <- del_pcsec %>% 
+  group_by(DISCHARGE, PROVIDER_NAME, PCSEC) %>% 
+  summarize(CNT = n()) %>% 
   pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
   rename(
     NPCSEC_CNT = "FALSE",
@@ -299,57 +305,24 @@ del_pcsec %>%
   mutate(
     TOTAL = NPCSEC_CNT + PCSEC_CNT
   ) %>% 
-  # filter(TOTAL >= 100) %>% 
+  filter(TOTAL >= 100) %>% 
   mutate(
     PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
   ) %>%
-  arrange(PCRATE %>% desc()) %>% 
-  filter(str_detect(PROVIDER_NAME, "Laredo"))
-```
+    arrange(PCRATE %>% desc())
 
-
-
-
-
-```{r}
-pcsec_rate_yr_all %>% arrange(YR)
-```
-
-
-
-### Filter for Laredo hospitals
-
-```{r pcsec_rate_yr_lar}
-pcsec_rate_yr_lar <- pcsec_rate_yr_all %>% 
-  filter(
-    str_detect(PROVIDER_NAME, "Laredo")
-  )
-```
-
-### Table of Laredo hospitals Primary Cesarean Rates by year
-
-```{r pcsec_rate_yr_lar_table}
-pcsec_rate_yr_lar %>% 
-  arrange(YR) %>% 
-  select(YR, PROVIDER_NAME, PCRATE) %>% 
-  pivot_wider(names_from = YR, values_from = PCRATE)
-```
-
-### Chart of Laredo hospitals Primary Cesarean Rates by year
-
-```{r pcsec_rate_yr_lar_plot}
-pcsec_rate_yr_lar %>% 
-  ggplot(aes(YR, PCRATE)) +
+pcsec_rate_qr_all %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo")) %>% 
+  ggplot(aes(DISCHARGE, PCRATE)) +
   geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
   expand_limits(y = c(0,40)) +
   theme(legend.position="bottom", legend.box = "vertical") +
-  labs(title = "Primary Cesarean rate by year", x = "YEAR", y = "Primary Cesarean Rate")
-
+  labs(title = "Primary Cesarean rate by quarter, Laredo", x = "QUARTER", y = "Primary Cesarean Rate")
 ```
 
 ## Write files
 
-We write some dataframes to rds for later use.
+Writing some dataframes to rds for later use.
 
 ```{r write}
 del_pcsec %>% write_rds("data-processed/pcsec.rds")

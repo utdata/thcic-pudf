@@ -228,7 +228,7 @@ del_epi_yr_table %>% datatable()
 
 Writing out some data frames for use in other notebooks
 
-```{r}
+```{r write}
 del_epi %>% write_rds("data-processed/epi.rds")
 
 beepr::beep(4)

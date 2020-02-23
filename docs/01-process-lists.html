@@ -1586,20 +1586,16 @@ School of Journalism, Moody College of Communication<br />
 University of Texas at Austin</p>
 <p>This THCIC analysis will need various lists of columns and ICD-10 codes. This notebook defines them and write them to rds where they can be use in later analysis.</p>
 <p>Of note, to turn a single-column rds import into a vector, use the following:</p>
-<pre class="txt"><code>new_list &lt;- read_rds(&quot;procedures-lists/filename.rds&quot;) %&gt;% .$col_name_from_df
-
-or
-
-new_list &lt;- read_rds(&quot;procedures-lists/filename.rds&quot;) %&gt;% pull(col_name_from_df)</code></pre>
+<pre class="txt"><code>new_list &lt;- read_rds(&quot;procedures-lists/filename.rds&quot;) %&gt;% .$col_name_from_df</code></pre>
 <pre class="r"><code>library(tidyverse)
 library(janitor)</code></pre>
 <div id="thcic-column-lists" class="section level2">
 <h2>THCIC column lists</h2>
-<p>The diagnostic and surgical procedure columns from the THCIC data are frequently used in <code>case_when()</code> statements and other vectors. This writes them to csv and rds for use later. We use my test data as a base point to find the columns.</p>
+<p>The diagnostic and surgical procedure columns from the THCIC data are frequently used in <code>case_when()</code> statements and other vectors. This writes them to csv and rds for use later. I use my test data as a base point to find the columns.</p>
 <p>There is an example data dictionary in the <code>resources</code> directory of this repo, or avialable online labeled as <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">User Manual, 2019</a>.</p>
 <div id="import-test-data-for-column-generation" class="section level3">
 <h3>Import test data for column generation</h3>
-<pre class="r"><code>testdata &lt;- read_rds(&quot;data-test/ahrq_del_ucmp_ptest.rds&quot;)</code></pre>
+<pre class="r"><code>testdata &lt;- read_rds(&quot;data-test/ahrq_del_ucmp_loop_test.rds&quot;)</code></pre>
 </div>
 <div id="diagnostic-columns" class="section level3">
 <h3>Diagnostic columns</h3>
@@ -1689,6 +1685,28 @@ prcse2g_list %&gt;%
 prcse2g_list %&gt;% nrow()</code></pre>
 <pre><code>## [1] 2</code></pre>
 </div>
+<div id="cesarean-delivery-updated" class="section level3">
+<h3>Cesarean delivery updated</h3>
+<p>I found zero Cesarean births listed for 2019, so research found this article on <a href="https://www.mhswi.com/newsroom/New-DRG-codes-for-C-sections-and-vaginal-deliveries.html">New DRG codes for C-sections and vaginal deliveries</a> and <a href="http://bok.ahima.org/doc?oid=302634#.XlK88JNKg6g">this post</a>, which indicate changes in billing codes for 2019. Here I extend the existing PRCSE2G list to add these new codes, calling it prcse2g_v2_list</p>
+<pre class="r"><code>prcse2g_v2_list &lt;- c(
+  &quot;765&quot;,
+  &quot;766&quot;,
+  &quot;783&quot;,
+  &quot;784&quot;,
+  &quot;785&quot;,
+  &quot;786&quot;,
+  &quot;787&quot;,
+  &quot;788&quot;
+) %&gt;%  
+  tibble::enframe(name = NULL) %&gt;% 
+  rename(prcse2g = value)
+
+prcse2g_v2_list %&gt;% 
+  write_rds(&quot;procedures-lists/ahrq_prcse2g_v2.rds&quot;)
+
+prcse2g_v2_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 8</code></pre>
+</div>
 <div id="hysterotomy-procedure-codes-prcse2p" class="section level3">
 <h3>Hysterotomy procedure codes: (PRCSE2P)</h3>
 <p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.</p>
@@ -1722,39 +1740,6 @@ prcsecp_list %&gt;%
 
 prcsecp_list %&gt;% nrow()</code></pre>
 <pre><code>## [1] 3</code></pre>
-</div>
-<div id="outcome-of-delivery-diagnosis-codes-delocmd" class="section level3">
-<h3>Outcome of delivery diagnosis codes: (DELOCMD)</h3>
-<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.</p>
-<pre class="r"><code>delocmd_list &lt;- c(
-  &quot;Z370&quot;,
-  &quot;Z371&quot;,
-  &quot;Z372&quot;,
-  &quot;Z373&quot;,
-  &quot;Z374&quot;,
-  &quot;Z3750&quot;,
-  &quot;Z3751&quot;,
-  &quot;Z3752&quot;,
-  &quot;Z3753&quot;,
-  &quot;Z3754&quot;,
-  &quot;Z3759&quot;,
-  &quot;Z3760&quot;,
-  &quot;Z3761&quot;,
-  &quot;Z3762&quot;,
-  &quot;Z3763&quot;,
-  &quot;Z3764&quot;,
-  &quot;Z3769&quot;,
-  &quot;Z377&quot;,
-  &quot;Z379&quot;
-) %&gt;%  
-  tibble::enframe(name = NULL) %&gt;% 
-  rename(delocmd = value)
-
-delocmd_list %&gt;% 
-  write_rds(&quot;procedures-lists/ahrq_delocmd.rds&quot;)
-
-delocmd_list %&gt;% nrow()</code></pre>
-<pre><code>## [1] 19</code></pre>
 </div>
 <div id="previous-cesarean-delivery-diagnosis-codes-prvbacd" class="section level3">
 <h3>Previous Cesarean delivery diagnosis codes: (PRVBACD)</h3>
