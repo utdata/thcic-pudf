@@ -225,6 +225,8 @@ del_epi_yr_table <- del_epi_yr_data %>%
   select(YR, PROVIDER_NAME, EPIRATE) %>% 
   pivot_wider(names_from = YR, values_from = EPIRATE) %>% 
   arrange(`2019` %>% desc())
+
+del_epi_yr_table %>% datatable()
 ```
 
 
