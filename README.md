@@ -18,6 +18,8 @@ The University of Texas at Austin
 - [01-process-ahrq-del-loop](https://utdata.github.io/thcic-pudf/01-process-ahrq-del-loop.html) is the method used to find all uncomplicated deliveries from the raw THCIC files.
 - [01-process-ahrq-del-test](https://utdata.github.io/thcic-pudf/01-process-ahrq-del-test.html) shows the processing logic in more detail using test data.
 - [01-process-ahrq-del-compare](https://utdata.github.io/thcic-pudf/01-process-ahrq-del-compare.html) compares the results of the loop script to the test script when both are processed using test data.
+- [01-process-lf-epi-loop](https://utdata.github.io/thcic-pudf/01-process-lf-epi-loop.html) is the method used to capture vaginal births using Leapfrog's methods.
+- [01-process-lf-epi-test](https://utdata.github.io/thcic-pudf/01-process-lf-epi-test.html) shows the processing logic in more detail using test data.
 
 ### Primary Cesareans study
 
