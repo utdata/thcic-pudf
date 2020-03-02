@@ -1,0 +1,341 @@
+---
+title: "Process various data lists"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+By **Christian McDonald**, Assistant Professor of Practice\
+School of Journalism, Moody College of Communication\
+University of Texas at Austin
+
+This THCIC analysis will need various lists of columns and ICD-10 codes. This notebook defines them and write them to rds where they can be use in later analysis.
+
+Of note, to turn a single-column rds import into a vector, use the following:
+
+```txt
+new_list <- read_rds("procedures-lists/filename.rds") %>% .$col_name_from_df
+```
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+library(janitor)
+```
+
+## THCIC column lists
+
+The diagnostic and surgical procedure columns from the THCIC data are frequently used in `case_when()` statements and other vectors. This writes them to csv and rds for use later. I use my test data as a base point to find the columns.
+
+There is an example data dictionary in the `resources` directory of this repo, or avialable online labeled as [User Manual, 2019](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm).
+
+### Import test data for column generation
+
+```{r data_test}
+testdata <- read_rds("data-test/ahrq_del_all_loop_test.rds")
+```
+
+### Diagnostic columns
+
+Values are all the names of diagnostics columns from the data in a singe tibble with column named `diag`. 
+
+```{r cols_diag}
+cols_diag <- testdata %>% 
+  select(contains("_DIAG"), -starts_with("POA")) %>%
+  names() %>% 
+  tibble::enframe(name = NULL) %>% 
+  rename(diag = value)
+
+cols_diag %>% 
+  write_csv("procedures-lists/cols_diag.csv")
+
+cols_diag %>% 
+  write_rds("procedures-lists/cols_diag.rds")
+  
+```
+
+### Surgical procedure columns
+
+Values are all the names of surgical procedure columns from the data in a singe tibble with column named `surg`.
+
+```{r cols_surg}
+cols_surg <- testdata %>% 
+  select(contains("SURG_PROC_CODE")) %>%
+  names() %>% 
+  tibble::enframe(name = NULL) %>% 
+  rename(surg = value)
+
+cols_surg %>% 
+  write_csv("procedures-lists/cols_surg.csv")
+
+cols_surg %>% 
+  write_rds("procedures-lists/cols_surg.rds")
+```
+
+## AHRQ lists
+
+These can come from IQI 33 or IQI 21. Some are in both. In addition to the links below they available in the `resources` directory of this repo.
+
+- [IQI 33 Primary Cesarean Delivery Rate, Uncomplicated](https://qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf)
+- [IQI 21 Cesarean Delivery Rate, Uncomplicated](https://qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_21_Cesarean_Delivery_Rate_Uncomplicated.pdf)
+
+### All deliveries (DELOCMD)
+
+All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery (DELOCMD). In both IQI 33 or IQI 21.
+
+```{r delocmd}
+delocmd_list <- c(
+  "Z370",
+  "Z371",
+  "Z372",
+  "Z373",
+  "Z374",
+  "Z3750",
+  "Z3751",
+  "Z3752",
+  "Z3753",
+  "Z3754",
+  "Z3759",
+  "Z3760",
+  "Z3761",
+  "Z3762",
+  "Z3763",
+  "Z3764",
+  "Z3769",
+  "Z377",
+  "Z379"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(delocmd = value)
+
+delocmd_list %>% 
+  write_rds("procedures-lists/ahrq_delocmd.rds")
+
+delocmd_list %>% nrow()
+```
+
+### Abnormal presentations (PRCSECD)
+
+We first need the list of PRCSECD codes from `resources/IQI_Appendix_A_2019.pdf`: "Abnormal presentation, fetal death and multiple gestation diagnosis codes: (PRCSECD)."
+
+The list of codes was extracted from the PDF and cleaned in OpenRefine to get the full list. The OpenRefine project is available in the `procedures/iqi-appendex-a` folder.
+
+```{r prcsecd}
+prcsecd_list <- read_csv("procedures-lists/IQI_Appendix_A.csv") %>% rename(prcsecd = codes)
+
+prcsecd_list %>% 
+  write_rds("procedures-lists/ahrq_prcsecd.rds")
+
+prcsecd_list %>% nrow()
+```
+
+### Cesarean delivery MS-DRG codes: (PRCSE2G)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.
+
+```{r prcse2g}
+# MS-DRG codes for Cesarean delivery (PRCSE2G*)
+prcse2g_list <- c(
+  "765",
+  "766"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prcse2g = value)
+
+prcse2g_list %>% 
+  write_rds("procedures-lists/ahrq_prcse2g.rds")
+
+prcse2g_list %>% nrow()
+```
+
+### Cesarean delivery updated
+
+I found zero Cesarean births listed for 2019, so research found this article on [New DRG codes for C-sections and vaginal deliveries](https://www.mhswi.com/newsroom/New-DRG-codes-for-C-sections-and-vaginal-deliveries.html) and [this post](http://bok.ahima.org/doc?oid=302634#.XlK88JNKg6g), which indicate changes in billing codes for 2019. Here I extend the existing PRCSE2G list to add these new codes, calling it prcse2g_v2_list
+
+```{r prcse2g_v2}
+prcse2g_v2_list <- c(
+  "765",
+  "766",
+  "783",
+  "784",
+  "785",
+  "786",
+  "787",
+  "788"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prcse2g = value)
+
+prcse2g_v2_list %>% 
+  write_rds("procedures-lists/ahrq_prcse2g_v2.rds")
+
+prcse2g_v2_list %>% nrow()
+```
+
+### Hysterotomy procedure codes: (PRCSE2P)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.
+
+```{r prcse2p}
+prcse2p_list <- c(
+  "10A00ZZ",
+  "10A03ZZ",
+  "10A04ZZ"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prcse2p = value)
+
+prcse2p_list %>% 
+  write_rds("procedures-lists/ahrq_prcse2p.rds")
+
+prcse2p_list %>% nrow()
+```
+
+### Cesarean delivery procedure codes: (PRCSECP)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.
+
+```{r prcsecp}
+prcsecp_list <- c(
+  "10D00Z0",
+  "10D00Z1",
+  "10D00Z2"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prcsecp = value)
+
+prcsecp_list %>% 
+  write_rds("procedures-lists/ahrq_prcsecp.rds")
+
+prcsecp_list %>% nrow()
+```
+
+### Previous Cesarean delivery diagnosis codes: (PRVBACD)
+
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated
+
+- with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD*)
+
+```{r prvbacd}
+prvbacd_list <- c(
+  "O3421",
+  "O34211",
+  "O34212",
+  "O34219",
+  "O6641"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(prvbacd = value)
+
+prvbacd_list %>% 
+  write_rds("procedures-lists/ahrq_prvbacd.rds")
+
+prvbacd_list %>% nrow()
+```
+
+## Other lists used
+
+### Child-bearing age codes
+
+Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest filtering deliveries to women of normal child-bearing age, 15-49.
+
+The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs).
+
+```{r age}
+age_list <- c(
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "23"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(age = value)
+
+age_list %>% 
+  write_rds("procedures-lists/utoha_age.rds")
+
+age_list %>% nrow()
+
+```
+
+## Leapfrog Episiotomy lists
+
+These definitions come from [Leapfrog Hospital survey measure specifications](https://www.leapfroggroup.org/sites/default/files/Files/2019HospitalSurvey_20190529_v8.0%20%28version%203%29.pdf). There is also a copy in the `resources` directory of this repo.
+
+### Vaginal MS_DRG codes
+
+```{r vag_msdrg}
+vag_msdrg_list <- c(
+  "767",
+  "768",
+  "774",
+  "775",
+  "796",
+  "797",
+  "798",
+  "805",
+  "806",
+  "807"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(vag_msdrg = value)
+
+vag_msdrg_list %>% 
+  write_rds("procedures-lists/lf_vag_msdrg.rds")
+
+vag_msdrg_list %>% nrow()
+```
+
+### Vaginal APR_DRG codes
+
+```{r vag_aprdrg}
+vag_aprdrg_list <- c(
+  "541",
+  "542",
+  "560"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(vag_aprdrg = value)
+
+vag_aprdrg_list %>% 
+  write_rds("procedures-lists/lf_vag_aprdrg.rds")
+
+vag_aprdrg_list %>% nrow()
+
+```
+
+### Vaginal birth exclusions
+
+```{r vag_excl}
+vag_excl_list <- c(
+  "O660"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(vag_excl = value)
+
+vag_excl_list %>% 
+  write_rds("procedures-lists/lf_vag_excl.rds")
+
+vag_excl_list %>% nrow()
+```
+
+### Episiotomy
+
+```{r epi}
+epi_list <- c(
+  "0W8NXZZ"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(epi = value)
+
+epi_list %>% 
+  write_rds("procedures-lists/lf_epi.rds")
+
+epi_list %>% nrow()
+```
+

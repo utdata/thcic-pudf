@@ -1,0 +1,230 @@
+---
+title: "Leapfrog Deliveries processing"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+The purpose of this notebook is to process multiple quarters of [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) into a single data file of **Total number of vaginal deliveries during the reporting time period, with Excluded Populations removed.** as defined by Leapfrog's 2019 Leapfrog Hospital Survey for Episiotomy (page 103). I also apply some data cleaning to remove records that have blank fields or mothers outside typical child-bearing age.
+
+The output is is then analyzed in other notebooks.
+
+Of note, there is another notebook `01-process-lf-epi-test` that uses the same filtering criteria but prints examples at various stages for manual checking.
+
+Also, there is another notebook `00-process-lists` where various AHRQ lists of ICD-10 and other codes are defined separately. Those values are written out to the `procedures-lists` folder as .rds and .csv files and then imported into this notebook and others. See that notebook to inspect the lists.
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(fs)
+library(tidyverse)
+```
+
+## Data sources
+
+### Test data
+
+I have a set of test data that grabs the first 10,000 rows from the first quarter of 2016-2018. This is used to test the processing without the load of the production data, which is considerable.
+
+```{r dir_test}
+# set test_flag to TRUE to use test data, etc.
+test_flag <- F
+data_dir_test <- "data-test"
+tsv_files_test <- dir_ls(data_dir_test, recurse = TRUE, regexp = "test_base1")
+tsv_files_test
+```
+
+### Production data
+
+Part of this process is to loop through all the matching files in the `data-raw` folder to process them. This sets up those directories.
+
+```{r dir_prod}
+# set up production data
+data_dir <- "data-raw"
+tsv_files <- dir_ls(data_dir, recurse = TRUE, regexp = "PUDF_base1_")
+
+# peek at the captured file list
+tsv_files
+```
+
+## Set up lists
+
+These are various lists we need for processing, so I'll pull them all in here:
+
+```{r lists}
+diag_cols <- read_rds("procedures-lists/cols_diag.rds") %>% .$diag
+diag_cols
+vag_msdrg_list <- read_rds("procedures-lists/lf_vag_msdrg.rds") %>% .$vag_msdrg
+vag_msdrg_list
+vag_aprdrg_list <- read_rds("procedures-lists/lf_vag_aprdrg.rds") %>% .$vag_aprdrg
+vag_aprdrg_list
+vag_excl_list <- read_rds("procedures-lists/lf_vag_excl.rds") %>% .$vag_excl
+vag_excl_list
+age_list <- read_rds("procedures-lists/utoha_age.rds") %>% .$age
+age_list
+```
+
+
+## Functions used in processing
+
+For processing this data, I build functions to apply different filtering to each file before binding them into a single tibble. In some cases the functions filters multiple columns for multiple variables.
+
+The functions are set up first, then used later in the processing loop.
+
+### Filter for vaginal deliveries
+
+This filters the dataset down to vaginal deliveries as outlined in Leapfrog's Episiotomy definitions (p103 of 2019 Leapfrog Hospital Survey).
+
+```{r fun_vag}
+filter_vag <- function(.data) {
+  .data %>%
+    filter(
+      MS_DRG %in% vag_msdrg_list | APR_DRG %in% vag_aprdrg_list
+    )
+}
+```
+
+## Exclusions from the deliveries
+
+From Leapfrog:
+
+Exclude any cases with the following ICD-10-CM diagnostic code in a primary or secondary field:
+- O66.0: Obstructed labor due to shoulder dystocia.
+
+The exclusion dataset is also defined in processed-lists, even though it is a single field.
+
+### Apply exclusions
+
+In defining this function we are filtering for the codes, but retaining the remainder. So, to the filter for the negative, we have to consider "all_vars" instead of "any_vars".
+
+```{r fun_vag_excl}
+
+filter_vag_excl <- function(.data) {
+  .data %>%
+  filter_at(
+    vars(diag_cols),
+    all_vars(
+      !(. %in% vag_excl_list)
+    )
+  ) 
+}
+```
+
+### Filter out blank cells
+
+Here I am using some cleaning concepts that are outlined by AHRQ that would seem logical to include with this analysis as well. They are defined as: "with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)."
+
+In base1, the fields are `SEX_CODE`, `PAT_AGE`, `DISCHARGE` for both quarter and year, and `PRINC_DIAG_CODE`.
+
+```{r fun_clean}
+
+filter_clean <- function(.data) {
+  .data %>% 
+      filter(
+        SEX_CODE == "F",
+        PAT_AGE != "`",
+        RACE != "`",
+        !is.na(DISCHARGE),
+        !is.na(PRINC_DIAG_CODE)
+      )
+}
+```
+
+### Child-bearing age
+
+Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest filtering deliveries to women of normal child-bearing age, 15-49.
+
+The codes for the ages 15-49 include "05" through "12". For HIV or drug patients it includes "23" (18-44 yrs).
+
+This function filters for those values.
+
+```{r fun_age}
+filter_age <- function(.data) {
+  .data %>% 
+    filter(PAT_AGE %in% age_list)
+}
+```
+
+## Import and process
+
+This is the workhorse process to loop through the files and combine the data. It brings in each file and then applies the filtering functions above and then appends the results to the growing tibble.
+
+At this time, the analysis utilizes only one (PUDF_base1) of several files in the release for each quarter. The raw data is never changed.
+
+Of note:
+
+- There is a trailing tab on each row in the data, which creates an unnecssary column. This is removed with `col_skip()` in the import statement, though it is still reported in the `problems()` function. Those problems are resolved with the `col_skip()` function.
+- The import sets "col_character" as the default datatype because some columns were otherwise importing as "logical" by the datatype sniffer in readr. Numeric columns are later reset with `as.numeric` where necessary.
+
+Import warnings are supressed. This hides import errors like `Missing column names filled in: 'X167'` caused by the extra tabs in the raw files.
+
+```{r process, echo=T, results='hide', message=F, warning=F}
+# warnings supressed.
+
+# create the tibble
+data <- tibble()
+
+# set the files list
+if(test_flag == T) files <- tsv_files_test else files <- tsv_files
+
+for (file in files) {
+  c <- read_tsv(
+    file,
+    col_types = cols(
+      .default = col_character(),
+      X168 = col_skip(),
+      X167 = col_skip()
+    )
+  ) %>% 
+    filter_vag() %>% 
+    filter_vag_excl() %>% 
+    filter_clean() %>% 
+    filter_age()
+  data <- bind_rows(data, c)
+}
+
+data %>% nrow()
+```
+
+The result of this function is `data`, which is our combined and filtered data.
+
+## Add year column
+
+In the resulting file we add a YR column for convenience to use in later analysis.
+
+```{r add_yr}
+data <- data %>% 
+  mutate(
+    YR = substr(DISCHARGE, 1, 4)
+  )
+
+data %>% 
+  count(YR)
+```
+
+## Remove other years
+
+Because of a reporting lag, there are years in the original data that we are not using for our analysis. At some point in 2015 there was a switch from ICD-9 to ICD-10 coding, so going eariler would require some conversions. Not impossible, but not in scope at this time to ease complication.
+
+We are using full years from 2016-2018 and a partial year 2019 through the 2nd quarter release. 
+
+```{r filter_yr}
+data <- data %>% 
+  filter(YR %in% c("2016", "2017", "2018", "2019"))
+```
+
+## Write file
+
+We write a single file of the uncomplicated deliveries.
+
+```{r write}
+if(test_flag == T) write_path <- "data-test/lf_del_vag_loop_test.rds" else write_path <- "data-processed/lf_del_vag.rds"
+
+data %>% write_rds(write_path)
+
+data %>% nrow()
+
+# A klaxon to indicate the processing is complete
+beepr::beep(4)
+
+```
+

@@ -1,5 +1,5 @@
 ---
-title: "Cesarean delivery rates, 2016-2q2019"
+title: "Primary Cesarean delivery rates, 2016-2q2019"
 output:
   html_document:
     df_print: paged
@@ -14,7 +14,7 @@ This is an analysis of the Primary Cesarean Delivery Rate, Uncomplicated, as def
 
 "First-time Cesarean deliveries without a hysterotomy procedure per 1,000 deliveries. Excludes deliveries with complications (abnormal presentation, preterm delivery, fetal death, multiple gestation diagnoses, or breech procedure)."
 
-This analysis has enough results to avoide defining as "per 1,000 deliveries". I use a simple rate: Primary Cesarean / All uncomplicated deliveries.
+This analysis has enough results to avoid defining as "per 1,000 deliveries". I use a simple rate: Primary Cesarean / All uncomplicated deliveries.
 
 ## AHRQ definition
 
@@ -43,25 +43,25 @@ library(DT)
 
 ## Import of deliveries
 
-I start with data that has already been through some "denominator" exclusions, including filtered for PRCSECD codes and any missing data. This was handled in `01-process-loop`, so I import that resulting file. Important to note with this analysis is the imported cases _DO_ have patients with previous cesareans, so those will have to be filtered out in a later step.
+I start here with  "All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery (DELOCMD)". This was processed in `01-process-loop`.
 
 ```{r imports}
+# set test flag to FALSE to run production data
+test_flag <- F
+
+### test data
+path_test <- "data-test/ahrq_del_all_loop_test.rds"
+
 ### production data
-del <- read_rds("data-processed/ahrq_del_ucmp.rds")
+path_prod <- "data-processed/ahrq_del_all.rds"
 
-### testing data
-# del <- read_rds("data-test/ahrq_del_ucmp_loop_test.rds")
-
-### single quarter unfiltered for testing
-# del <- read_tsv("data-raw/PUDF 1Q2018 tab-delimited/PUDF_base1_1q2018_tab.txt")
-
-### 2019 quarter unfiltered for testing
-# del <- read_tsv("data-raw/PUDF 1Q2019 tab-delimited/PUDF_base1_1q2019_tab.txt")
+### import based on flag
+if (test_flag == T) del <- read_rds(path_test) else del <- read_rds(path_prod)
 
 del %>% nrow()
 ```
 
-## Set up various ICD-10 lists
+## Set up various processing lists
 
 These are lists from the IQI 33 reference used for filtering and such. See 01-process-lists for definitions.
 
@@ -71,6 +71,9 @@ diag_cols <- read_rds("procedures-lists/cols_diag.rds") %>% .$diag
 
 # surgical procedure columns
 surg_cols <- read_rds("procedures-lists/cols_surg.rds") %>% .$surg
+
+# appendix a complications list
+prcsecd_list <- read_rds("procedures-lists/ahrq_prcsecd.rds") %>% .$prcsecd
 
 # Cesarean delivery MS-DRG codes, updated
 prcse2g_v2_list <- read_rds("procedures-lists/ahrq_prcse2g_v2.rds") %>% .$prcse2g
@@ -84,12 +87,31 @@ prvbacd_list <- read_rds("procedures-lists/ahrq_prvbacd.rds") %>% .$prvbacd
 
 ## Filter deliveries to set denominator
 
+### Filter out complicated deliveries
+
+Start by filtering out rows "with any-listed ICD-10-CM diagnosis codes for abnormal presentation, preterm, fetal death, or multiple gestation (Appendix A: PRCSECD)".
+
+
+```{r prcsecd}
+del_ucmp <- del %>% 
+  filter_at(
+    vars(all_of(diag_cols)),
+    all_vars(
+      !(. %in% prcsecd_list)
+    )
+  )
+
+del_ucmp %>% nrow()
+```
+
+### Filter out previous Cesarean deliveries
+
 For this analysis, I need to additionally exclude outcomes "with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD)". This prvbacd_list comes from the AHRQ specification.
 
 ```{r nprv}
-del_nprv <- del %>% 
+del_nprv <- del_ucmp %>% 
   filter_at(
-    vars(diag_cols),
+    vars(all_of(diag_cols)),
     all_vars(
       !(. %in% prvbacd_list)
     )
@@ -112,11 +134,9 @@ How I handle this:
 
 - Create a cesarean column updated `PRCSE2G` based on MS-DRG codes. This is an easy `if_else`.
 - Create a column `PRCSE2P` that are hysterotomy cases. This is more complicated because I have to look through each SURG_PROC column for any value in the prcse2p_v2_list.
-- Create a primary Cesarean column `PCSEC` based on Cesarean geing TRUE and hysterotomy being FALSE.
+- Create a primary Cesarean column `PCSEC` based on Cesarean being TRUE and hysterotomy being FALSE.
 
 ### Create column for PRCSE2G or cesarean deliveries
-
-Simple if_else statement.
 
 ```{r csec}
 del_csec <- del_nprv %>% 
@@ -277,6 +297,8 @@ pcsec_rate_yr_table %>% datatable()
 
 **The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.**
 
+The numbers in parenthesis are counts.
+
 ```{r pcsec_laredo_rate}
 del_pcsec %>% 
   filter(
@@ -295,6 +317,22 @@ pcsec_rate_yr_table %>%
   filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
 
+## Primary Cesarean rate and count by year, Laredo
+
+> This is unfinished
+
+For this, perhaps make a stacked bar chart that shows the Total deliveries, with a segment for primary cesareans on the y axis, and yr or quarter on the x axis. (However, that would not show the counts for reporting)
+
+Better would be a table with two levels of names_from, grouped first by year, then by PC_CNT and TOTAL.
+
+```{r}
+pcsec_rate_yr_all %>% 
+  filter(
+    str_detect(PROVIDER_NAME, "Doctors Hospital-Laredo")
+  ) %>% 
+  select(YR, PROVIDER_NAME, TOTAL) %>% 
+  pivot_wider(names_from = c(YR), values_from = c(TOTAL))
+```
 
 ### Chart: Primary Cesarean Rates by year, Laredo
 
@@ -337,14 +375,40 @@ pcsec_rate_qr_all %>%
   labs(title = "Primary Cesarean rate by quarter, Laredo", x = "QUARTER", y = "Primary Cesarean Rate")
 ```
 
+## Doctors at Laredo hospital
+
+### How many doctors delivering babies per hospital
+
+```{r}
+del_pcsec %>% 
+  filter(
+    str_detect(PROVIDER_NAME, "Doctors Hospital-Laredo")
+  ) %>% 
+  group_by(YR, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  summarise(CNT = n()) %>% 
+  # filter(CNT >= 10) %>%  # filters docs with less than 10 deliveries
+  pivot_wider(names_from = YR, values_from = CNT)
+```
+
+It is interesting that there were way more doctors delivering in 2016 than after, even if they had just done a few deliveries.
+
+```{r}
+del_pcsec %>% 
+  filter(
+    str_detect(PROVIDER_NAME, "Laredo")
+  ) %>% 
+  group_by(PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  summarise(CNT = n())
+```
+
+
 ## Write files
 
 Writing some dataframes to rds for later use.
 
 ```{r write}
-del_pcsec %>% write_rds("data-processed/pcsec.rds")
-
-pcsec_rate_yr_all %>% write_rds("data-processed/pcsec_rate_yr_all.rds")
+# if (test_flag == F) del_pcsec %>% write_rds("data-processed/pcsec.rds")
+# if (test_flag == F) pcsec_rate_yr_all %>% write_rds("data-processed/pcsec_rate_yr_all.rds")
 
 # A klaxon to indicate the processing is complete
 beepr::beep(4)

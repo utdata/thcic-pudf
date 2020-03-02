@@ -16,10 +16,10 @@ TheUniversity of Texas at Austin
 
 ### Data processing notebooks
 
-- [01-process-lists](https://utdata.github.io/thcic-pudf/01-process-lists.html) defines various lists of codes and columns used within other notebooks.
-- [01-process-loop](https://utdata.github.io/thcic-pudf/01-process-loop.html) is the method used to find all uncomplicated deliveries from the raw THCIC files.
-- [01-t1-process-test](https://utdata.github.io/thcic-pudf/01-t1-process-test.html) shows the processing logic in more detail using test data.
-- [01-t2-process-compare](https://utdata.github.io/thcic-pudf/01-t2-process-compare.html) compares the results of the loop script to the test script when both are processed using test data.
+- [00-process-lists](https://utdata.github.io/thcic-pudf/00-process-lists.html) defines various lists of codes and columns used within other notebooks.
+- [01-process-ahrq-del-loop](https://utdata.github.io/thcic-pudf/01-process-ahrq-del-loop.html) is the method used to find all uncomplicated deliveries from the raw THCIC files.
+- [01-process-ahrq-del-test](https://utdata.github.io/thcic-pudf/01-process-ahrq-del-test.html) shows the processing logic in more detail using test data.
+- [01-process-ahrq-del-compare](https://utdata.github.io/thcic-pudf/01-process-ahrq-del-compare.html) compares the results of the loop script to the test script when both are processed using test data.
 
 ### Primary Cesareans study
 
@@ -29,12 +29,4 @@ TheUniversity of Texas at Austin
 
 - [02-analyze-episiotomy](https://utdata.github.io/thcic-pudf/02-analyze-episiotomy.html) is an analysis of episiotomy procedures statewide and for Laredo hospitals.
 
-### All Cesareans study
 
-- [02-analyze-csec](https://utdata.github.io/thcic-pudf/02-analyze-csec.html) is  and **UNFINISHED** the analysis of Cesareans vs all uncomplicated births.
-- [03-viz-crate](https://utdata.github.io/thcic-pudf/03-viz-crate.html) is an **UNFINISHED** interactive table of the Cesarean rates for a three-year period, 2016-2018.
-
-### Other notebooks
-
-- [99-explore-other](https://utdata.github.io/thcic-pudf/99-explore-other.html)
-- [99-mutate-challenge](https://utdata.github.io/thcic-pudf/99-mutate-challenge.html)

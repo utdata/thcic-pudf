@@ -1,0 +1,34 @@
+---
+title: "AHRQ deliveries process comparison"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+This notebook compares the output of a non-looped process to a single process on the data. This sort of tests the function in the `01-ahrq-del-process-loop` file to make sure the less verbose functions process correctly.
+
+The `01-ahrq-del-process-test` notebook use a non-looped processesing of the data with some visual checks on the files. I want to make sure those same filters are applied to the looping notebook above used for production.
+
+I ran a test on the looped processes against the test data for comparison. Here I check to make sure the number of rows returned is the same.
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+```
+
+Read in each test rds and note the number of rows. The result should be the same for both.
+
+```{r}
+ttst <- read_rds("data-test/ahrq_del_all_loop_test.rds")
+ttst %>% nrow()
+ptst <- read_rds("data-test/ahrq_del_all_single_test.rds")
+ptst %>% nrow()
+```
+
+I once had a problem with the age filtering in the no-loop file, so this checks that. There should be zero rows returned here.
+
+```{r echo=F, message=F}
+ttst %>% anti_join(ptst) %>% 
+  select(PAT_AGE)
+```
+
