@@ -6,11 +6,9 @@ No raw data is made public through this project. The data is typically sold by t
 
 This analysis is by:
 
-**CHRISTIAN MCDONALD**\
-Assistant Professor of Practice\
-School of Journalism\
-Moody College ofCommunication\
-TheUniversity of Texas at Austin
+**CHRISTIAN MCDONALD**, Assistant Professor of Practice\
+School of Journalism, Moody College ofCommunication\
+The University of Texas at Austin
 
 ## Notebooks
 
