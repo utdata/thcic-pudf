@@ -207,6 +207,8 @@ del_pcsec <- del_csec %>%
   mutate(
     PCSEC = if_else((PRCSE2G == T & PRCSE2P == F), T, F)
   )
+
+del_pcsec %>% head()
 ```
 
 ## Primary Cesarean rate statewide
@@ -344,6 +346,10 @@ pcsec_rate_yr_all %>%
   expand_limits(y = c(0,40)) +
   theme(legend.position="bottom", legend.box = "vertical") +
   labs(title = "Primary Cesarean rate by year, Laredo", x = "YEAR", y = "Primary Cesarean Rate")
+```
+
+```{r}
+pcsec_rate_yr_all
 ```
 
 ### Chart: Primary Cesarean rates by quarter, Laredo
