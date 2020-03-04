@@ -23,8 +23,16 @@ library(DT)
 ```
 
 ```{r imports}
+test_flag <- F
+
+### test data
+path_test <- "data-test/lf_del_vag_loop_test.rds"
+
 ### production data
-del_vag_excl <- read_rds("data-processed/lf_del_vag.rds")
+path_prod <- "data-processed/lf_del_vag.rds"
+
+### import based on flag
+if (test_flag == T) del_vag_excl <- read_rds(path_test) else del_vag_excl <- read_rds(path_prod)
 
 del_vag_excl %>% nrow()
 ```
@@ -183,6 +191,47 @@ The table above, filtered for Laredo.
 del_epi_yr_table %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
+
+
+### Chart: Episiotomy rates by year, Laredo
+
+```{r plot_yr_lar}
+del_epi_yr_data %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
+  ggplot(aes(YR, EPIRATE)) +
+  geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
+  expand_limits(y = c(0,40)) +
+  theme(legend.position="bottom", legend.box = "vertical") +
+  labs(title = "Episiotomy rate by year, Laredo hospitals", x = "YEAR", y = "Episiotomy rate")
+```
+
+### Chart: Episiotomy rates by quarter, Laredo
+
+```{r plot_qr_lar}
+del_epi_qr_data <- del_epi %>% 
+  group_by(DISCHARGE, PROVIDER_NAME, EPI) %>% 
+  summarise(
+    EPI_CNT = n()
+  ) %>% 
+  pivot_wider(names_from = EPI, values_from = EPI_CNT) %>% 
+  rename(
+    EPIF = "FALSE",
+    EPIT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = EPIF + EPIT,
+    EPIRATE = round((EPIT / TOTAL) * 100,1)
+  )
+
+del_epi_qr_data %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
+  ggplot(aes(DISCHARGE, EPIRATE)) +
+  geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
+  expand_limits(y = c(0,40)) +
+  theme(legend.position="bottom", legend.box = "vertical") +
+  labs(title = "Episiotomy rate by quarter, Laredo hospitals", x = "QUARTER", y = "Episiotomy rate")
+```
+
 
 ## Write files
 
