@@ -1,0 +1,183 @@
+---
+title: "Doctor deliveries per hospital (AHRQ specs)"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+By **Christian McDonald**, Assistant Professor of Practice\
+School of Journalism, Moody College of Communication\
+University of Texas at Austin
+
+## Purpose of this analysis
+
+The purpose of this notebook is to look at the number of deliveries per doctor and some subsets for that:
+
+- Of doctors in specific hospitals of interest, how many deliveries do they do each year?
+- Of all deliveries in a year, what percentage of women who went in to give birth got an episiotomy or C-section. Both statewide, and by hospitals of interest.
+
+I DO NOT filter for complications, fetal deaths or other factors.
+
+We'll be using the `ATTENDING_PHYSICIAN_UNIF_ID` field to identify the attending physician, described as "Unique identifier assigned to the licensed physician expected to certify medical necessity of services rendered, with primary responsibility for the patient’s medical care and treatment." That indication does not guarantee the doctor performed the procedure.
+
+There is also a `OPERATING_PHYSICIAN_UNIF_ID` field for each patient: "Unique identifier assigned to the operating physician or physician other than the attending physician."
+
+> Both of the PHYSICIAN values are suppressed if there are fewer than 5 in a quarter. That appears to be a significant suppression for many hospitals
+
+As I read these, there is no guarantee that either doctor actually performed a specific procedure, but the ATTENDING PHYSICIAN should be responsible for the patient's care.
+
+## Project setup
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(fs)
+library(tidyverse)
+library(DT)
+```
+
+## Import all deliveries
+
+I start with a subset of the [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) that include all deliveries as outlined in AHRQ's [Inpatient Quality Indicators Technical Specifications](https://www.qualityindicators.ahrq.gov/Modules/IQI_TechSpec_ICD10_v2019.aspx). The `DELOCMD` specification in IQI 21 is "All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery". Some cleaning was applied as outlined in the `01-process-ahrq-del-loop` notebook. The result is imported here.
+
+(I also have test data options.)
+
+```{r imports}
+test_flag <- F
+
+### test data
+path_test <- "data-test/ahrq_del_all_loop_test.rds"
+
+### production data
+path_prod <- "data-processed/ahrq_del_all.rds"
+
+### import based on flag
+if (test_flag == T) del <- read_rds(path_test) else del <- read_rds(path_prod)
+
+del %>% nrow()
+```
+
+## Dealing with suppressions
+
+Both ATTENDING_PHYSICIAN_UNIF_ID and OPERATING_PHYSICIAN_UNIF_ID are "Suppressed when the number of physicians represented in a DRG for a hospital is less than the minimum cell size of five."
+
+- 9999999998: Cell size less than 5
+- 9999999999: Temporary license or license number could not be matched
+
+```{r}
+del %>% 
+  count(ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  arrange(n %>% desc())
+```
+
+The ATTENDING_PHYSICIAN is supporesed in about 6% of deliveries. For some hospitals, even big ones like Brownwood Regional Medical Center, all the physician data is suppressed.
+
+```{r}
+del %>% 
+  filter(str_detect(PROVIDER_NAME, "Brownwood Regional Medical Center")) %>% 
+  count(ATTENDING_PHYSICIAN_UNIF_ID)
+```
+
+### Removing suppressed doctors
+
+```{r}
+suppressed = c("9999999998", "9999999999")
+
+del_supp <- del %>% 
+  filter(
+    !ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed
+  )
+```
+
+## Deliveries per hospital, per doctor
+
+How many deliveries by hospitals from 2016 to present. This is all doctors regardless of the number of deliveries.
+
+```{r}
+del_supp %>% 
+  group_by(PROVIDER_NAME) %>% 
+  summarize(
+    DELIVERIES = n(),
+    PHYSICIANS = n_distinct(ATTENDING_PHYSICIAN_UNIF_ID)
+    ) %>% 
+  mutate(
+    RATE = round(DELIVERIES/PHYSICIANS, 1)
+  ) %>% 
+  arrange(RATE %>% desc())
+```
+
+
+Let's remove doctors with less than 10 deliveries in a given year
+
+```{r grp_yr_hosp_doc}
+del_supp %>% 
+  group_by(YR, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  summarize(DELIVERIES = n()) %>% 
+  rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  filter(DELIVERIES >= 10) %>% 
+  group_by(PROVIDER_NAME) %>% 
+  summarize(
+    DELIVERIES = sum(DELIVERIES),
+    PHYSICIANS = n_distinct(PHYSICIAN)
+  ) %>% 
+  mutate(
+    RATE = round(DELIVERIES/PHYSICIANS,1)
+  ) %>% 
+  arrange(RATE %>% desc()) %>% 
+  datatable()
+```
+
+
+### More on Laredo
+
+Delivery rate per doctor by year.
+
+> suppressions affect this
+
+```{r}
+del_supp %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
+  group_by(YR, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  summarize(DELIVERIES = n()) %>% 
+  rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  filter(DELIVERIES >= 10) %>% 
+  group_by(YR, PROVIDER_NAME) %>% 
+  summarize(
+    DELIVERIES = sum(DELIVERIES),
+    PHYSICIANS = n_distinct(PHYSICIAN)
+  ) %>% 
+  mutate(
+    RATE = round(DELIVERIES/PHYSICIANS, 1)
+  ) %>% 
+  select(YR, PROVIDER_NAME, RATE) %>% 
+  pivot_wider(names_from = YR, values_from = RATE)
+```
+
+
+
+
+
+```{r}
+del_yr_hosp_doc %>% 
+  group_by(YR)
+```
+
+
+
+## Process Cesarean and episiotomy deliveries
+
+- Use AHRQ IQI 21 to denote which deliveries resulted in a Cesarean
+- Use Leapfrog's rules to denote deliveries with episiotomies
+
+## Get Cesarean rate
+
+- Group by hospital and Cesarean and count
+
+## Get episiotmy rates
+
+- Group by hospital and episiotomy
+
+## Combine Cesarean and episiotmy
+
+- Characterize if a delivery had either procedure
+- group and count by hospital
+

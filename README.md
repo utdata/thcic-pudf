@@ -1,3 +1,15 @@
+---
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(
+    inputFile,
+    encoding = encoding,
+    output_dir = "docs",
+    output_file='index.html'
+  ) })
+---
+
 # Birth outcomes for Texas
 
 This is an analysis of the [Texas Inpatient Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) for a series of birth outcomes.

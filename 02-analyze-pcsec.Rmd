@@ -224,7 +224,7 @@ del_pcsec %>%
 
 ### Table: Cesarean rate by hospital, combined years
 
-Get Primary Cesarean rate by hospital from all years combined.
+Get Primary Cesarean rate by hospital from all years combined. Hospitals with fewer than 100 deliveries excluded.
 
 ```{r pcsec_rate_all}
 pcsec_rate_all <- del_pcsec %>% 
@@ -295,7 +295,7 @@ pcsec_rate_yr_table %>% datatable()
 
 ## Laredo hospitals
 
-## Primary Cesarean rate combined years, Laredo hospitals
+### Primary Cesarean rate combined years, Laredo hospitals
 
 **The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.**
 
@@ -312,14 +312,14 @@ del_pcsec %>%
   adorn_ns()
 ```
 
-## Primary Cesarean rate by year, Laredo hospitals
+### Primary Cesarean rate by year, Laredo hospitals
 
 ```{r pcsec_rate_yr_lar}
 pcsec_rate_yr_table %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
 
-## Primary Cesarean rate and count by year, Laredo
+### Primary Cesarean rate and count by year, Laredo
 
 > This is unfinished
 
@@ -381,7 +381,7 @@ pcsec_rate_qr_all %>%
   labs(title = "Primary Cesarean rate by quarter, Laredo", x = "QUARTER", y = "Primary Cesarean Rate")
 ```
 
-## Doctors at Laredo hospital
+## Doctors at Laredo hospitals
 
 ### How many doctors delivering babies per hospital
 
