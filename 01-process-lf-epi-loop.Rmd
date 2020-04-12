@@ -101,7 +101,7 @@ In defining this function we are filtering for the codes, but retaining the rema
 filter_vag_excl <- function(.data) {
   .data %>%
   filter_at(
-    vars(diag_cols),
+    vars(all_of(diag_cols)),
     all_vars(
       !(. %in% vag_excl_list)
     )

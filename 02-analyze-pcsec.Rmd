@@ -6,6 +6,8 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
+> I need to move the doctor stuff at the bottom to the deliveries analysis, I think.
+
 By **Christian McDonald**, Assistant Professor of Practice\
 School of Journalism, Moody College of Communication\
 University of Texas at Austin
@@ -319,22 +321,6 @@ pcsec_rate_yr_table %>%
   filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
 
-### Primary Cesarean rate and count by year, Laredo
-
-> This is unfinished
-
-For this, perhaps make a stacked bar chart that shows the Total deliveries, with a segment for primary cesareans on the y axis, and yr or quarter on the x axis. (However, that would not show the counts for reporting)
-
-Better would be a table with two levels of names_from, grouped first by year, then by PC_CNT and TOTAL.
-
-```{r}
-pcsec_rate_yr_all %>% 
-  filter(
-    str_detect(PROVIDER_NAME, "Doctors Hospital-Laredo")
-  ) %>% 
-  select(YR, PROVIDER_NAME, TOTAL) %>% 
-  pivot_wider(names_from = c(YR), values_from = c(TOTAL))
-```
 
 ### Chart: Primary Cesarean Rates by year, Laredo
 
@@ -346,10 +332,6 @@ pcsec_rate_yr_all %>%
   expand_limits(y = c(0,40)) +
   theme(legend.position="bottom", legend.box = "vertical") +
   labs(title = "Primary Cesarean rate by year, Laredo", x = "YEAR", y = "Primary Cesarean Rate")
-```
-
-```{r}
-pcsec_rate_yr_all
 ```
 
 ### Chart: Primary Cesarean rates by quarter, Laredo
@@ -380,33 +362,6 @@ pcsec_rate_qr_all %>%
   theme(legend.position="bottom", legend.box = "vertical") +
   labs(title = "Primary Cesarean rate by quarter, Laredo", x = "QUARTER", y = "Primary Cesarean Rate")
 ```
-
-## Doctors at Laredo hospitals
-
-### How many doctors delivering babies per hospital
-
-```{r}
-del_pcsec %>% 
-  filter(
-    str_detect(PROVIDER_NAME, "Doctors Hospital-Laredo")
-  ) %>% 
-  group_by(YR, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  summarise(CNT = n()) %>% 
-  # filter(CNT >= 10) %>%  # filters docs with less than 10 deliveries
-  pivot_wider(names_from = YR, values_from = CNT)
-```
-
-It is interesting that there were way more doctors delivering in 2016 than after, even if they had just done a few deliveries.
-
-```{r}
-del_pcsec %>% 
-  filter(
-    str_detect(PROVIDER_NAME, "Laredo")
-  ) %>% 
-  group_by(PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  summarise(CNT = n())
-```
-
 
 ## Write files
 

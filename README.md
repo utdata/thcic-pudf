@@ -41,4 +41,7 @@ The University of Texas at Austin
 
 - [02-analyze-episiotomy](https://utdata.github.io/thcic-pudf/02-analyze-episiotomy.html) is an analysis of episiotomy procedures statewide and for Laredo hospitals.
 
+### Deliveries study
+
+- [02-analyze-deliveries](https://utdata.github.io/thcic-pudf/02-analyze-deliveries.html) looks at overall delivery rates at hospitals, including simple rates for Cesarean and episiotomies.
 

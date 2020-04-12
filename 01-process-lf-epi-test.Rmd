@@ -111,7 +111,7 @@ The exclusion dataset is also defined in processed-lists, even though it is a si
 
 del_vag_excl <- del_vag %>% 
   filter_at(
-    vars(diag_cols),
+    vars(all_of(diag_cols)),
     all_vars(
       !(. %in% vag_excl_list)
     )

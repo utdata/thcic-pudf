@@ -104,12 +104,9 @@ del %>%
 
 ## Exclusions from the deliveries
 
-From IQI 33 ... Exclude cases:
+Some further notebooks need to exclude cases for complications like for abnormal presentation, fetal death, or multiple gestation. Those will be handled in those notebooks as needed.
 
-- with any listed ICD-10-CM diagnosis codes for abnormal presentation, fetal death, or multiple gestation (Appendix A: PRCSECD) and
-- with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)
-
-We will do the "Appendix A: PRCSECD" filtering when needed in other notebooks. Here we will only deal with the missing data.
+Here we only filter out missing or bad data.
 
 ### Filter out blank cells per Appendix A
 
@@ -155,7 +152,7 @@ del_cln_age <- del_cln %>%
 del_cln_age %>% nrow()
 ```
 
-Peeking at records outside the child-bearing age list.
+Peeking at records outside the child-bearing age list to make sure are none.
 
 ```{r age_test}
 # set up not in
@@ -180,7 +177,7 @@ del_cln_age_yr <- del_cln_age %>%
 
 Because of a reporting lag, there are years in the original data that we are not using for our analysis. At some point in 2015 there was a switch from ICD-9 to ICD-10 coding, so going eariler would require some conversions. Not impossible, but not in scope at this time to ease complication.
 
-We are using full years from 2016-2018 and a partial year 2019 through the 2nd quarter release. 
+We are using full years from 2016-2018 and a partial year 2019 through the 2nd quarter release. This is subject to change as new data is released.
 
 ```{r filter_yr}
 del_cln_age_yr <- del_cln_age_yr %>% 

@@ -244,55 +244,49 @@ del_epi_qr_data %>%
 
 ## A look at doctors
 
-These views are all of vaginal deliveries only.
+These views are all of vaginal deliveries only. See 02-analysis-deliveries for a look against all deliveries.
 
-> I need to make a data set of all deliveries to get a complete look.
+Before looking at individual doctor counts, I need to ensure anonymity for them. The challenge is to provide useful information while staying within the allowances of data use.
 
-### Episiotomy rates doctor in Laredo
+### Doctor suppression
 
-Vaginal deliveries vs episiotomies for all years combined, with rate. Doctors with fewer than 10 vaginal deliveries excluded. Some doctors have delivered at both hospitals.
+Before looking at these rates it should be known that in some cases the ATTENDING_PHYSICIAN was suppressed in the data. This means multiple unknown physicians could be grouped as a single doctor in a given quarter. The number of records affected is small, but so is the actual number of physicians at these hospitals.
 
-```{r}
+These suppression rates are just for this data set of **vaginal deliveries in Laredo**.
+
+```{r supp_count_lar}
+suppressed = c("9999999998", "9999999999")
+
 del_epi_lar %>% 
-  group_by(ATTENDING_PHYSICIAN_UNIF_ID, EPI) %>%
-  summarise(CNT = n()) %>%
-  pivot_wider(names_from = EPI, values_from = CNT) %>%
-  rename(
-    EPIF = "FALSE",
-    EPIT = "TRUE"
-  ) %>%
   mutate(
-    TOTAL = EPIF + EPIT,
-    EPIRATE = round((EPIT / TOTAL) * 100,1)
+    DOC_SUPPRESSED = if_else(ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed, T, F)
   ) %>% 
-  filter(TOTAL > 10) %>% 
-  arrange(EPIRATE %>% desc()) %>% 
-  datatable()
+  tabyl(DOC_SUPPRESSED, PROVIDER_NAME) %>% 
+  adorn_percentages("col") %>%
+  adorn_pct_formatting(digits = 2) %>%
+  adorn_ns()
 ```
 
-### Procedures totals by doctor by year
+## Doctors performing vaginal deliveries in Laredo
 
-Not the best way to look at this, but this is a list of Laredo doctors and the number of vaginal deliveries and episiotomies by year.
+Includes doctors who IDs were suppresed and therefore combined.
 
-```{r}
-del_epi_lar_doc_yr <- del_epi_lar %>% 
-  group_by(YR, ATTENDING_PHYSICIAN_UNIF_ID, EPI) %>%
-  summarise(CNT = n()) %>%
-  pivot_wider(names_from = EPI, values_from = CNT) %>%
-  rename(
-    EPIF = "FALSE",
-    EPIT = "TRUE"
-  ) %>%
+```{r del_hosp_doc}
+del_epi_lar %>% 
+  group_by(PROVIDER_NAME) %>% 
+  summarize(
+    DELIVERIES = n(),
+    PHYSICIANS = n_distinct(ATTENDING_PHYSICIAN_UNIF_ID)
+    ) %>% 
   mutate(
-    TOTAL = EPIF + EPIT,
-    EPIRATE = round((EPIT / TOTAL) * 100,1)
+    RATE = round(DELIVERIES/PHYSICIANS, 1)
   ) %>% 
-  arrange(ATTENDING_PHYSICIAN_UNIF_ID, YR)
-
-del_epi_lar_doc_yr %>% datatable()
+  arrange(RATE %>% desc())
 ```
 
 ### Chart: Count of doctors performing vaginal deliveries at each hospital
+
+The data we start with here excludes doctors who have done fewer than 10 vaginal deliveries over the full time period.
 
 ```{r}
 del_epi_lar %>% 
@@ -308,7 +302,9 @@ del_epi_lar %>%
   labs(title = "Doctors attending deliveries, Laredo hospitals", x = "Year", y = "# of doctors")
 ```
 
-### Chart: Count of doctors performing vaginal deliveries at each hospital
+### Table: Count of doctors performing vaginal deliveries at each hospital
+
+Again, excludes doctors with fewer than 10 deliveries over the full time period.
 
 ```{r}
 del_epi_lar %>% 
@@ -320,7 +316,6 @@ del_epi_lar %>%
   pivot_wider(names_from = YR, values_from = ATTEND_DOCS)
 ```
  
-
 ## Write files
 
 Writing out some data frames for use in other notebooks
