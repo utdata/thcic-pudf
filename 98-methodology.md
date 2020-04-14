@@ -10,7 +10,7 @@ knit: (function(inputFile, encoding) { rmarkdown::render(
   ) })
 ---
 
-# Methology for THCIC analysis
+# Methology used for Texas Inpatient data analysis
 
 To accomplish the analysis behind these articles, University of Texas at Austin Assistant Professor of Practice Christian McDonald used the [Texas Inpatient Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) provided by the [Texas Department of State Health Services](https://www.dshs.texas.gov/). The data was not shared with the Express News as per the agency's governing rules. No patients or doctors are identified in the analysis.
 
