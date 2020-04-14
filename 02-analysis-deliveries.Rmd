@@ -32,6 +32,7 @@ As I understand these, there is no guarantee that either doctor actually perform
 ```{r setup, echo=T, results='hide', message=F, warning=F}
 library(fs)
 library(tidyverse)
+library(dplyr)
 library(janitor)
 library(DT)
 ```
@@ -69,6 +70,9 @@ prcse2g_v2_list
 # Episiotomy codes
 epi_list <- read_rds("procedures-lists/lf_epi.rds") %>% .$epi
 epi_list
+
+# surgical procedure columns
+surg_cols <- read_rds("procedures-lists/cols_surg.rds") %>% .$surg
 ```
 
 ## Cesarean indicator
