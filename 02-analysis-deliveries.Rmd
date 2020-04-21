@@ -14,12 +14,12 @@ University of Texas at Austin
 
 The purpose of this notebook is to look at the number of deliveries per doctor and some subsets for that:
 
-- How many docotrs to hospitals have doing deliveries and how many deliveries do they do each year?
+- How many docters per hospital are doing deliveries and how many deliveries do they do each year?
 - Of all deliveries in a year, what percentage of women who went in to give birth got an episiotomy or C-section. Both statewide, and for hospitals of interest.
 
 I DO NOT filter for complications, fetal deaths or other factors. This could be revisited later, but the idea is to see how many people are served for these procedures regardless of complications.
 
-I use the `ATTENDING_PHYSICIAN_UNIF_ID` field to identify the attending physician, described as "Unique identifier assigned to the licensed physician expected to certify medical necessity of services rendered, with primary responsibility for the patient’s medical care and treatment." That indication does not guarantee the doctor performed the procedure.
+I use the `ATTENDING_PHYSICIAN_UNIF_ID` field to identify the attending physician, described as "Unique identifier assigned to the licensed physician expected to certify medical necessity of services rendered, with primary responsibility for the patient’s medical care and treatment." That indication does not guarantee the doctor performed a specific procedure.
 
 There is also a `OPERATING_PHYSICIAN_UNIF_ID` field for each patient: "Unique identifier assigned to the operating physician or physician other than the attending physician."
 
