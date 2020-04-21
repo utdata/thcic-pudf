@@ -35,11 +35,11 @@ The University of Texas at Austin
 
 ### Primary Cesareans study
 
-- [02-analyze-pcsec](https://utdata.github.io/thcic-pudf/02-analyze-pcsec.html) is an analysis of Primary Cesarean rates vs all uncomplicated births statewide and for Laredo hospitals.
+- [02-analyze-pcsec](https://utdata.github.io/thcic-pudf/02-analysis-pcsec.html) is an analysis of Primary Cesarean rates vs all uncomplicated births statewide and for Laredo hospitals.
 
 ### Episiotomy study
 
-- [02-analyze-episiotomy](https://utdata.github.io/thcic-pudf/02-analyze-episiotomy.html) is an analysis of episiotomy procedures statewide and for Laredo hospitals.
+- [02-analyze-episiotomy](https://utdata.github.io/thcic-pudf/02-analysis-episiotomy.html) is an analysis of episiotomy procedures statewide and for Laredo hospitals.
 
 ### Deliveries study
 
@@ -50,6 +50,3 @@ The University of Texas at Austin
 - [The methodology](https://utdata.github.io/thcic-pudf/methodology.html) of the measures and calculations used in the analysis.
 
 > The full repo is not yet public, but we can do so once we are all ready.
-
-
-
