@@ -12,9 +12,9 @@ University of Texas at Austin
 
 ## Purpose of this analysis
 
-The purpose of this notebook is to look at the number of deliveries per doctor and some subsets for that:
+The purpose of this notebook is to look at the number of deliveries per doctor and some subsets of that, answering the following questions:
 
-- How many docters per hospital are doing deliveries and how many deliveries do they do each year?
+- How many doctors per hospital are doing deliveries and how many deliveries do they do each year?
 - Of all deliveries in a year, what percentage of women who went in to give birth got an episiotomy or C-section. Both statewide, and for hospitals of interest.
 
 I DO NOT filter for complications, fetal deaths or other factors. This could be revisited later, but the idea is to see how many people are served for these procedures regardless of complications.
@@ -41,7 +41,7 @@ library(DT)
 
 I start with a subset of the [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) that include all deliveries as outlined in AHRQ's [Inpatient Quality Indicators Technical Specifications](https://www.qualityindicators.ahrq.gov/Modules/IQI_TechSpec_ICD10_v2019.aspx). The `DELOCMD` specification in IQI 21 is "All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery". Some cleaning was applied as outlined in the `01-process-ahrq-del-loop` notebook. The result is imported here.
 
-(I also have test data options, which is a small subset for faster testing.)
+(I also have test data options, which is a small subset of the data for faster processing in testing.x)
 
 ```{r imports}
 test_flag <- F
@@ -175,7 +175,7 @@ del %>%
   adorn_pct_formatting()
 ```
 
-Since our hospitals of interest are in Laredo, let's do the same for those.
+Since our hospitals of interest are in Laredo, let's check how many of those are suppressed as well.
 
 ```{r supp_count_lar}
 del %>% 
@@ -191,7 +191,7 @@ del %>%
 
 ### Removing suppressed doctors
 
-To achieve a count of deliveries per doctor, I remove the records where the ATTENDING_PHYSICIAN was suppressed as this could combine multiple doctors into the same group.
+To achieve a count of deliveries per doctor, I remove the records where the ATTENDING_PHYSICIAN was suppressed as this could combine multiple doctors into the same group. This supression may have more affect on some hospitals than others.
 
 ```{r del_supp}
 del_supp <- del %>% 
@@ -220,7 +220,9 @@ del_supp %>%
 
 ### Difference removing infrequent deliveries
 
-For comparision I now remove doctors with fewer than 10 deliveries in a given year.
+In this view I remove doctors with fewer than 10 deliveries in a given year to give a more accurate look at the staff doctors that do the bulk of deliveries.
+
+> The choice of 10 deliveries as a threshold is arbitrary and could be changed if we deem necessary.
 
 ```{r grp_yr_hosp_doc}
 del_supp %>% 
@@ -242,7 +244,7 @@ del_supp %>%
 
 ### Deliveries per doctor at Laredo hospitals
 
-Delivery rate per doctor by year. Unknown doctors are suppressed. Infrequent deliveries are filtered out.
+Delivery rate per doctor by year. Unknown doctors are suppressed. Infrequent deliveries (<10/year) are filtered out.
 
 ```{r lar_yr_rate}
 del_supp %>% 
@@ -263,7 +265,7 @@ del_supp %>%
   pivot_wider(names_from = YR, values_from = RATE)
 ```
 
-Just how much do doctor suppressions affect these rates in Laredo? We'll do the same calculation on the data but without unknown doctor suppression. Note this has limitations because muliple doctors could be counted in the two suppression values.
+Just how much do doctor suppressions affect these rates in Laredo? We'll do the same calculation on the data but without suppressig unknown doctors. Note this has limitations because muliple doctors could be counted in the two suppression values.
 
 ```{r lar_yr_rate_nosupp}
 del %>% 
@@ -289,7 +291,7 @@ del %>%
 
 Here we look at all deliveries to see how many mothers have Cesareans. Note this starts with all ATTENDING_PHYSICIANS, including those who's IDs are suppressed. These are also all Cesareans, complicated or not. This is a simple rate of Cesarean births / All births in order to get an idea how many are performed.
 
-Excludes hosptials with fewer than 100 deliveries in or time span.
+Excludes hosptials with fewer than 100 deliveries in our time span.
 
 ```{r ces_rate_hosp}
 ces_rate_hosp <- del %>% 
@@ -417,7 +419,7 @@ epi_hosp_yr %>%
 
 ## Either epi or cesarean
 
-This looks to see if a mother had either a cesarean or an episiotomy. All the same things apply: All doctors, all complications, but hospitals with fewer than 100 deliveries in our time perioed excluded.
+This looks to see if a mother had either a cesarean or an episiotomy. All the same things apply: All doctors, all complications, but hospitals with fewer than 100 deliveries in our time period are excluded.
 
 ```{r epicsec_rate}
 epicsec_rate <- del %>% 
