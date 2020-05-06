@@ -27,12 +27,12 @@ The University of Texas at Austin
 ### Data processing notebooks
 
 - [00-process-lists](https://utdata.github.io/thcic-pudf/00-process-lists.html) defines various lists of codes and columns used within other notebooks.
-- [01-process-ahrq-del-loop](https://utdata.github.io/thcic-pudf/01-process-ahrq-del-loop.html) is the method used to find all deliveries from the raw THCIC files.
-- [01-process-ahrq-del-test](https://utdata.github.io/thcic-pudf/01-process-ahrq-del-test.html) shows the processing logic in more detail using test data.
-- [01-process-ahrq-del-compare](https://utdata.github.io/thcic-pudf/01-process-ahrq-del-compare.html) compares the results of the loop script to the test script when both are processed using test data.
-- [01-process-lf-epi-loop](https://utdata.github.io/thcic-pudf/01-process-lf-epi-loop.html) is the method used to capture vaginal births using Leapfrog's methods.
-- [01-process-lf-epi-test](https://utdata.github.io/thcic-pudf/01-process-lf-epi-test.html) shows the processing logic in more detail using test data.
-- [02-process-providers](https://utdata.github.io/thcic-pudf/02-process-providers.html) creates a list of the most recent names for hospitals to assist analysis. Can't be run until the deliveries data is generated.
+- [0101-process-ahrq-del-loop](https://utdata.github.io/thcic-pudf/0101-process-ahrq-del-loop.html) is the method used to find all deliveries from the raw THCIC files.
+- [0101-process-ahrq-del-test](https://utdata.github.io/thcic-pudf/0101-process-ahrq-del-test.html) shows the processing logic in more detail using test data.
+- [0102-process-ahrq-del-compare](https://utdata.github.io/thcic-pudf/0102-process-ahrq-del-compare.html) compares the results of the loop script to the test script when both are processed using test data.
+- [0101-process-lf-epi-loop](https://utdata.github.io/thcic-pudf/0101-process-lf-epi-loop.html) is the method used to capture vaginal births using Leapfrog's methods.
+- [0101-process-lf-epi-test](https://utdata.github.io/thcic-pudf/0101-process-lf-epi-test.html) shows the processing logic in more detail using test data.
+- [0102-process-providers](https://utdata.github.io/thcic-pudf/0102-process-providers.html) creates a list of the most recent names for hospitals to assist analysis. Can't be run until the deliveries data is generated.
 
 ### Primary Cesareans study
 

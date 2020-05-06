@@ -38,6 +38,19 @@ if (test_flag == T) del_vag_excl <- read_rds(path_test) else del_vag_excl <- rea
 del_vag_excl %>% nrow()
 ```
 
+### Update PROVIDER_NAME
+
+Hospitals change names over time, skewing any analayis that groups by PROVIDER_NAME. This process updates the PROVIDER_NAME field to use the most recent name used in the data, based on a sanitized list from another workbook.
+
+```{r}
+# Updated Hospitals list
+providers_list <- read_rds("procedures-lists/providers_cleaned.rds")
+
+del_vag_excl <- del_vag_excl %>% 
+  left_join(providers_list, by = "THCIC_ID") %>% 
+  select(-PROVIDER_NAME) %>% 
+  rename(PROVIDER_NAME = PROVIDER_NAME_RECENT)
+```
 
 ### Set the episiotomy cases
 
@@ -97,7 +110,7 @@ del_epi %>%
 
 ## Searchable table: Episiotomy rates by hospital, combined years
 
-Hospitals with fewer than 100 deliveries excluded.
+Hospitals with fewer than 300 deliveries excluded.
 
 ```{r rate_combo_state_table}
 del_epi_data <- del_epi %>%
@@ -115,7 +128,9 @@ del_epi_data <- del_epi %>%
     EPIRATE = round((EPIT / TOTAL) * 100,1)
   ) %>% 
   select(PROVIDER_NAME, TOTAL, EPIF, EPIT, EPIRATE) %>% 
-  filter(TOTAL >= 100) %>% 
+  filter(
+    TOTAL >= 300
+    ) %>% 
   arrange(EPIRATE %>% desc())
 
 del_epi_data %>%   
@@ -137,7 +152,7 @@ del_epi_data %>%
 
 ### Episiotomy rates by hospital, by year
 
-A look at the episiotomy rates for hospitals by year. We create the rate using the EPI column we created above, then pivot to do the math. We pivot again to see the years nicely in a table.
+A look at the episiotomy rates for hospitals by year. We create the rate using the EPI column we created above, then pivot to do the math. We pivot again to see the years nicely in a table. Excludes hospitals with fewer than 100 deliveries in a given year.
 
 ```{r by_year}
 # pivot to crate the rate based on logical EPI column

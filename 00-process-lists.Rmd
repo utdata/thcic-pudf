@@ -339,3 +339,9 @@ epi_list %>%
 epi_list %>% nrow()
 ```
 
+## Closing out
+
+```{r}
+beepr::beep(4)
+```
+

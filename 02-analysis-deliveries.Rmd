@@ -73,6 +73,20 @@ epi_list
 
 # surgical procedure columns
 surg_cols <- read_rds("procedures-lists/cols_surg.rds") %>% .$surg
+
+# Updated Hospitals list
+providers_list <- read_rds("procedures-lists/providers_cleaned.rds")
+```
+
+### Update PROVIDER_NAME
+
+Hospitals change names over time, skewing any analayis that groups by PROVIDER_NAME. This process updates the PROVIDER_NAME field to use the most recent name used in the data, based on a sanitized list from another workbook.
+
+```{r}
+del <- del %>% 
+  left_join(providers_list, by = "THCIC_ID") %>% 
+  select(-PROVIDER_NAME) %>% 
+  rename(PROVIDER_NAME = PROVIDER_NAME_RECENT)
 ```
 
 ## Cesarean indicator
@@ -220,7 +234,7 @@ del_supp %>%
 
 ### Difference removing infrequent deliveries
 
-In this view I remove doctors with fewer than 10 deliveries in a given year to give a more accurate look at the staff doctors that do the bulk of deliveries.
+In this view I remove doctors with fewer than 20 deliveries in a given year to give a more accurate look at the staff doctors that do the bulk of deliveries.
 
 > The choice of 10 deliveries as a threshold is arbitrary and could be changed if we deem necessary.
 
@@ -229,7 +243,7 @@ del_supp %>%
   group_by(YR, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
   summarize(DELIVERIES = n()) %>% 
   rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  filter(DELIVERIES >= 10) %>% 
+  filter(DELIVERIES >= 20) %>% 
   group_by(PROVIDER_NAME) %>% 
   summarize(
     DELIVERIES = sum(DELIVERIES),
@@ -244,7 +258,7 @@ del_supp %>%
 
 ### Deliveries per doctor at Laredo hospitals
 
-Delivery rate per doctor by year. Unknown doctors are suppressed. Infrequent deliveries (<10/year) are filtered out.
+Delivery rate per doctor by year. Unknown doctors are suppressed. Infrequent deliveries (<20/year) are filtered out.
 
 ```{r lar_yr_rate}
 del_supp %>% 
@@ -252,7 +266,7 @@ del_supp %>%
   group_by(YR, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
   summarize(DELIVERIES = n()) %>% 
   rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  filter(DELIVERIES >= 10) %>% 
+  filter(DELIVERIES >= 20) %>% 
   group_by(YR, PROVIDER_NAME) %>% 
   summarize(
     DELIVERIES = sum(DELIVERIES),
@@ -273,7 +287,7 @@ del %>%
   group_by(YR, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
   summarize(DELIVERIES = n()) %>% 
   rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  filter(DELIVERIES >= 10) %>% 
+  filter(DELIVERIES >= 20) %>% 
   group_by(YR, PROVIDER_NAME) %>% 
   summarize(
     DELIVERIES = sum(DELIVERIES),
@@ -291,7 +305,7 @@ del %>%
 
 Here we look at all deliveries to see how many mothers have Cesareans. Note this starts with all ATTENDING_PHYSICIANS, including those who's IDs are suppressed. These are also all Cesareans, complicated or not. This is a simple rate of Cesarean births / All births in order to get an idea how many are performed.
 
-Excludes hosptials with fewer than 100 deliveries in our time span.
+Excludes hosptials with fewer than 300 deliveries in our time span.
 
 ```{r ces_rate_hosp}
 ces_rate_hosp <- del %>% 
@@ -305,7 +319,7 @@ ces_rate_hosp <- del %>%
     RATE = round((CSEC / TOTAL) * 100, 1)
   ) %>% 
   filter(
-    TOTAL >= 100 
+    TOTAL >= 300 
   ) %>% 
   arrange(RATE %>% desc())
 
@@ -322,7 +336,7 @@ ces_rate_hosp %>%
 
 ## Cesarean rates by hospital by year
 
-This is the same calculation as above, but by year, showing only the rates. Excludes hosptials with fewer than 100 deliveries in or time span.
+This is the same calculation as above, but by year, showing only the rates. Excludes hosptials with fewer than 100 deliveries in a year.
 
 ```{r csec_hosp_yr}
 csec_hosp_yr <- del %>% 
@@ -356,7 +370,7 @@ csec_hosp_yr %>%
 
 ## Episiotomy rates
 
-Like the simple Cesarean rate above, here we look at all deliveries and note how many involved episiotomies. Note this starts with all ATTENDING_PHYSICIANS, including those who's IDs are suppressed. Excludes hospitals with fewer than 100 deliveries in our time span.
+Like the simple Cesarean rate above, here we look at all deliveries and note how many involved episiotomies. Note this starts with all ATTENDING_PHYSICIANS, including those who's IDs are suppressed. Excludes hospitals with fewer than 300 deliveries in our time span.
 
 ```{r epi_rate_hosp}
 epi_rate_hosp <- del %>% 
@@ -372,7 +386,7 @@ epi_rate_hosp <- del %>%
     TOTAL = NEPI + EPI,
     RATE = round((EPI / TOTAL * 100), 1)
   ) %>% 
-  filter(TOTAL >= 100) %>% 
+  filter(TOTAL >= 300) %>% 
   arrange(RATE %>% desc())
 
 epi_rate_hosp %>% 
@@ -419,7 +433,7 @@ epi_hosp_yr %>%
 
 ## Either epi or cesarean
 
-This looks to see if a mother had either a cesarean or an episiotomy. All the same things apply: All doctors, all complications, but hospitals with fewer than 100 deliveries in our time period are excluded.
+This looks to see if a mother had either a cesarean or an episiotomy. All the same things apply: All doctors, all complications, but hospitals with fewer than 300 deliveries in our time period are excluded.
 
 ```{r epicsec_rate}
 epicsec_rate <- del %>% 
@@ -437,7 +451,7 @@ epicsec_rate <- del %>%
     TOTAL = EPICSEC + NEPICSEC,
     RATE = round((EPICSEC / TOTAL * 100), 1)
   ) %>% 
-  filter(TOTAL >= 100) %>% 
+  filter(TOTAL >= 300) %>% 
   arrange(RATE %>% desc())
 
 epicsec_rate %>% 

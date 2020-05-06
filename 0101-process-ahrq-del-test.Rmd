@@ -52,7 +52,7 @@ base1 <- test_tsv_files %>%
       X168 = col_skip(),
       X167 = col_skip()
     )
-  ) %>% 
+  ) %>%
   mutate_at(
     vars(contains("_CHARGES")), as.numeric
   )

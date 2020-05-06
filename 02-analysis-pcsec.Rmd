@@ -83,7 +83,22 @@ prcse2p_list <- read_rds("procedures-lists/ahrq_prcse2p.rds") %>% .$prcse2p
 
 # Previous Cesarean delivery diagnosis codes: (PRVBACD)
 prvbacd_list <- read_rds("procedures-lists/ahrq_prvbacd.rds") %>% .$prvbacd
+
+# Updated Hospitals list
+providers_list <- read_rds("procedures-lists/providers_cleaned.rds")
 ```
+
+### Update PROVIDER_NAME
+
+Hospitals change names over time, skewing any analayis that groups by PROVIDER_NAME. This process updates the PROVIDER_NAME field to use the most recent name used in the data, based on a sanitized list from another workbook.
+
+```{r}
+del <- del %>% 
+  left_join(providers_list, by = "THCIC_ID") %>% 
+  select(-PROVIDER_NAME) %>% 
+  rename(PROVIDER_NAME = PROVIDER_NAME_RECENT)
+```
+
 
 ## Filter deliveries to set denominator
 
@@ -222,9 +237,9 @@ del_pcsec %>%
   adorn_pct_formatting()
 ```
 
-### Table: Cesarean rate by hospital, combined years
+### Table: Primary Cesarean rate by hospital, combined years
 
-Get Primary Cesarean rate by hospital from all years combined. Hospitals with fewer than 100 deliveries excluded.
+Get Primary Cesarean rate by hospital from all years combined. Hospitals with fewer than 300 deliveries over the data set excluded. (The cutoff of 300 deliveries across the dataset could be adjusted if we get more data. The idea was to stick around the equivalent of 100 deliveries a year.)
 
 ```{r pcsec_rate_all}
 pcsec_rate_all <- del_pcsec %>% 
@@ -238,7 +253,7 @@ pcsec_rate_all <- del_pcsec %>%
   mutate(
     TOTAL = NPCSEC_CNT + PCSEC_CNT
   ) %>% 
-  filter(TOTAL >= 100) %>% 
+  filter(TOTAL >= 300) %>% 
   mutate(
     PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
   ) %>%
@@ -262,7 +277,7 @@ pcsec_rate_all %>%
 
 ### Table: Primary Cesarean rates, by hospital and year
 
-Hospitals with fewer than 100 total deliveries excluded.
+Hospitals with fewer than 100 total deliveries within a given year are excluded.
 
 ```{r pcsec_rate_yr_all}
 pcsec_rate_yr_all <- del_pcsec %>% 
@@ -334,6 +349,8 @@ pcsec_rate_yr_all %>%
 
 ### Chart: Primary Cesarean rates by quarter, Laredo
 
+
+
 ```{r plot_pcrate_q_lar}
 pcsec_rate_qr_all <- del_pcsec %>% 
   group_by(DISCHARGE, PROVIDER_NAME, PCSEC) %>% 
@@ -346,7 +363,7 @@ pcsec_rate_qr_all <- del_pcsec %>%
   mutate(
     TOTAL = NPCSEC_CNT + PCSEC_CNT
   ) %>% 
-  filter(TOTAL >= 100) %>% 
+  # filter(TOTAL >= 100) %>% 
   mutate(
     PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
   ) %>%
