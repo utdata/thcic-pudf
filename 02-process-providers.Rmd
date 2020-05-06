@@ -1,0 +1,107 @@
+---
+title: "Clean provider names"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+By **Christian McDonald**, Assistant Professor of Practice\
+School of Journalism, Moody College of Communication\
+University of Texas at Austin
+
+Hospital names change over time, causing problems for any analysis that groups or aggregates by the PROVIDER_NAME.
+
+This notbook provides a list of THCIC_IDs with their most recent name.
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+library(janitor)
+```
+
+## Import delivery data
+
+We start with all delivery data per AHRQ standards.
+
+```{r imports}
+### production data
+path_prod <- "data-processed/ahrq_del_all.rds"
+
+del <- read_rds(path_prod)
+
+del %>% nrow()
+```
+
+### How many distinct IDs are there?
+
+We want to ensure that we have one provider name for each THCIC, so let's first check how many there are in the dataset.
+
+```{r count}
+del %>% 
+  distinct(THCIC_ID) %>% 
+  nrow()
+```
+
+## List the problem records
+
+The solution to get our cleaned data is simple enough, but we'll want to spot check it against the hospitals that have changed names during the time of our data set, so let's first find and show those.
+
+### Find the IDs with multiple names
+
+Find out which THCIC_ID's have more than one provider name, then pull out the IDs into a list.
+
+```{r find_dupes}
+multi_name <- del %>% 
+  distinct(THCIC_ID, PROVIDER_NAME) %>% 
+  count(THCIC_ID) %>% 
+  arrange(n %>% desc()) %>% 
+  filter(n > 1) %>% 
+  pull(THCIC_ID)
+
+multi_name
+```
+
+### Peek at the THCIC_ID list by their old/new PROVIDER_NAMEs
+
+This list is created just to check against the final list. The PROVIDER_NAME used in most recent year for a specific THCIC_ID listed here should be the only one listed in the final data. This list is only those that have multiples.
+
+```{r check_list}
+del %>% 
+  distinct(THCIC_ID, PROVIDER_NAME, YR) %>% 
+  filter(
+    THCIC_ID %in% multi_name
+  ) %>% 
+  arrange(THCIC_ID, YR)
+```
+
+
+## Get THCIC_ID list with most recent PROVIDER_NAME
+
+Essentially we get the list of ids, names and years, group by the id then choose the most recent year. The idea to group and slice from the tail by row_number came from [this stack overflow article](https://stackoverflow.com/a/53994503/2909130).
+
+
+```{r make_list}
+providers_cleaned <- del %>% 
+  distinct(THCIC_ID, PROVIDER_NAME, YR) %>% 
+  arrange(THCIC_ID, YR) %>% 
+  select(THCIC_ID, PROVIDER_NAME) %>% 
+  group_by(THCIC_ID) %>% 
+  slice(tail(row_number(), 1)) %>% 
+  rename(PROVIDER_NAME_RECENT = PROVIDER_NAME)
+
+# inspect the results
+providers_cleaned
+```
+
+Note the number of rows is the same as the disticnt THCIC_IDs at the beginning of the notebook. Can also spot check PROVIDER_NAME values from the multi-named list to this list.
+
+## Export to rds
+
+```{r export}
+# write the file
+providers_cleaned %>% write_rds("procedures-lists/providers_cleaned.rds")
+
+# klaxon to sound completion
+beepr::beep(4)
+```
+
