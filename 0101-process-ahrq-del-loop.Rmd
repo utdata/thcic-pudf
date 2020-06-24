@@ -175,9 +175,9 @@ data %>%
 
 ## Remove other years
 
-Because of a reporting lag, there are years in the original data that we are not using for our analysis. At some point in 2015 there was a switch from ICD-9 to ICD-10 coding, so going eariler would require some conversions. Not impossible, but not in scope at this time to ease complication.
+Because of a reporting lag, there are years in the original data that we are not using for our analysis. At some point in 2015 there was a switch from ICD-9 to ICD-10 coding, so going earlier would require some conversions. Not impossible, but not in scope at this time to ease complication.
 
-We are using full years from 2016-2018 and a partial year 2019 through the 2nd quarter release. 
+We are using full years from 2016-2018 and a partial year 2019 through the 3rd quarter release. 
 
 ```{r filter_yr}
 data <- data %>% 

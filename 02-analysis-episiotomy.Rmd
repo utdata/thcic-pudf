@@ -1,5 +1,5 @@
 ---
-title: "Leapfrog Episiotomy rates, 2016-2q2019"
+title: "Leapfrog Episiotomy rates, 2016-3q2019"
 output:
   html_document:
     df_print: paged
@@ -97,7 +97,7 @@ lf_epi <- del_vag_excl %>%
 
 ```
 
-## Statewide episiotomy rate, 2016-2q2019
+## Statewide episiotomy rate, 2016-3q2019
 
 We combine all years of data to compare the percentage of episiotomy cases. The **TRUE** value is the percentage of cases where an episiotomy is performed.
 
