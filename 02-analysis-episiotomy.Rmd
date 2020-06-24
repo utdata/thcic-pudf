@@ -20,7 +20,7 @@ This analysis looks at episiotomy rates using the [Texas Health Care Information
 library(tidyverse)
 library(janitor)
 library(DT)
-library(data.table)
+# library(data.table)
 ```
 
 ```{r imports}
@@ -40,7 +40,7 @@ del_vag_excl %>% nrow()
 
 ### Update PROVIDER_NAME
 
-Hospitals change names over time, skewing any analayis that groups by PROVIDER_NAME. This process updates the PROVIDER_NAME field to use the most recent name used in the data, based on a sanitized list from another workbook.
+Hospitals change names over time, skewing any analysis that groups by PROVIDER_NAME. This process updates the PROVIDER_NAME field to use the most recent name used in the data, based on a sanitized list from another workbook.
 
 ```{r}
 # Updated Hospitals list
@@ -59,11 +59,11 @@ This creates a column for cases where episiotomy is true. We have to look throug
 > I'd like to refactor this method, but at least it is easy to see and understand.
 
 ```{r epi_col}
-# list of codes for episiotmy, which is really one: 0W8NXZZ
+# list of codes for episiotomy, which is really one: 0W8NXZZ
 epi_list <- read_rds("procedures-lists/lf_epi.rds") %>% .$epi
 epi_list
 
-del_epi <- del_vag_excl %>% 
+lf_epi <- del_vag_excl %>% 
   mutate(
     EPI = case_when(
       PRINC_SURG_PROC_CODE %in% epi_list ~ TRUE,
@@ -102,7 +102,7 @@ del_epi <- del_vag_excl %>%
 We combine all years of data to compare the percentage of episiotomy cases. The **TRUE** value is the percentage of cases where an episiotomy is performed.
 
 ```{r rate_state}
-del_epi %>% 
+lf_epi %>% 
   tabyl(EPI) %>% 
   rename(count = n) %>% 
   adorn_pct_formatting()
@@ -113,7 +113,7 @@ del_epi %>%
 Hospitals with fewer than 300 deliveries excluded.
 
 ```{r rate_combo_state_table}
-del_epi_data <- del_epi %>%
+lf_epi_data <- lf_epi %>%
   group_by(PROVIDER_NAME, EPI) %>% 
   summarise(
     EPI_CNT = n()
@@ -133,7 +133,7 @@ del_epi_data <- del_epi %>%
     ) %>% 
   arrange(EPIRATE %>% desc())
 
-del_epi_data %>%   
+lf_epi_data %>%   
     datatable()
 ```
 
@@ -142,7 +142,7 @@ del_epi_data %>%
 The mean/median taken from the episiotomy rate of each hospital.
 
 ```{r stats_tx}
-del_epi_data %>% 
+lf_epi_data %>% 
   ungroup() %>% 
   summarise(
     MEAN = round(mean(EPIRATE, na.rm=TRUE),2),
@@ -156,7 +156,7 @@ A look at the episiotomy rates for hospitals by year. We create the rate using t
 
 ```{r by_year}
 # pivot to crate the rate based on logical EPI column
-del_epi_yr_data <- del_epi %>% 
+lf_epi_yr_data <- lf_epi %>% 
   group_by(YR, PROVIDER_NAME, EPI) %>% 
   summarise(
     EPI_CNT = n()
@@ -172,13 +172,13 @@ del_epi_yr_data <- del_epi %>%
   )
 
 # select, pivot to see years.
-del_epi_yr_table <- del_epi_yr_data %>% 
+lf_epi_yr_table <- lf_epi_yr_data %>% 
   filter(TOTAL >= 100) %>% 
   select(YR, PROVIDER_NAME, EPIRATE) %>% 
   pivot_wider(names_from = YR, values_from = EPIRATE) %>% 
   arrange(`2019` %>% desc())
 
-del_epi_yr_table %>% datatable()
+lf_epi_yr_table %>% datatable()
 ```
 
 ## Laredo hospitals
@@ -186,7 +186,7 @@ del_epi_yr_table %>% datatable()
 Build a Laredo hospital set used for some sets.
 
 ```{r}
-del_epi_lar <- del_epi %>% 
+lf_epi_lar <- lf_epi %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo"))
 
 ```
@@ -199,7 +199,7 @@ From combined years of the data.
 ```{r rate_laredo}
 # filter for laredo hospitals
 
-del_epi_lar %>% 
+lf_epi_lar %>% 
   tabyl(PROVIDER_NAME, EPI) %>% 
   adorn_percentages() %>% 
   adorn_pct_formatting() %>% 
@@ -212,7 +212,7 @@ The table above, filtered for Laredo.
 
 ```{r by_yr_laredo}
 # filter for Laredo
-del_epi_yr_table %>% 
+lf_epi_yr_table %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
 
@@ -220,7 +220,7 @@ del_epi_yr_table %>%
 ### Chart: Episiotomy rates by year, Laredo
 
 ```{r plot_yr_lar}
-del_epi_yr_data %>% 
+lf_epi_yr_data %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
   ggplot(aes(YR, EPIRATE)) +
   geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
@@ -232,7 +232,7 @@ del_epi_yr_data %>%
 ### Chart: Episiotomy rates by quarter, Laredo
 
 ```{r plot_qr_lar}
-del_epi_qr_data <- del_epi %>% 
+lf_epi_qr_data <- lf_epi %>% 
   group_by(DISCHARGE, PROVIDER_NAME, EPI) %>% 
   summarise(
     EPI_CNT = n()
@@ -247,7 +247,7 @@ del_epi_qr_data <- del_epi %>%
     EPIRATE = round((EPIT / TOTAL) * 100,1)
   )
 
-del_epi_qr_data %>% 
+lf_epi_qr_data %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
   ggplot(aes(DISCHARGE, EPIRATE)) +
   geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
@@ -272,7 +272,7 @@ These suppression rates are just for this data set of **vaginal deliveries in La
 ```{r supp_count_lar}
 suppressed = c("9999999998", "9999999999")
 
-del_epi_lar %>% 
+lf_epi_lar %>% 
   mutate(
     DOC_SUPPRESSED = if_else(ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed, T, F)
   ) %>% 
@@ -287,7 +287,7 @@ del_epi_lar %>%
 Includes doctors who IDs were suppresed and therefore combined.
 
 ```{r del_hosp_doc}
-del_epi_lar %>% 
+lf_epi_lar %>% 
   group_by(PROVIDER_NAME) %>% 
   summarize(
     DELIVERIES = n(),
@@ -304,7 +304,7 @@ del_epi_lar %>%
 The data we start with here excludes doctors who have done fewer than 10 vaginal deliveries over the full time period.
 
 ```{r}
-del_epi_lar %>% 
+lf_epi_lar %>% 
   distinct(YR,PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
   count(YR, PROVIDER_NAME) %>% 
   rename(
@@ -322,7 +322,7 @@ del_epi_lar %>%
 Again, excludes doctors with fewer than 10 deliveries over the full time period.
 
 ```{r}
-del_epi_lar %>% 
+lf_epi_lar %>% 
   distinct(YR,PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
   count(YR, PROVIDER_NAME) %>% 
   rename(
@@ -333,10 +333,27 @@ del_epi_lar %>%
  
 ## Write files
 
-Writing out some data frames for use in other notebooks
+Writing out aggregate files. Here is a list of what is available
+
+- lf_epi_yr_data: Columns are YR, PROVIDER_NAME, EPIF (Epi False), EPIT (Epi True), TOTAL, EPIRATE. Observation is count or rate.
+- lf_epi_yr_table: Columns are PROVIDER_NAME, 2016, 2017, 2018, 2019. Observation is Epi Rate.
+- lf_epi_qr_data: Columns are DISCHARGE (the quarter), PROVIDER_NAME, EPIF, EPIT, TOTAL, EPIRATE. Observation is count or rate.
+
 
 ```{r write}
-# del_epi %>% write_rds("data-processed/epi.rds")
+# lf_epi %>% write_rds("data-processed/epi.rds")
+
+if (test_flag == F) lf_epi_yr_data %>%
+  arrange(PROVIDER_NAME,YR) %>%
+  write_csv("exports/lf_epi_yr_data.csv")
+
+if (test_flag == F) lf_epi_yr_table %>%
+  arrange(PROVIDER_NAME) %>%
+  write_csv("exports/lf_epi_yr_table.csv")
+
+if (test_flag == F) lf_epi_qr_data %>%
+  arrange(PROVIDER_NAME,DISCHARGE) %>%
+  write_csv("exports/lf_epi_qr_data.csv")
 
 beepr::beep(4)
 ```
