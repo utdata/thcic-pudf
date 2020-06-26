@@ -1,5 +1,6 @@
 ---
 title: "Clean provider names"
+date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged
@@ -12,16 +13,17 @@ University of Texas at Austin
 
 Hospital names change over time, causing problems for any analysis that groups or aggregates by the PROVIDER_NAME.
 
-This notbook provides a list of THCIC_IDs with their most recent name.
+This notebook provides a list of THCIC_IDs with first their official name from the Current Facility Contact Information found at [Outpatient Data Reporting Requirements](https://www.dshs.texas.gov/thcic/OutpatientFacilities/OutpatientReportingRequirements.shtm). If the case's THCIC_ID is not listed in the facilities list, then the facilities' most recent name is used.
 
 ```{r setup, echo=T, results='hide', message=F, warning=F}
 library(tidyverse)
 library(janitor)
+library(readxl)
 ```
 
-## Import delivery data
+## Importing the data
 
-We start with all delivery data per AHRQ standards.
+We start with all delivery data per AHRQ standards since it is our largest collected dataset. The facilities list is noted above.
 
 ```{r imports}
 ### production data
@@ -30,71 +32,92 @@ path_prod <- "data-processed/ahrq_del_all.rds"
 del <- read_rds(path_prod)
 
 del %>% nrow()
+
+### facilities list
+facilities_list <- read_excel("resources/FacilityList_20200623.xlsx") %>% clean_names()
 ```
 
 ### How many distinct IDs are there?
 
 We want to ensure that we have one provider name for each THCIC, so let's first check how many there are in the dataset.
 
+
 ```{r count}
 del %>% 
   distinct(THCIC_ID) %>% 
   nrow()
+
+facilities_list %>% 
+  distinct(thcic_id) %>% 
+  nrow()
 ```
 
-## List the problem records
+## Process for cleaning the provider name
 
-The solution to get our cleaned data is simple enough, but we'll want to spot check it against the hospitals that have changed names during the time of our data set, so let's first find and show those.
+- get distinct id, name, quarter
+  - arrange by id, quarter so we can find the most recent version
+  - group and slice the most recent name, creating a new col with the recent name
+- join with facilities_list to get the official name
+  - In some cases the id is not in the facilities list. In those cases, use case_when to use "recent" name
 
-### Find the IDs with multiple names
+The concept of group and slice from the tail by row_number came from [this stack overflow article](https://stackoverflow.com/a/53994503/2909130).
 
-Find out which THCIC_ID's have more than one provider name, then pull out the IDs into a list.
-
-```{r find_dupes}
-multi_name <- del %>% 
-  distinct(THCIC_ID, PROVIDER_NAME) %>% 
-  count(THCIC_ID) %>% 
-  arrange(n %>% desc()) %>% 
-  filter(n > 1) %>% 
-  pull(THCIC_ID)
-
-multi_name
-```
-
-### Peek at the THCIC_ID list by their old/new PROVIDER_NAMEs
-
-This list is created just to check against the final list. The PROVIDER_NAME used in most recent year for a specific THCIC_ID listed here should be the only one listed in the final data. This list is only those that have multiples.
-
-```{r check_list}
-del %>% 
-  distinct(THCIC_ID, PROVIDER_NAME, YR) %>% 
-  filter(
-    THCIC_ID %in% multi_name
-  ) %>% 
-  arrange(THCIC_ID, YR)
-```
-
-
-## Get THCIC_ID list with most recent PROVIDER_NAME
-
-Essentially we get the list of ids, names and years, group by the id then choose the most recent year. The idea to group and slice from the tail by row_number came from [this stack overflow article](https://stackoverflow.com/a/53994503/2909130).
-
-
-```{r make_list}
+```{r providers_cleaned}
 providers_cleaned <- del %>% 
-  distinct(THCIC_ID, PROVIDER_NAME, YR) %>% 
-  arrange(THCIC_ID, YR) %>% 
+  distinct(THCIC_ID, PROVIDER_NAME, DISCHARGE) %>% 
+  arrange(THCIC_ID, DISCHARGE) %>% 
   select(THCIC_ID, PROVIDER_NAME) %>% 
   group_by(THCIC_ID) %>% 
   slice(tail(row_number(), 1)) %>% 
-  rename(PROVIDER_NAME_RECENT = PROVIDER_NAME)
+  rename(PROVIDER_NAME_RECENT = PROVIDER_NAME) %>% 
+  left_join(facilities_list, by = c("THCIC_ID" = "thcic_id")) %>% 
+  select(THCIC_ID, PROVIDER_NAME_RECENT, facility) %>% 
+  # Create new provider name and fill from facilities list
+  mutate(
+    PROVIDER_NAME_CLEANED = case_when(
+       is.na(facility) ~ PROVIDER_NAME_RECENT,
+       TRUE ~ facility
+    )
+  ) %>% 
+  select(THCIC_ID, PROVIDER_NAME_CLEANED) %>% 
+  arrange(PROVIDER_NAME_CLEANED)
 
-# inspect the results
 providers_cleaned
 ```
 
-Note the number of rows is the same as the disticnt THCIC_IDs at the beginning of the notebook. Can also spot check PROVIDER_NAME values from the multi-named list to this list.
+Check for duplicate ids in cleaned list.
 
+```{r test_id}
+providers_cleaned %>% 
+  count(THCIC_ID) %>% 
+  filter(n > 1)
+```
+Check for duplicate names in cleaned list.
+
+```{r test_name}
+providers_cleaned %>% 
+  count(PROVIDER_NAME_CLEANED) %>% 
+  filter(n > 1)
+```
+## Test run on the data
+
+This is what we'll need in each workbook where we want to cleaned names.
+
+```{r list_test}
+del_cleaned <- del %>% # or assign back to the same dataframe
+  left_join(providers_cleaned, by = "THCIC_ID") %>% 
+  select(-PROVIDER_NAME) %>% 
+  rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED)
+```
+
+Now we'll check for provider names with more than one id. In some cases these are different hospitals with the same name (Memorial Hospital). In others it just is what it is: the data has more than one id for the hospital name (Baylor Scott & White entries).
+
+```{r list_test_errors}
+del_cleaned %>% 
+  distinct(THCIC_ID, PROVIDER_NAME) %>% 
+  count(PROVIDER_NAME) %>% 
+  filter(n > 1)
+```
 ## Export to rds
 
 ```{r export}

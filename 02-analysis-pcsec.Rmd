@@ -1,5 +1,6 @@
 ---
 title: "Primary Cesarean delivery rates, 2016-3q2019"
+date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged
@@ -90,13 +91,13 @@ providers_list <- read_rds("procedures-lists/providers_cleaned.rds")
 
 ### Update PROVIDER_NAME
 
-Hospitals change names over time, skewing any analayis that groups by PROVIDER_NAME. This process updates the PROVIDER_NAME field to use the most recent name used in the data, based on a sanitized list from another workbook.
+Hospitals change names over time, skewing any analysis that groups by PROVIDER_NAME. This process updates the PROVIDER_NAME field to use the most recent name used in the data, based on a sanitized list from another workbook.
 
-```{r}
+```{r providers_list}
 del <- del %>% 
   left_join(providers_list, by = "THCIC_ID") %>% 
   select(-PROVIDER_NAME) %>% 
-  rename(PROVIDER_NAME = PROVIDER_NAME_RECENT)
+  rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED)
 ```
 
 
@@ -227,23 +228,16 @@ ahrq_pcsec <- del_csec %>%
 # ahrq_pcsec %>% head()
 ```
 
-## Primary Cesarean rate statewide
+This completes the processing of the data.
 
-This compares all the cases and gives us a percentage of those that are Primary Cesarean births. **The TRUE value below is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.**
+---
 
-```{r pcsec_prc}
-ahrq_pcsec %>% 
-  tabyl(PCSEC) %>% 
-  rename(count = n) %>% 
-  adorn_pct_formatting()
-```
-
-### Table: Primary Cesarean rate by hospital, combined years
+## Table: Primary Cesarean rate by hospital, combined years
 
 Get Primary Cesarean rate by hospital from all years combined. Hospitals with fewer than 300 deliveries over the data set excluded. (The cutoff of 300 deliveries across the dataset could be adjusted if we get more data. The idea was to stick around the equivalent of 100 deliveries a year.)
 
-```{r ahrq_pcsec_rate_all}
-ahrq_pcsec_rate_all <- ahrq_pcsec %>% 
+```{r ahrq_pcsec_rate_hosp}
+ahrq_pcsec_rate_hosp <- ahrq_pcsec %>% 
   group_by(PROVIDER_NAME, PCSEC) %>% 
   summarize(CNT = n()) %>% 
   pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
@@ -256,33 +250,20 @@ ahrq_pcsec_rate_all <- ahrq_pcsec %>%
   ) %>% 
   filter(TOTAL >= 300) %>% 
   mutate(
-    PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
+    PCRATE = round_half_up((PCSEC_CNT / TOTAL) * 100,1)
   ) %>%
     arrange(PCRATE %>% desc())
 
-ahrq_pcsec_rate_all %>% datatable()
+ahrq_pcsec_rate_hosp %>% datatable()
 ```
 
-### Mean, Median of Primary Cesarean Rate by hospitals
-
-The mean and median rate based on the yearly rate for each hospital.
-
-```{r}
-ahrq_pcsec_rate_all %>% 
-  ungroup() %>% 
-  summarise(
-    MEAN = round(mean(PCRATE),1),
-    MEDIAN = median(PCRATE)
-  )
-```
-
-### Table: Primary Cesarean rates, by hospital and year
+## Table: Primary Cesarean rates, by hospital and year
 
 Hospitals with fewer than 100 total deliveries within a given year are excluded.
 
-```{r ahrq_pcsec_rate_yr_all}
-ahrq_pcsec_rate_yr_all <- ahrq_pcsec %>% 
-  group_by(YR, PROVIDER_NAME, PCSEC) %>% 
+```{r ahrq_pcsec_rate_hosp_yr}
+ahrq_pcsec_rate_hosp_yr <- ahrq_pcsec %>% 
+  group_by(YR, THCIC_ID, PROVIDER_NAME, PCSEC) %>% 
   summarize(CNT = n()) %>% 
   pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
   rename(
@@ -294,20 +275,19 @@ ahrq_pcsec_rate_yr_all <- ahrq_pcsec %>%
   ) %>% 
   filter(TOTAL >= 100) %>% 
   mutate(
-    PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
+    PCRATE = round_half_up((PCSEC_CNT / TOTAL) * 100,1)
   ) %>%
     arrange(PCRATE %>% desc())
 
-ahrq_pcsec_rate_yr_table <- ahrq_pcsec_rate_yr_all %>% 
+ahrq_pcsec_rate_hosp_yr_table <- ahrq_pcsec_rate_hosp_yr %>% 
   arrange(YR) %>% 
-  select(YR, PROVIDER_NAME, PCRATE) %>% 
+  select(YR, THCIC_ID, PROVIDER_NAME, PCRATE) %>% 
   pivot_wider(names_from = YR, values_from = PCRATE) %>% 
   arrange(`2019` %>% desc())
 
-ahrq_pcsec_rate_yr_table %>% datatable()
+ahrq_pcsec_rate_hosp_yr_table %>% datatable()
 
 ```
-
 
 ## Laredo hospitals
 
@@ -317,7 +297,7 @@ ahrq_pcsec_rate_yr_table %>% datatable()
 
 The numbers in parenthesis are counts.
 
-```{r pcsec_laredo_rate}
+```{r ahrq_pcsec_rate_hosp_laredo}
 ahrq_pcsec %>% 
   filter(
      str_detect(PROVIDER_NAME, "Laredo")
@@ -330,16 +310,16 @@ ahrq_pcsec %>%
 
 ### Primary Cesarean rate by year, Laredo hospitals
 
-```{r pcsec_rate_yr_lar}
-ahrq_pcsec_rate_yr_table %>% 
+```{r ahrq_pcsec_rate_hosp_yr_laredo}
+ahrq_pcsec_rate_hosp_yr_table %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
 
 
 ### Chart: Primary Cesarean Rates by year, Laredo
 
-```{r pcsec_rate_yr_lar_plot}
-ahrq_pcsec_rate_yr_all %>% 
+```{r ahrq_pcsec_rate_hosp_yr_laredo_plot}
+ahrq_pcsec_rate_hosp_yr %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo")) %>% 
   ggplot(aes(YR, PCRATE)) +
   geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
@@ -350,8 +330,8 @@ ahrq_pcsec_rate_yr_all %>%
 
 ### Chart: Primary Cesarean rates by quarter, Laredo
 
-```{r plot_pcrate_q_lar}
-ahrq_pcsec_rate_qr_all <- ahrq_pcsec %>% 
+```{r ahrq_pcsec_rate_hosp_qr_laredo_plot}
+ahrq_pcsec_rate_hosp_qr <- ahrq_pcsec %>% 
   group_by(DISCHARGE, PROVIDER_NAME, PCSEC) %>% 
   summarize(CNT = n()) %>% 
   pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
@@ -362,39 +342,124 @@ ahrq_pcsec_rate_qr_all <- ahrq_pcsec %>%
   mutate(
     TOTAL = NPCSEC_CNT + PCSEC_CNT
   ) %>% 
-  # filter(TOTAL >= 100) %>% 
   mutate(
-    PCRATE = round((PCSEC_CNT / TOTAL) * 100,1)
+    PCRATE = round_half_up((PCSEC_CNT / TOTAL) * 100,1)
   ) %>%
     arrange(PCRATE %>% desc())
 
-ahrq_pcsec_rate_qr_all %>% 
+ahrq_pcsec_rate_hosp_qr %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo")) %>% 
   ggplot(aes(DISCHARGE, PCRATE)) +
   geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
   expand_limits(y = c(0,40)) +
-  theme(legend.position="bottom", legend.box = "vertical") +
+  theme(legend.position="bottom", legend.box = "vertical", axis.text.x=element_text(angle = -45, hjust = 0)) +
   labs(title = "Primary Cesarean rate by quarter, Laredo", x = "QUARTER", y = "Primary Cesarean Rate")
+```
+
+
+## Summaries
+
+### Primary Cesarean rate statewide
+
+This compares all the cases and gives us a percentage of those that are Primary Cesarean births. **The TRUE value is the percentage of deliveries involving all low-risk mothers (without prior Cesareans) that result in a Cesarean delivery.**
+
+```{r ahrq_pcsec_rate_tx}
+ahrq_pcsec %>% 
+  tabyl(PCSEC) %>% 
+  rename(count = n) %>% 
+  adorn_pct_formatting()
+```
+
+
+> DONT THINK I NEED THIS SINCE IT IS ALL CASES STATEWIDE. This filters out hospitals with fewer than 300 deliveries over the total data period. 
+
+```{r ahrq_pcsec_rate_tx_summary}
+ahrq_pcsec_rate_tx_summary <- ahrq_pcsec %>% 
+  group_by(PCSEC) %>% 
+  summarize(CNT = n()) %>% 
+  pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
+  rename(
+    NPCSEC_CNT = "FALSE",
+    PCSEC_CNT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = NPCSEC_CNT + PCSEC_CNT
+  ) %>% 
+  filter(TOTAL >= 300) %>% # I DON'T THINK I NEED THIS FOR THIS SUMMARY
+  mutate(
+   SUMMARY = "TX",
+   CATEGORY = "PRIMARY CESAREAN",
+   MEASUREMENT = "RATE",
+   VALUE = round_half_up((PCSEC_CNT / TOTAL) * 100,1) # RATE
+  ) %>%
+  select(SUMMARY, CATEGORY, MEASUREMENT, VALUE)
+
+ahrq_pcsec_rate_tx_summary
+```
+
+### Primary Cesarean rate statewide by year
+
+Excludes hospitals with fewer than 100 deliveries a year.
+
+```{r ahrq_pcsec_rate_tx_yr_summary}
+ahrq_pcsec_rate_tx_yr_summary <- ahrq_pcsec %>% 
+  group_by(PCSEC, YR) %>% 
+  summarize(CNT = n()) %>% 
+  pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
+  rename(
+    NPCSEC_CNT = "FALSE",
+    PCSEC_CNT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = NPCSEC_CNT + PCSEC_CNT
+  ) %>% 
+  filter(TOTAL >= 100) %>% 
+  mutate(
+   SUMMARY = "TX",
+   CATEGORY = "PRIMARY CESAREAN",
+   MEASUREMENT = "RATE",
+   VALUE = round_half_up((PCSEC_CNT / TOTAL) * 100,1) # RATE
+  ) %>%
+  select(YR, SUMMARY, CATEGORY, MEASUREMENT, VALUE)
+
+ahrq_pcsec_rate_tx_yr_summary
+```
+
+### Primary Cesarean rate by hospital: Averaged, by year
+
+```{r ahrq_pcsec_rate_hosp_yr_summary}
+ahrq_pcsec_rate_hosp_yr_summary <- ahrq_pcsec_rate_hosp_yr %>% 
+  ungroup() %>% 
+  group_by(YR) %>% 
+  summarize(
+    SUMMARY = "HOSPITAL",
+    CATEGORY = "PRIMARY CESAREAN",
+    MEASUREMENT = "MEAN OF RATE",
+    # MEDIAN = median(PCRATE),
+    VALUE = round_half_up(mean(PCRATE),1) #MEAN
+  )
+
+ahrq_pcsec_rate_hosp_yr_summary
 ```
 
 ## Write files
 
-Writing some dataframes to for later use.
+Writing out aggregate files. Here is a list of CSVs exports:
 
-- ahrq_pcsec_rate_yr_all: Rows are by hospital and year. Columns are YR, PROVIDER_NAME, NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
-- ahrq_pcsec_rate_qr_all: Rows are by hospital and Quarter. Columns are DISCHARGE (Quarter), PROVIDER_NAME, NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
+- ahrq_pcsec_rate_hosp_yr: Grouped by PROVIDER_NAME and UR. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
 
 ```{r write}
 # if (test_flag == F) ahrq_pcsec %>% write_rds("data-processed/ahrq_pcsec.rds")
 
-if (test_flag == F) ahrq_pcsec_rate_yr_all %>%
+if (test_flag == F) ahrq_pcsec_rate_tx_yr_summary %>%
+  write_rds("data-processed/ahrq_pcsec_rate_tx_yr_summary.rds")
+
+if (test_flag == F) ahrq_pcsec_rate_hosp_yr_summary %>%
+  write_rds("data-processed/ahrq_pcsec_rate_hosp_yr_summary.rds")
+
+if (test_flag == F) ahrq_pcsec_rate_hosp_yr %>%
   arrange(PROVIDER_NAME,YR) %>%
-  write_csv("exports/ahrq_pcsec_rate_yr_all.csv")
-
-if (test_flag == F) ahrq_pcsec_rate_qr_all %>%
-  arrange(PROVIDER_NAME,DISCHARGE) %>%
-  write_csv("exports/ahrq_pcsec_rate_qr_all.csv")
-
+  write_csv("exports/ahrq_pcsec_rate_hosp_yr.csv")
 
 # A klaxon to indicate the processing is complete
 beepr::beep(4)

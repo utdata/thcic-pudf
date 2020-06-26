@@ -1,5 +1,6 @@
 ---
 title: "Leapfrog Episiotomy rates, 2016-3q2019"
+date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged
@@ -10,9 +11,7 @@ By **Christian McDonald**, Assistant Professor of Practice\
 School of Journalism, Moody College of Communication\
 University of Texas at Austin
 
-This analysis looks at episiotomy rates using the [Texas Health Care Information Collection's Texas Inpatient Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm). The definition to calculate the rates comes from the [2019 Leapfrog Hospital Survey p103](https://www.leapfroggroup.org/sites/default/files/Files/2019HospitalSurvey_20190529_v8.0%20%28version%203%29.pdf).
-
-> To start this analysis, I've start with data filtered using the 2019 Leapfrog Hospital Survey specs for Episiotomy (p103). The process was done in "01-process-lf-epi-loop".
+This analysis looks at episiotomy rates using the [Texas Health Care Information Collection's Texas Inpatient Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm). The definition to calculate the rates comes from the [2019 Leapfrog Hospital Survey p103](https://www.leapfroggroup.org/sites/default/files/Files/2019HospitalSurvey_20190529_v8.0%20%28version%203%29.pdf). I start with data filtered from the THCIC data using the Leapfrog specs. That process is explained in "01-process-lf-epi-loop".
 
 ## Setup and import
 
@@ -42,14 +41,14 @@ del_vag_excl %>% nrow()
 
 Hospitals change names over time, skewing any analysis that groups by PROVIDER_NAME. This process updates the PROVIDER_NAME field to use the most recent name used in the data, based on a sanitized list from another workbook.
 
-```{r}
+```{r providers_list}
 # Updated Hospitals list
 providers_list <- read_rds("procedures-lists/providers_cleaned.rds")
 
 del_vag_excl <- del_vag_excl %>% 
   left_join(providers_list, by = "THCIC_ID") %>% 
   select(-PROVIDER_NAME) %>% 
-  rename(PROVIDER_NAME = PROVIDER_NAME_RECENT)
+  rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED)
 ```
 
 ### Set the episiotomy cases
@@ -97,23 +96,16 @@ lf_epi <- del_vag_excl %>%
 
 ```
 
-## Statewide episiotomy rate, 2016-3q2019
+This completes the processing of the data.
 
-We combine all years of data to compare the percentage of episiotomy cases. The **TRUE** value is the percentage of cases where an episiotomy is performed.
-
-```{r rate_state}
-lf_epi %>% 
-  tabyl(EPI) %>% 
-  rename(count = n) %>% 
-  adorn_pct_formatting()
-```
+---
 
 ## Searchable table: Episiotomy rates by hospital, combined years
 
 Hospitals with fewer than 300 deliveries excluded.
 
-```{r rate_combo_state_table}
-lf_epi_data <- lf_epi %>%
+```{r lf_epi_rate_hosp}
+lf_epi_rate_hosp <- lf_epi %>%
   group_by(PROVIDER_NAME, EPI) %>% 
   summarise(
     EPI_CNT = n()
@@ -125,7 +117,7 @@ lf_epi_data <- lf_epi %>%
   ) %>% 
   mutate(
     TOTAL = EPIF + EPIT,
-    EPIRATE = round((EPIT / TOTAL) * 100,1)
+    EPIRATE = round_half_up((EPIT / TOTAL) * 100,1)
   ) %>% 
   select(PROVIDER_NAME, TOTAL, EPIF, EPIT, EPIRATE) %>% 
   filter(
@@ -133,31 +125,18 @@ lf_epi_data <- lf_epi %>%
     ) %>% 
   arrange(EPIRATE %>% desc())
 
-lf_epi_data %>%   
+lf_epi_rate_hosp %>%   
     datatable()
 ```
 
-### Mean, Median of episiotomy rates by hospital
-
-The mean/median taken from the episiotomy rate of each hospital.
-
-```{r stats_tx}
-lf_epi_data %>% 
-  ungroup() %>% 
-  summarise(
-    MEAN = round(mean(EPIRATE, na.rm=TRUE),2),
-    MEDIAN = median(EPIRATE, na.rm=TRUE)
-  )
-```
-
-### Episiotomy rates by hospital, by year
+## Episiotomy rates by hospital, by year
 
 A look at the episiotomy rates for hospitals by year. We create the rate using the EPI column we created above, then pivot to do the math. We pivot again to see the years nicely in a table. Excludes hospitals with fewer than 100 deliveries in a given year.
 
-```{r by_year}
+```{r lf_epi_rate_hosp_yr}
 # pivot to crate the rate based on logical EPI column
-lf_epi_yr_data <- lf_epi %>% 
-  group_by(YR, PROVIDER_NAME, EPI) %>% 
+lf_epi_rate_hosp_yr <- lf_epi %>% 
+  group_by(YR, THCIC_ID, PROVIDER_NAME, EPI) %>% 
   summarise(
     EPI_CNT = n()
   ) %>% 
@@ -168,59 +147,46 @@ lf_epi_yr_data <- lf_epi %>%
   ) %>% 
   mutate(
     TOTAL = EPIF + EPIT,
-    EPIRATE = round((EPIT / TOTAL) * 100,1)
+    EPIRATE = round_half_up((EPIT / TOTAL) * 100,1)
   )
 
 # select, pivot to see years.
-lf_epi_yr_table <- lf_epi_yr_data %>% 
+lf_epi_rate_hosp_yr_table <- lf_epi_rate_hosp_yr %>% 
   filter(TOTAL >= 100) %>% 
-  select(YR, PROVIDER_NAME, EPIRATE) %>% 
+  select(YR, THCIC_ID, PROVIDER_NAME, EPIRATE) %>% 
   pivot_wider(names_from = YR, values_from = EPIRATE) %>% 
   arrange(`2019` %>% desc())
 
-lf_epi_yr_table %>% datatable()
+lf_epi_rate_hosp_yr_table %>% datatable()
 ```
 
 ## Laredo hospitals
 
-Build a Laredo hospital set used for some sets.
+Filtering above sets for Laredo hospitals.
 
-```{r}
-lf_epi_lar <- lf_epi %>% 
-  filter(str_detect(PROVIDER_NAME, "Laredo"))
-
-```
-
-
-### Episiotomy rate combined year, Laredo hospitals
+### Episiotomy rate combined years, Laredo hospitals
 
 From combined years of the data.
 
-```{r rate_laredo}
-# filter for laredo hospitals
-
-lf_epi_lar %>% 
-  tabyl(PROVIDER_NAME, EPI) %>% 
-  adorn_percentages() %>% 
-  adorn_pct_formatting() %>% 
-  adorn_ns()
+```{r lf_epi_rate_hosp_laredo}
+lf_epi_rate_hosp %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
 
 ### Episiotomy rates by year, Laredo hospitals
 
 The table above, filtered for Laredo.
 
-```{r by_yr_laredo}
+```{r lf_epi_rate_hosp_yr_table_laredo}
 # filter for Laredo
-lf_epi_yr_table %>% 
+lf_epi_rate_hosp_yr_table %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
 
-
 ### Chart: Episiotomy rates by year, Laredo
 
-```{r plot_yr_lar}
-lf_epi_yr_data %>% 
+```{r lf_epi_rate_hosp_yr_laredo_plot}
+lf_epi_rate_hosp_yr %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
   ggplot(aes(YR, EPIRATE)) +
   geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
@@ -231,8 +197,9 @@ lf_epi_yr_data %>%
 
 ### Chart: Episiotomy rates by quarter, Laredo
 
-```{r plot_qr_lar}
-lf_epi_qr_data <- lf_epi %>% 
+```{r lf_epi_rate_hosp_qr_laredo_plot}
+lf_epi_rate_hosp_qr_laredo_plot <- lf_epi %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
   group_by(DISCHARGE, PROVIDER_NAME, EPI) %>% 
   summarise(
     EPI_CNT = n()
@@ -244,116 +211,118 @@ lf_epi_qr_data <- lf_epi %>%
   ) %>% 
   mutate(
     TOTAL = EPIF + EPIT,
-    EPIRATE = round((EPIT / TOTAL) * 100,1)
+    EPIRATE = round_half_up((EPIT / TOTAL) * 100,1)
   )
 
-lf_epi_qr_data %>% 
-  filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
+lf_epi_rate_hosp_qr_laredo_plot %>% 
   ggplot(aes(DISCHARGE, EPIRATE)) +
   geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
   expand_limits(y = c(0,40)) +
-  theme(legend.position="bottom", legend.box = "vertical") +
+  theme(legend.position="bottom", legend.box = "vertical",axis.text.x=element_text(angle = -45, hjust = 0)) +
   labs(title = "Episiotomy rate by quarter, Laredo hospitals", x = "QUARTER", y = "Episiotomy rate")
 ```
 
 
-## A look at doctors
+## Summaries
 
-These views are all of vaginal deliveries only. See 02-analysis-deliveries for a look against all deliveries.
+### Statewide episiotomy rate
 
-Before looking at individual doctor counts, I need to ensure anonymity for them. The challenge is to provide useful information while staying within the allowances of data use.
+We combine all years of data to compare the percentage of episiotomy cases. The **TRUE** value is the percentage of cases where an episiotomy is performed.
 
-### Doctor suppression
-
-Before looking at these rates it should be known that in some cases the ATTENDING_PHYSICIAN was suppressed in the data. This means multiple unknown physicians could be grouped as a single doctor in a given quarter. The number of records affected is small, but so is the actual number of physicians at these hospitals.
-
-These suppression rates are just for this data set of **vaginal deliveries in Laredo**.
-
-```{r supp_count_lar}
-suppressed = c("9999999998", "9999999999")
-
-lf_epi_lar %>% 
-  mutate(
-    DOC_SUPPRESSED = if_else(ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed, T, F)
-  ) %>% 
-  tabyl(DOC_SUPPRESSED, PROVIDER_NAME) %>% 
-  adorn_percentages("col") %>%
-  adorn_pct_formatting(digits = 2) %>%
-  adorn_ns()
+```{r lf_epi_rate_tx}
+lf_epi %>% 
+  tabyl(EPI) %>% 
+  rename(count = n) %>% 
+  adorn_pct_formatting()
 ```
 
-## Doctors performing vaginal deliveries in Laredo
+Creating a summary table in case we want it.
 
-Includes doctors who IDs were suppresed and therefore combined.
+```{r lf_epi_rate_tx_summary}
+lf_epi_rate_tx_summary <- lf_epi %>% 
+  group_by(EPI) %>% 
+  summarize(CNT = n()) %>% 
+  pivot_wider(names_from = EPI, values_from = CNT) %>% 
+  rename(
+    EPIF = "FALSE",
+    EPIT = "TRUE"
+  ) %>% 
+  mutate(
+    SUMMARY = "TX",
+    CATEGORY = "EPISIOTOMY",
+    MEASUREMENT = "RATE",
+    TOTAL = EPIF + EPIT,
+    VALUE = round_half_up((EPIT / TOTAL) * 100,1) # EPIRATE
+  ) %>% 
+  select(SUMMARY, CATEGORY, MEASUREMENT, VALUE)
 
-```{r del_hosp_doc}
-lf_epi_lar %>% 
-  group_by(PROVIDER_NAME) %>% 
+lf_epi_rate_tx_summary
+```
+
+### Episiotomy rate statewide by year 
+
+```{r lf_epi_rate_tx_yr_summary}
+lf_epi_rate_tx_yr_summary <- lf_epi %>%
+  group_by(YR, EPI) %>% 
+  summarise(
+    EPI_CNT = n()
+  ) %>% 
+  pivot_wider(names_from = EPI, values_from = EPI_CNT) %>% 
+  rename(
+    EPIF = "FALSE",
+    EPIT = "TRUE"
+  ) %>% 
+  mutate(
+    SUMMARY = "TX",
+    CATEGORY = "EPISIOTOMY",
+    MEASUREMENT = "RATE",
+    TOTAL = EPIF + EPIT,
+    VALUE = round_half_up((EPIT / TOTAL) * 100,1) # EPIRATE
+  ) %>% 
+  select(
+    YR, SUMMARY, CATEGORY, MEASUREMENT, VALUE
+  )
+
+lf_epi_rate_tx_yr_summary
+```
+
+### Episiotomy rate by hospital: Averaged, by year
+
+```{r lf_epi_rate_hosp_yr_summary}
+lf_epi_rate_hosp_yr_summary <- lf_epi_rate_hosp_yr %>% 
+  ungroup() %>% 
+  group_by(YR) %>% 
   summarize(
-    DELIVERIES = n(),
-    PHYSICIANS = n_distinct(ATTENDING_PHYSICIAN_UNIF_ID)
-    ) %>% 
-  mutate(
-    RATE = round(DELIVERIES/PHYSICIANS, 1)
-  ) %>% 
-  arrange(RATE %>% desc())
+    SUMMARY = "HOSPITAL",
+    CATEGORY = "EPISIOTOMY",
+    MEASUREMENT = "MEAN OF RATE",
+    # MEDIAN = median(EPIRATE),
+    VALUE = round_half_up(mean(EPIRATE, na.rm = TRUE),1) #MEAN
+  )
+
+lf_epi_rate_hosp_yr_summary
 ```
 
-### Chart: Count of doctors performing vaginal deliveries at each hospital
-
-The data we start with here excludes doctors who have done fewer than 10 vaginal deliveries over the full time period.
-
-```{r}
-lf_epi_lar %>% 
-  distinct(YR,PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  count(YR, PROVIDER_NAME) %>% 
-  rename(
-    ATTEND_DOCS = n
-    ) %>% 
-  ggplot(aes(YR, ATTEND_DOCS)) +
-  geom_line(aes(group = PROVIDER_NAME, color = PROVIDER_NAME)) +
-  expand_limits(y = c(0,40)) +
-  theme(legend.position="bottom", legend.box = "vertical") +
-  labs(title = "Doctors attending deliveries, Laredo hospitals", x = "Year", y = "# of doctors")
-```
-
-### Table: Count of doctors performing vaginal deliveries at each hospital
-
-Again, excludes doctors with fewer than 10 deliveries over the full time period.
-
-```{r}
-lf_epi_lar %>% 
-  distinct(YR,PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  count(YR, PROVIDER_NAME) %>% 
-  rename(
-    ATTEND_DOCS = n
-  ) %>% 
-  pivot_wider(names_from = YR, values_from = ATTEND_DOCS)
-```
- 
 ## Write files
 
-Writing out aggregate files. Here is a list of what is available
+Writing out aggregate files. Here is a list of CSVs exports:
 
-- lf_epi_yr_data: Columns are YR, PROVIDER_NAME, EPIF (Epi False), EPIT (Epi True), TOTAL, EPIRATE. Observation is count or rate.
-- lf_epi_yr_table: Columns are PROVIDER_NAME, 2016, 2017, 2018, 2019. Observation is Epi Rate.
-- lf_epi_qr_data: Columns are DISCHARGE (the quarter), PROVIDER_NAME, EPIF, EPIT, TOTAL, EPIRATE. Observation is count or rate.
+- lf_epi_rate_hosp_yr: Grouped by YR, PROVIDER NAME. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.
 
 
 ```{r write}
 # lf_epi %>% write_rds("data-processed/epi.rds")
 
-if (test_flag == F) lf_epi_yr_data %>%
+if (test_flag == F) lf_epi_rate_tx_yr_summary %>%
+  write_rds("data-processed/lf_epi_rate_tx_yr_summary.rds")
+
+if (test_flag == F) lf_epi_rate_hosp_yr_summary %>%
+  write_rds("data-processed/lf_epi_rate_hosp_yr_summary.rds")
+
+if (test_flag == F) lf_epi_rate_hosp_yr %>%
   arrange(PROVIDER_NAME,YR) %>%
-  write_csv("exports/lf_epi_yr_data.csv")
+  write_csv("exports/lf_epi_rate_hosp_yr.csv")
 
-if (test_flag == F) lf_epi_yr_table %>%
-  arrange(PROVIDER_NAME) %>%
-  write_csv("exports/lf_epi_yr_table.csv")
-
-if (test_flag == F) lf_epi_qr_data %>%
-  arrange(PROVIDER_NAME,DISCHARGE) %>%
-  write_csv("exports/lf_epi_qr_data.csv")
 
 beepr::beep(4)
 ```

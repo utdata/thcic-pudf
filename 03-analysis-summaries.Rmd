@@ -1,0 +1,48 @@
+---
+title: "Summary statistics, 2016-3q2019"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+By **Christian McDonald**, Assistant Professor of Practice\
+School of Journalism, Moody College of Communication\
+University of Texas at Austin
+
+## Purpose of the notebook
+
+Each of the other analysis notebooks in the project export two types of summaries for each measure: statewide rates and averages of hospital rates. This notebook simply brings them all together into a single data file for export.
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(fs)
+library(tidyverse)
+```
+
+## Imports
+
+```{r imports}
+# set up folder
+data_dir <- "data-processed"
+# find the files
+summary_files <- dir_ls(data_dir, recurse = TRUE, regexp = "_summary")
+# peek at them
+summary_files
+
+# read and combine
+summary_data <- summary_files %>%
+  map_dfr(read_rds) %>% 
+  arrange(SUMMARY, CATEGORY, YR)
+
+# finished data
+summary_data
+```
+
+## Exports
+
+```{r write}
+summary_data %>% 
+  write_csv("exports/summary_data.csv")
+```
+
