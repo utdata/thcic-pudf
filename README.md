@@ -10,9 +10,9 @@ knit: (function(inputFile, encoding) { rmarkdown::render(
   ) })
 ---
 
-> This repo is not yet public though some knitted workbooks are. We make public once we are all ready.
-
 # Birth outcomes for Texas
+
+> This repo is not yet public though some knitted workbooks are. I'll make public once we are all ready.
 
 This is an analysis of the [Texas Inpatient Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) for a series of birth outcomes.
 
