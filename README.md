@@ -38,6 +38,10 @@ The University of Texas at Austin
 
 - [02-analysis-deliveries](https://utdata.github.io/thcic-pudf/02-analysis-deliveries.html) looks at overall delivery rates at hospitals, including simple rates for Cesarean and episiotomies.
 
+### Summaries
+
+- [03-analysis-summaries](https://utdata.github.io/thcic-pudf/03-analysis-summaries.html) gives statewide rates and by-hospital averages by year for our key measures.
+
 ### Methodology
 
 - [The methodology](https://utdata.github.io/thcic-pudf/methodology.html) of the measures and calculations used in the analysis.
