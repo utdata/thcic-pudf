@@ -4,7 +4,7 @@ data*
 notes/
 resources-thcic-dictionaries/
 exports/
-99-*
+zz-*
 
 # Created by https://www.gitignore.io/api/r,macos,python,windows,jupyternotebooks
 # Edit at https://www.gitignore.io/?templates=r,macos,python,windows,jupyternotebooks
