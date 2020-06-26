@@ -10,6 +10,7 @@
 
 
 
+<meta name="date" content="2020-06-25" />
 
 <title>AHRQ deliveries process comparison</title>
 
@@ -1633,11 +1634,12 @@ summary {
 
 
 <h1 class="title toc-ignore">AHRQ deliveries process comparison</h1>
+<h4 class="date">2020-06-25</h4>
 
 </div>
 
 
-<p>This notebook compares the output of a non-looped process to a single process on the data. This sort of tests the function in the <code>01-ahrq-del-process-loop</code> file to make sure the less verbose functions process correctly.</p>
+<p>This notebook compares the output of a non-looped process to a single process on the data. This tests the function in the <code>01-ahrq-del-process-loop</code> file to make sure the less verbose functions process correctly.</p>
 <p>The <code>01-ahrq-del-process-test</code> notebook use a non-looped processesing of the data with some visual checks on the files. I want to make sure those same filters are applied to the looping notebook above used for production.</p>
 <p>I ran a test on the looped processes against the test data for comparison. Here I check to make sure the number of rows returned is the same.</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
@@ -1654,6 +1656,7 @@ ptst %&gt;% nrow()</code></pre>
 {"columns":[{"label":["PAT_AGE"],"name":[1],"type":["chr"],"align":["left"]}],"data":[],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
+<pre class="r"><code>beepr::beep(4)</code></pre>
 
 
 

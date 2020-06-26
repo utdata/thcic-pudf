@@ -44,5 +44,8 @@ summary_data
 ```{r write}
 summary_data %>% 
   write_csv("exports/summary_data.csv")
+
+# A klaxon to indicate the processing is complete
+beepr::beep(4)
 ```
 

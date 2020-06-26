@@ -341,7 +341,7 @@ This is the same calculation as above, but by year, showing only the rates. Excl
 
 ```{r csec_hosp_rate_yr}
 csec_hosp_rate_yr <- del %>% 
-  group_by(THCIC_ID, YR, PROVIDER_NAME, PRCSE2G) %>% 
+  group_by(YR, THCIC_ID, PROVIDER_NAME, PRCSE2G) %>% 
   count(YR, PRCSE2G) %>%
   rename(CASES = n) %>%
   pivot_wider(names_from = PRCSE2G, values_from = CASES) %>%

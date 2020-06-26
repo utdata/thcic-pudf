@@ -1,5 +1,6 @@
 ---
 title: "Process various data lists"
+date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged

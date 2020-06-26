@@ -1636,6 +1636,9 @@ summary {
 </div>
 
 
+<blockquote>
+<p>This repo is not yet public though some knitted workbooks are. We make public once we are all ready.</p>
+</blockquote>
 <div id="birth-outcomes-for-texas" class="section level1">
 <h1>Birth outcomes for Texas</h1>
 <p>This is an analysis of the <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">Texas Inpatient Public Use Data File</a> for a series of birth outcomes.</p>
@@ -1646,18 +1649,6 @@ School of Journalism, Moody College ofCommunication<br />
 The University of Texas at Austin</p>
 <div id="notebooks" class="section level2">
 <h2>Notebooks</h2>
-<div id="data-processing-notebooks" class="section level3">
-<h3>Data processing notebooks</h3>
-<ul>
-<li><a href="https://utdata.github.io/thcic-pudf/00-process-lists.html">00-process-lists</a> defines various lists of codes and columns used within other notebooks.</li>
-<li><a href="https://utdata.github.io/thcic-pudf/0101-process-ahrq-del-loop.html">0101-process-ahrq-del-loop</a> is the method used to find all deliveries from the raw THCIC files.</li>
-<li><a href="https://utdata.github.io/thcic-pudf/0101-process-ahrq-del-test.html">0101-process-ahrq-del-test</a> shows the processing logic in more detail using test data.</li>
-<li><a href="https://utdata.github.io/thcic-pudf/0102-process-ahrq-del-compare.html">0102-process-ahrq-del-compare</a> compares the results of the loop script to the test script when both are processed using test data.</li>
-<li><a href="https://utdata.github.io/thcic-pudf/0101-process-lf-epi-loop.html">0101-process-lf-epi-loop</a> is the method used to capture vaginal births using Leapfrog’s methods.</li>
-<li><a href="https://utdata.github.io/thcic-pudf/0101-process-lf-epi-test.html">0101-process-lf-epi-test</a> shows the processing logic in more detail using test data.</li>
-<li><a href="https://utdata.github.io/thcic-pudf/0102-process-providers.html">0102-process-providers</a> creates a list of the most recent names for hospitals to assist analysis. Can’t be run until the deliveries data is generated.</li>
-</ul>
-</div>
 <div id="primary-cesareans-study" class="section level3">
 <h3>Primary Cesareans study</h3>
 <ul>
@@ -1681,9 +1672,33 @@ The University of Texas at Austin</p>
 <ul>
 <li><a href="https://utdata.github.io/thcic-pudf/methodology.html">The methodology</a> of the measures and calculations used in the analysis.</li>
 </ul>
-<blockquote>
-<p>The full repo is not yet public, but we can do so once we are all ready.</p>
-</blockquote>
+</div>
+<div id="data-processing-notebooks" class="section level3">
+<h3>Data processing notebooks</h3>
+<ul>
+<li><a href="https://utdata.github.io/thcic-pudf/00-process-lists.html">00-process-lists</a> defines various lists of codes and columns used within other notebooks.</li>
+<li><a href="https://utdata.github.io/thcic-pudf/0101-process-ahrq-del-loop.html">0101-process-ahrq-del-loop</a> is the method used to find all deliveries from the raw THCIC files.</li>
+<li><a href="https://utdata.github.io/thcic-pudf/0101-process-ahrq-del-test.html">0101-process-ahrq-del-test</a> shows the processing logic in more detail using test data.</li>
+<li><a href="https://utdata.github.io/thcic-pudf/0102-process-ahrq-del-compare.html">0102-process-ahrq-del-compare</a> compares the results of the loop script to the test script when both are processed using test data.</li>
+<li><a href="https://utdata.github.io/thcic-pudf/0101-process-lf-epi-loop.html">0101-process-lf-epi-loop</a> is the method used to capture vaginal births using Leapfrog’s methods.</li>
+<li><a href="https://utdata.github.io/thcic-pudf/0101-process-lf-epi-test.html">0101-process-lf-epi-test</a> shows the processing logic in more detail using test data.</li>
+<li><a href="https://utdata.github.io/thcic-pudf/0102-process-providers.html">0102-process-providers</a> creates a list of the most recent names for hospitals to assist analysis. Can’t be run until the deliveries data is generated.</li>
+</ul>
+</div>
+<div id="exports" class="section level3">
+<h3>Exports</h3>
+<p>A series of aggregated data that may prove useful. In the <code>exports/</code> folder:</p>
+<ul>
+<li>ahrq_pcsec_rate_hosp_yr: Grouped by PROVIDER_NAME and UR. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).</li>
+<li>lf_epi_rate_hosp_yr: Grouped by YR, PROVIDER NAME. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.</li>
+<li>csec_hosp_rate_yr: Grouped by id, year and name. Observations are NCSEC (not cesarean), CSEC (cesarean), TOTAL and RATE.</li>
+<li>epicsec_rate_hosp_yr: Grouped by id, year and name. Observations are NEPICSEC (Not either epi or csec), EPICSEC (is either), TOTAL and RATE</li>
+<li>summary_data: Summary data for the major categories.</li>
+</ul>
+</div>
+<div id="music-to-get-you-through-it" class="section level3">
+<h3>Music to get you through it</h3>
+<p>A good portion of this project was made possible through <a href="https://www.pandora.com/station/play/847050113183194133">Iron Maiden Radio</a> on Pandora.</p>
 </div>
 </div>
 </div>

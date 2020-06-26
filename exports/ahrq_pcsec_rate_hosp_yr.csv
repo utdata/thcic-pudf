@@ -1,0 +1,851 @@
+YR,THCIC_ID,PROVIDER_NAME,NPCSEC_CNT,PCSEC_CNT,TOTAL,PCRATE
+2016,091001,Abilene Regional Medical Center,913,195,1108,17.6
+2017,091001,Abilene Regional Medical Center,677,158,835,18.9
+2018,091001,Abilene Regional Medical Center,547,132,679,19.4
+2019,091001,Abilene Regional Medical Center,380,60,440,13.6
+2016,397001,Adventhealth Central Texas,656,84,740,11.4
+2017,397001,Adventhealth Central Texas,864,110,974,11.3
+2018,397001,Adventhealth Central Texas,795,100,895,11.2
+2019,397001,Adventhealth Central Texas,608,74,682,10.9
+2016,040000,Ascension Providence,887,147,1034,14.2
+2017,040000,Ascension Providence,807,130,937,13.9
+2018,040000,Ascension Providence,932,136,1068,12.7
+2019,040000,Ascension Providence,617,113,730,15.5
+2016,921000,Ascension Seton Hays,745,85,830,10.2
+2017,921000,Ascension Seton Hays,708,87,795,10.9
+2018,921000,Ascension Seton Hays,736,93,829,11.2
+2019,921000,Ascension Seton Hays,579,49,628,7.8
+2016,497000,Ascension Seton Medical Center,2913,653,3566,18.3
+2017,497000,Ascension Seton Medical Center,2736,626,3362,18.6
+2018,497000,Ascension Seton Medical Center,3004,602,3606,16.7
+2019,497000,Ascension Seton Medical Center,2329,435,2764,15.7
+2016,797600,Ascension Seton Northwest,805,210,1015,20.7
+2017,797600,Ascension Seton Northwest,729,191,920,20.8
+2018,797600,Ascension Seton Northwest,778,166,944,17.6
+2019,797600,Ascension Seton Northwest,621,135,756,17.9
+2016,797500,Ascension Seton Southwest,437,77,514,15
+2016,861700,Ascension Seton Williamson,212,41,253,16.2
+2017,861700,Ascension Seton Williamson,210,56,266,21.1
+2018,861700,Ascension Seton Williamson,196,48,244,19.7
+2019,861700,Ascension Seton Williamson,132,32,164,19.5
+2016,389000,Baptist Hospitals of Southeast Texas,787,268,1055,25.4
+2017,389000,Baptist Hospitals of Southeast Texas,742,231,973,23.7
+2018,389000,Baptist Hospitals of Southeast Texas,752,231,983,23.5
+2019,389000,Baptist Hospitals of Southeast Texas,533,154,687,22.4
+2016,114001,Baptist Medical Center,737,132,869,15.2
+2017,114001,Baptist Medical Center,622,89,711,12.5
+2018,114001,Baptist Medical Center,614,131,745,17.6
+2019,114001,Baptist Medical Center,448,72,520,13.8
+2016,001000,Baptist St Anthonys Hospital,1290,227,1517,15
+2017,001000,Baptist St Anthonys Hospital,1015,158,1173,13.5
+2018,001000,Baptist St Anthonys Hospital,1214,196,1410,13.9
+2019,001000,Baptist St Anthonys Hospital,900,149,1049,14.2
+2017,973960,Bay Area Regional Medical Center,136,38,174,21.8
+2018,973960,Bay Area Regional Medical Center,120,14,134,10.4
+2016,363000,Baylor Scott & White All Saints Medical Center-Fort Worth,3217,732,3949,18.5
+2017,363000,Baylor Scott & White All Saints Medical Center-Fort Worth,3391,653,4044,16.1
+2018,363000,Baylor Scott & White All Saints Medical Center-Fort Worth,3449,656,4105,16
+2019,363000,Baylor Scott & White All Saints Medical Center-Fort Worth,2582,501,3083,16.3
+2016,206100,Baylor Scott & White Hospital College Station,764,159,923,17.2
+2017,206100,Baylor Scott & White Hospital College Station,674,148,822,18
+2018,206100,Baylor Scott & White Hospital College Station,800,170,970,17.5
+2019,206100,Baylor Scott & White Hospital College Station,641,149,790,18.9
+2016,066000,Baylor Scott & White Hospital-Brenham,223,36,259,13.9
+2017,066000,Baylor Scott & White Hospital-Brenham,214,40,254,15.7
+2018,066000,Baylor Scott & White Hospital-Brenham,188,45,233,19.3
+2019,066000,Baylor Scott & White Hospital-Brenham,101,16,117,13.7
+2016,042000,Baylor Scott & White Medical Center Carrollton,515,103,618,16.7
+2017,042000,Baylor Scott & White Medical Center Carrollton,375,95,470,20.2
+2016,806300,Baylor Scott & White Medical Center Centennial,394,83,477,17.4
+2017,806300,Baylor Scott & White Medical Center Centennial,526,108,634,17
+2018,806300,Baylor Scott & White Medical Center Centennial,105,26,131,19.8
+2018,975285,Baylor Scott & White Medical Center Centennial,629,143,772,18.5
+2019,975285,Baylor Scott & White Medical Center Centennial,437,81,518,15.6
+2016,506000,Baylor Scott & White Medical Center Hillcrest,1297,214,1511,14.2
+2016,506001,Baylor Scott & White Medical Center Hillcrest,688,109,797,13.7
+2017,506001,Baylor Scott & White Medical Center Hillcrest,1764,257,2021,12.7
+2018,506001,Baylor Scott & White Medical Center Hillcrest,1676,263,1939,13.6
+2019,506001,Baylor Scott & White Medical Center Hillcrest,1177,196,1373,14.3
+2016,625000,Baylor Scott & White Medical Center Lake Pointe,974,262,1236,21.2
+2017,625000,Baylor Scott & White Medical Center Lake Pointe,1058,350,1408,24.9
+2018,975286,Baylor Scott & White Medical Center Lake Pointe,742,180,922,19.5
+2018,625000,Baylor Scott & White Medical Center Lake Pointe,157,33,190,17.4
+2019,975286,Baylor Scott & White Medical Center Lake Pointe,748,182,930,19.6
+2017,975165,Baylor Scott & White Medical Center Lakeway,87,21,108,19.4
+2018,975165,Baylor Scott & White Medical Center Lakeway,136,41,177,23.2
+2019,975165,Baylor Scott & White Medical Center Lakeway,134,28,162,17.3
+2016,974940,Baylor Scott & White Medical Center Marble Falls,249,33,282,11.7
+2017,974940,Baylor Scott & White Medical Center Marble Falls,234,22,256,8.6
+2018,974940,Baylor Scott & White Medical Center Marble Falls,233,43,276,15.6
+2019,974940,Baylor Scott & White Medical Center Marble Falls,180,32,212,15.1
+2016,971900,Baylor Scott & White Medical Center McKinney,1073,251,1324,19
+2017,971900,Baylor Scott & White Medical Center McKinney,1099,259,1358,19.1
+2018,971900,Baylor Scott & White Medical Center McKinney,1118,249,1367,18.2
+2019,971900,Baylor Scott & White Medical Center McKinney,950,206,1156,17.8
+2016,852600,Baylor Scott & White Medical Center Round Rock,358,69,427,16.2
+2017,852600,Baylor Scott & White Medical Center Round Rock,376,73,449,16.3
+2018,852600,Baylor Scott & White Medical Center Round Rock,366,72,438,16.4
+2019,852600,Baylor Scott & White Medical Center Round Rock,280,60,340,17.6
+2016,919000,Baylor Scott & White Medical Center Sunnyvale,348,73,421,17.3
+2016,537000,Baylor Scott & White Medical Center Temple,1487,297,1784,16.6
+2017,537000,Baylor Scott & White Medical Center Temple,1412,248,1660,14.9
+2018,537000,Baylor Scott & White Medical Center Temple,1329,219,1548,14.1
+2019,537000,Baylor Scott & White Medical Center Temple,1102,179,1281,14
+2016,285000,Baylor Scott & White Medical Center Waxahachie,658,93,751,12.4
+2017,285000,Baylor Scott & White Medical Center Waxahachie,581,96,677,14.2
+2018,285000,Baylor Scott & White Medical Center Waxahachie,685,129,814,15.8
+2019,285000,Baylor Scott & White Medical Center Waxahachie,486,97,583,16.6
+2016,511000,Baylor Scott & White Medical Center White Rock,824,137,961,14.3
+2017,511000,Baylor Scott & White Medical Center White Rock,881,166,1047,15.9
+2018,511000,Baylor Scott & White Medical Center White Rock,123,31,154,20.1
+2016,787400,Baylor Scott & White Medical Center-Frisco,1402,219,1621,13.5
+2017,787400,Baylor Scott & White Medical Center-Frisco,1368,233,1601,14.6
+2018,787400,Baylor Scott & White Medical Center-Frisco,1274,308,1582,19.5
+2019,787400,Baylor Scott & White Medical Center-Frisco,907,205,1112,18.4
+2016,513000,Baylor Scott & White Medical Center-Grapevine,1379,364,1743,20.9
+2017,513000,Baylor Scott & White Medical Center-Grapevine,1278,312,1590,19.6
+2018,513000,Baylor Scott & White Medical Center-Grapevine,1305,326,1631,20
+2019,513000,Baylor Scott & White Medical Center-Grapevine,925,250,1175,21.3
+2016,300000,Baylor Scott & White Medical Center-Irving,1056,267,1323,20.2
+2017,300000,Baylor Scott & White Medical Center-Irving,939,201,1140,17.6
+2018,300000,Baylor Scott & White Medical Center-Irving,831,182,1013,18
+2019,300000,Baylor Scott & White Medical Center-Irving,731,143,874,16.4
+2016,331000,Baylor University Medical Center,2653,542,3195,17
+2017,331000,Baylor University Medical Center,2667,563,3230,17.4
+2018,331000,Baylor University Medical Center,2436,496,2932,16.9
+2019,331000,Baylor University Medical Center,1814,293,2107,13.9
+2016,711900,Big Bend Regional Medical Center,128,20,148,13.5
+2017,711900,Big Bend Regional Medical Center,104,21,125,16.8
+2018,711900,Big Bend Regional Medical Center,124,31,155,20
+2016,058000,Brownwood Regional Medical Center,336,71,407,17.4
+2017,058000,Brownwood Regional Medical Center,328,73,401,18.2
+2018,058000,Brownwood Regional Medical Center,325,71,396,17.9
+2019,058000,Brownwood Regional Medical Center,237,55,292,18.8
+2016,549001,Bush Renner,929,320,1249,25.6
+2017,549001,Bush Renner,897,308,1205,25.6
+2018,549001,Bush Renner,902,296,1198,24.7
+2019,549001,Bush Renner,697,226,923,24.5
+2016,858300,Cedar Park Regional Medical Center,673,140,813,17.2
+2017,858300,Cedar Park Regional Medical Center,494,105,599,17.5
+2018,858300,Cedar Park Regional Medical Center,531,112,643,17.4
+2019,858300,Cedar Park Regional Medical Center,449,89,538,16.5
+2016,556000,Central Texas Medical Center,459,78,537,14.5
+2017,556000,Central Texas Medical Center,528,72,600,12
+2018,556000,Central Texas Medical Center,514,64,578,11.1
+2019,556000,Central Texas Medical Center,329,47,376,12.5
+2016,466000,CHI St Lukes Health - Memorial Livingston,212,58,270,21.5
+2017,466000,CHI St Lukes Health - Memorial Livingston,183,69,252,27.4
+2018,466000,CHI St Lukes Health - Memorial Livingston,207,68,275,24.7
+2019,466000,CHI St Lukes Health - Memorial Livingston,120,39,159,24.5
+2016,436000,CHI St Lukes Health Brazosport,300,65,365,17.8
+2017,436000,CHI St Lukes Health Brazosport,278,59,337,17.5
+2018,436000,CHI St Lukes Health Brazosport,264,40,304,13.2
+2019,436000,CHI St Lukes Health Brazosport,182,39,221,17.6
+2016,129000,CHI St Lukes Health Memorial Lufkin,160,42,202,20.8
+2017,129000,CHI St Lukes Health Memorial Lufkin,185,43,228,18.9
+2018,129000,CHI St Lukes Health Memorial Lufkin,177,49,226,21.7
+2019,129000,CHI St Lukes Health Memorial Lufkin,151,27,178,15.2
+2016,634000,Childrens Hospital of San Antonio,488,106,594,17.8
+2017,634000,Childrens Hospital of San Antonio,447,92,539,17.1
+2018,634000,Childrens Hospital of San Antonio,524,107,631,17
+2019,634000,Childrens Hospital of San Antonio,318,70,388,18
+2016,026000,Childress Regional Medical Center,100,38,138,27.5
+2017,026000,Childress Regional Medical Center,99,28,127,22
+2018,026000,Childress Regional Medical Center,97,21,118,17.8
+2016,029000,CHRISTUS Good Shepherd Medical Center-Longview,1060,186,1246,14.9
+2017,029000,CHRISTUS Good Shepherd Medical Center-Longview,838,193,1031,18.7
+2018,029000,CHRISTUS Good Shepherd Medical Center-Longview,969,162,1131,14.3
+2019,029000,CHRISTUS Good Shepherd Medical Center-Longview,726,138,864,16
+2016,020000,CHRISTUS Good Shepherd Medical Center-Marshall,336,29,365,7.9
+2017,020000,CHRISTUS Good Shepherd Medical Center-Marshall,261,33,294,11.2
+2016,975159,Christus Mother Frances Hospital Sulphur Springs,195,68,263,25.9
+2017,975159,Christus Mother Frances Hospital Sulphur Springs,364,117,481,24.3
+2018,975159,Christus Mother Frances Hospital Sulphur Springs,377,72,449,16
+2019,975159,Christus Mother Frances Hospital Sulphur Springs,233,46,279,16.5
+2016,286000,Christus Mother Frances Hospital Tyler,1700,321,2021,15.9
+2017,286000,Christus Mother Frances Hospital Tyler,1734,294,2028,14.5
+2018,286000,Christus Mother Frances Hospital Tyler,1834,312,2146,14.5
+2019,286000,Christus Mother Frances Hospital Tyler,1423,234,1657,14.1
+2016,863300,CHRISTUS Santa Rosa Hospital New Braunfels,239,30,269,11.2
+2017,863300,CHRISTUS Santa Rosa Hospital New Braunfels,227,27,254,10.6
+2018,863300,CHRISTUS Santa Rosa Hospital New Braunfels,219,29,248,11.7
+2019,863300,CHRISTUS Santa Rosa Hospital New Braunfels,184,33,217,15.2
+2016,339002,CHRISTUS Santa Rosa Hospital-Westover Hills,900,170,1070,15.9
+2017,339002,CHRISTUS Santa Rosa Hospital-Westover Hills,953,156,1109,14.1
+2018,339002,CHRISTUS Santa Rosa Hospital-Westover Hills,927,140,1067,13.1
+2019,339002,CHRISTUS Santa Rosa Hospital-Westover Hills,775,131,906,14.5
+2016,038001,CHRISTUS Southeast Texas - Jasper Memorial,115,35,150,23.3
+2017,038001,CHRISTUS Southeast Texas - Jasper Memorial,110,39,149,26.2
+2018,038001,CHRISTUS Southeast Texas - Jasper Memorial,106,27,133,20.3
+2016,444001,CHRISTUS Southeast Texas - St Elizabeth,929,374,1303,28.7
+2017,444001,CHRISTUS Southeast Texas - St Elizabeth,899,383,1282,29.9
+2018,444001,CHRISTUS Southeast Texas - St Elizabeth,884,358,1242,28.8
+2019,444001,CHRISTUS Southeast Texas - St Elizabeth,733,320,1053,30.4
+2016,689401,CHRISTUS Spohn Hospital Alice,231,26,257,10.1
+2017,689401,CHRISTUS Spohn Hospital Alice,132,8,140,5.7
+2016,398002,CHRISTUS Spohn Hospital Corpus Christi-South,1361,300,1661,18.1
+2017,398002,CHRISTUS Spohn Hospital Corpus Christi-South,1347,297,1644,18.1
+2018,398002,CHRISTUS Spohn Hospital Corpus Christi-South,1393,281,1674,16.8
+2019,398002,CHRISTUS Spohn Hospital Corpus Christi-South,1029,198,1227,16.1
+2016,429001,CHRISTUS Spohn Hospital-Beeville,177,29,206,14.1
+2017,429001,CHRISTUS Spohn Hospital-Beeville,149,30,179,16.8
+2018,429001,CHRISTUS Spohn Hospital-Beeville,108,32,140,22.9
+2019,429001,CHRISTUS Spohn Hospital-Beeville,77,28,105,26.7
+2016,216001,CHRISTUS Spohn Hospital-Kleberg,183,31,214,14.5
+2017,216001,CHRISTUS Spohn Hospital-Kleberg,191,31,222,14
+2018,216001,CHRISTUS Spohn Hospital-Kleberg,197,31,228,13.6
+2019,216001,CHRISTUS Spohn Hospital-Kleberg,158,32,190,16.8
+2016,788001,CHRISTUS St Michael Health System,924,232,1156,20.1
+2017,788001,CHRISTUS St Michael Health System,855,224,1079,20.8
+2018,788001,CHRISTUS St Michael Health System,879,262,1141,23
+2019,788001,CHRISTUS St Michael Health System,710,159,869,18.3
+2016,064000,Citizens Medical Center,368,135,503,26.8
+2017,064000,Citizens Medical Center,388,115,503,22.9
+2018,064000,Citizens Medical Center,432,128,560,22.9
+2019,064000,Citizens Medical Center,303,99,402,24.6
+2018,975268,City Hospital at White Rock,635,114,749,15.2
+2019,975268,City Hospital at White Rock,539,82,621,13.2
+2016,439000,Cogdell Memorial Hospital,119,18,137,13.1
+2017,439000,Cogdell Memorial Hospital,95,11,106,10.4
+2016,071000,College Station Medical Center,609,115,724,15.9
+2017,071000,College Station Medical Center,684,137,821,16.7
+2018,071000,College Station Medical Center,373,81,454,17.8
+2016,014000,Columbus Community Hospital,146,32,178,18
+2017,014000,Columbus Community Hospital,170,39,209,18.7
+2018,014000,Columbus Community Hospital,195,53,248,21.4
+2019,014000,Columbus Community Hospital,132,34,166,20.5
+2016,703000,Corpus Christi Medical Center-Bay Area,2478,584,3062,19.1
+2017,703000,Corpus Christi Medical Center-Bay Area,2263,487,2750,17.7
+2018,703000,Corpus Christi Medical Center-Bay Area,2286,524,2810,18.6
+2019,703000,Corpus Christi Medical Center-Bay Area,1720,361,2081,17.3
+2017,686000,Covenant Childrens Hospital,1129,242,1371,17.7
+2018,686000,Covenant Childrens Hospital,1303,198,1501,13.2
+2019,686000,Covenant Childrens Hospital,1040,139,1179,11.8
+2016,307000,Covenant Hospital-Levelland,118,9,127,7.1
+2017,307000,Covenant Hospital-Levelland,117,17,134,12.7
+2018,307000,Covenant Hospital-Levelland,113,27,140,19.3
+2019,307000,Covenant Hospital-Levelland,103,14,117,12
+2016,146000,Covenant Hospital-Plainview,214,55,269,20.4
+2017,146000,Covenant Hospital-Plainview,207,42,249,16.9
+2018,146000,Covenant Hospital-Plainview,228,42,270,15.6
+2019,146000,Covenant Hospital-Plainview,156,31,187,16.6
+2016,109000,Covenant Medical Center-Lakeside,1304,263,1567,16.8
+2016,449000,Dallas Medical Center,472,68,540,12.6
+2017,449000,Dallas Medical Center,227,36,263,13.7
+2016,315003,Dallas Regional Medical Center,287,58,345,16.8
+2017,315003,Dallas Regional Medical Center,359,64,423,15.1
+2018,315003,Dallas Regional Medical Center,363,74,437,16.9
+2019,315003,Dallas Regional Medical Center,404,79,483,16.4
+2016,319000,Del Sol Medical Center,1584,416,2000,20.8
+2017,319000,Del Sol Medical Center,1357,400,1757,22.8
+2018,319000,Del Sol Medical Center,1439,453,1892,23.9
+2019,319000,Del Sol Medical Center,1120,303,1423,21.3
+2016,453000,DeTar Hospital-Navarro,182,40,222,18
+2016,453001,DeTar Hospital-North,526,143,669,21.4
+2017,453001,DeTar Hospital-North,608,227,835,27.2
+2018,453001,DeTar Hospital-North,654,199,853,23.3
+2019,453001,DeTar Hospital-North,482,128,610,21
+2018,156000,Dimmit Regional Hospital,83,19,102,18.6
+2016,301000,Doctors Hospital-Laredo,930,397,1327,29.9
+2017,301000,Doctors Hospital-Laredo,818,422,1240,34
+2018,301000,Doctors Hospital-Laredo,828,340,1168,29.1
+2019,301000,Doctors Hospital-Laredo,601,266,867,30.7
+2016,458001,East Houston Regional Medical Center,1111,147,1258,11.7
+2017,458001,East Houston Regional Medical Center,593,96,689,13.9
+2016,410000,East Texas Medical Center,451,111,562,19.8
+2017,410000,East Texas Medical Center,464,93,557,16.7
+2018,410000,East Texas Medical Center,106,22,128,17.2
+2016,374000,East Texas Medical Center-Athens,595,89,684,13
+2017,374000,East Texas Medical Center-Athens,600,101,701,14.4
+2018,374000,East Texas Medical Center-Athens,137,16,153,10.5
+2016,248000,East Texas Medical Center-Henderson,135,28,163,17.2
+2017,248000,East Texas Medical Center-Henderson,119,28,147,19
+2016,416000,East Texas Medical Center-Jacksonville,186,76,262,29
+2017,416000,East Texas Medical Center-Jacksonville,243,70,313,22.4
+2016,547001,Fort Duncan Regional Medical Center,601,238,839,28.4
+2017,547001,Fort Duncan Regional Medical Center,551,197,748,26.3
+2018,547001,Fort Duncan Regional Medical Center,583,146,729,20
+2019,547001,Fort Duncan Regional Medical Center,427,100,527,19
+2016,654000,Golden Plains Community Hospital,193,38,231,16.5
+2017,654000,Golden Plains Community Hospital,178,33,211,15.6
+2018,654000,Golden Plains Community Hospital,140,47,187,25.1
+2019,654000,Golden Plains Community Hospital,108,36,144,25
+2016,155000,Guadalupe Regional Medical Center,529,72,601,12
+2017,155000,Guadalupe Regional Medical Center,499,72,571,12.6
+2018,155000,Guadalupe Regional Medical Center,554,49,603,8.1
+2019,155000,Guadalupe Regional Medical Center,381,41,422,9.7
+2016,788002,Harlingen Medical Center,573,106,679,15.6
+2017,788002,Harlingen Medical Center,606,103,709,14.5
+2018,788002,Harlingen Medical Center,539,102,641,15.9
+2019,788002,Harlingen Medical Center,353,69,422,16.4
+2016,459000,Harris Health System Ben Taub Hospital,2000,349,2349,14.9
+2017,459000,Harris Health System Ben Taub Hospital,1792,278,2070,13.4
+2018,459000,Harris Health System Ben Taub Hospital,1660,266,1926,13.8
+2019,459000,Harris Health System Ben Taub Hospital,1200,211,1411,15
+2016,384000,Harris Health System Lyndon B Johnson Hospital,1478,157,1635,9.6
+2017,384000,Harris Health System Lyndon B Johnson Hospital,1210,193,1403,13.8
+2018,384000,Harris Health System Lyndon B Johnson Hospital,1354,187,1541,12.1
+2019,384000,Harris Health System Lyndon B Johnson Hospital,1116,132,1248,10.6
+2016,212000,HCA Houston Healthcare Clear Lake,2061,535,2596,20.6
+2017,212000,HCA Houston Healthcare Clear Lake,2031,491,2522,19.5
+2018,212000,HCA Houston Healthcare Clear Lake,1774,391,2165,18.1
+2019,212000,HCA Houston Healthcare Clear Lake,1238,386,1624,23.8
+2016,508001,HCA Houston Healthcare Conroe,864,168,1032,16.3
+2017,508001,HCA Houston Healthcare Conroe,833,156,989,15.8
+2018,508001,HCA Houston Healthcare Conroe,837,193,1030,18.7
+2019,508001,HCA Houston Healthcare Conroe,634,122,756,16.1
+2016,606000,HCA Houston Healthcare Cypress Fairbanks,1941,628,2569,24.4
+2017,606000,HCA Houston Healthcare Cypress Fairbanks,1612,434,2046,21.2
+2018,606000,HCA Houston Healthcare Cypress Fairbanks,1523,366,1889,19.4
+2019,606000,HCA Houston Healthcare Cypress Fairbanks,203,53,256,20.7
+2016,675000,HCA Houston Healthcare Kingwood,1590,323,1913,16.9
+2017,675000,HCA Houston Healthcare Kingwood,1622,315,1937,16.3
+2018,675000,HCA Houston Healthcare Kingwood,1661,309,1970,15.7
+2019,675000,HCA Houston Healthcare Kingwood,1238,226,1464,15.4
+2016,793000,HCA Houston Healthcare Mainland,111,57,168,33.9
+2016,229000,HCA Houston Healthcare Northwest,2674,445,3119,14.3
+2017,229000,HCA Houston Healthcare Northwest,2383,395,2778,14.2
+2018,229000,HCA Houston Healthcare Northwest,2150,356,2506,14.2
+2019,229000,HCA Houston Healthcare Northwest,1466,225,1691,13.3
+2016,974390,HCA Houston Healthcare Pearland,148,43,191,22.5
+2017,974390,HCA Houston Healthcare Pearland,81,19,100,19
+2016,349001,HCA Houston Healthcare Southeast,1447,319,1766,18.1
+2017,349001,HCA Houston Healthcare Southeast,1329,311,1640,19
+2018,349001,HCA Houston Healthcare Southeast,1373,336,1709,19.7
+2019,349001,HCA Houston Healthcare Southeast,1062,216,1278,16.9
+2016,076000,HCA Houston Healthcare Tomball,700,102,802,12.7
+2017,076000,HCA Houston Healthcare Tomball,566,99,665,14.9
+2018,076000,HCA Houston Healthcare Tomball,472,61,533,11.4
+2019,076000,HCA Houston Healthcare Tomball,486,92,578,15.9
+2016,337001,HCA Houston Healthcare West,1736,433,2169,20
+2017,337001,HCA Houston Healthcare West,1573,375,1948,19.3
+2018,337001,HCA Houston Healthcare West,1373,338,1711,19.8
+2019,337001,HCA Houston Healthcare West,1016,262,1278,20.5
+2016,500000,Hendrick Medical Center,750,138,888,15.5
+2017,500000,Hendrick Medical Center,987,174,1161,15
+2018,500000,Hendrick Medical Center,1008,208,1216,17.1
+2019,500000,Hendrick Medical Center,825,145,970,14.9
+2018,420000,Hereford Regional Medical Center,153,32,185,17.3
+2019,420000,Hereford Regional Medical Center,110,18,128,14.1
+2016,219000,Hill Country Memorial Hospital,283,44,327,13.5
+2017,219000,Hill Country Memorial Hospital,276,52,328,15.9
+2018,219000,Hill Country Memorial Hospital,278,57,335,17
+2019,219000,Hill Country Memorial Hospital,216,34,250,13.6
+2016,383000,Hill Regional Hospital,101,32,133,24.1
+2017,383000,Hill Regional Hospital,106,22,128,17.2
+2018,383000,Hill Regional Hospital,111,30,141,21.3
+2019,383000,Hill Regional Hospital,93,13,106,12.3
+2016,280000,Hopkins County Memorial Hospital,205,60,265,22.6
+2016,405000,Houston Methodist Baytown Hospital,843,240,1083,22.2
+2017,405000,Houston Methodist Baytown Hospital,520,150,670,22.4
+2018,405000,Houston Methodist Baytown Hospital,953,259,1212,21.4
+2019,405000,Houston Methodist Baytown Hospital,743,180,923,19.5
+2016,124000,Houston Methodist Hospital,564,141,705,20
+2017,124000,Houston Methodist Hospital,1982,537,2519,21.3
+2018,124000,Houston Methodist Hospital,608,178,786,22.6
+2019,124000,Houston Methodist Hospital,529,130,659,19.7
+2016,973640,Houston Methodist St John Hospital,266,56,322,17.4
+2017,973640,Houston Methodist St John Hospital,199,44,243,18.1
+2018,973640,Houston Methodist St John Hospital,401,110,511,21.5
+2019,973640,Houston Methodist St John Hospital,285,76,361,21.1
+2016,823000,Houston Methodist Sugar Land Hospital,2119,645,2764,23.3
+2017,823000,Houston Methodist Sugar Land Hospital,1036,291,1327,21.9
+2018,823000,Houston Methodist Sugar Land Hospital,1675,445,2120,21
+2019,823000,Houston Methodist Sugar Land Hospital,1031,316,1347,23.5
+2017,975208,Houston Methodist The Woodlands Hospital,171,44,215,20.5
+2018,975208,Houston Methodist The Woodlands Hospital,886,257,1143,22.5
+2019,975208,Houston Methodist The Woodlands Hospital,664,191,855,22.3
+2016,800010,Houston Methodist West Hospital,1492,397,1889,21
+2017,800010,Houston Methodist West Hospital,682,153,835,18.3
+2018,800010,Houston Methodist West Hospital,1296,321,1617,19.9
+2019,800010,Houston Methodist West Hospital,1029,246,1275,19.3
+2016,724700,Houston Methodist Willowbrook Hospital,2060,497,2557,19.4
+2017,724700,Houston Methodist Willowbrook Hospital,1243,304,1547,19.7
+2018,724700,Houston Methodist Willowbrook Hospital,1999,435,2434,17.9
+2019,724700,Houston Methodist Willowbrook Hospital,1709,461,2170,21.2
+2016,085000,Hunt Regional Medical Center Greenville,586,88,674,13.1
+2017,085000,Hunt Regional Medical Center Greenville,694,140,834,16.8
+2018,085000,Hunt Regional Medical Center Greenville,771,144,915,15.7
+2019,085000,Hunt Regional Medical Center Greenville,590,116,706,16.4
+2016,061000,Huntsville Memorial Hospital,272,58,330,17.6
+2017,061000,Huntsville Memorial Hospital,259,61,320,19.1
+2018,061000,Huntsville Memorial Hospital,216,34,250,13.6
+2019,061000,Huntsville Memorial Hospital,167,29,196,14.8
+2016,409000,John Peter Smith Hospital,2132,277,2409,11.5
+2017,409000,John Peter Smith Hospital,2272,328,2600,12.6
+2018,409000,John Peter Smith Hospital,2103,328,2431,13.5
+2019,409000,John Peter Smith Hospital,1436,273,1709,16
+2016,480000,Knapp Medical Center,1006,110,1116,9.9
+2017,480000,Knapp Medical Center,960,70,1030,6.8
+2018,480000,Knapp Medical Center,963,75,1038,7.2
+2019,480000,Knapp Medical Center,630,53,683,7.8
+2016,424000,Lake Granbury Medical Center,371,41,412,10
+2017,424000,Lake Granbury Medical Center,364,46,410,11.2
+2018,424000,Lake Granbury Medical Center,306,45,351,12.8
+2019,424000,Lake Granbury Medical Center,283,56,339,16.5
+2016,207001,Laredo Medical Center,1759,603,2362,25.5
+2017,207001,Laredo Medical Center,1660,497,2157,23
+2018,207001,Laredo Medical Center,1546,505,2051,24.6
+2019,207001,Laredo Medical Center,1144,364,1508,24.1
+2016,180000,Las Palmas Medical Center,1138,301,1439,20.9
+2017,180000,Las Palmas Medical Center,1062,307,1369,22.4
+2018,180000,Las Palmas Medical Center,1114,274,1388,19.7
+2019,180000,Las Palmas Medical Center,943,198,1141,17.4
+2016,525000,Longview Regional Medical Center,1110,192,1302,14.7
+2017,525000,Longview Regional Medical Center,1114,254,1368,18.6
+2018,525000,Longview Regional Medical Center,1099,195,1294,15.1
+2019,525000,Longview Regional Medical Center,922,158,1080,14.6
+2016,006000,Matagorda Regional Medical Center,372,38,410,9.3
+2017,006000,Matagorda Regional Medical Center,327,59,386,15.3
+2018,006000,Matagorda Regional Medical Center,294,47,341,13.8
+2019,006000,Matagorda Regional Medical Center,215,45,260,17.3
+2016,181000,Medical Center Hospital,1101,149,1250,11.9
+2017,181000,Medical Center Hospital,946,163,1109,14.7
+2018,181000,Medical Center Hospital,983,197,1180,16.7
+2019,181000,Medical Center Hospital,864,203,1067,19
+2016,464002,Medical Center-Southeast Texas,862,174,1036,16.8
+2017,464002,Medical Center-Southeast Texas,696,172,868,19.8
+2018,464002,Medical Center-Southeast Texas,584,169,753,22.4
+2019,464002,Medical Center-Southeast Texas,397,136,533,25.5
+2016,974490,Medical City Alliance,430,98,528,18.6
+2017,974490,Medical City Alliance,432,92,524,17.6
+2018,974490,Medical City Alliance,509,132,641,20.6
+2019,974490,Medical City Alliance,369,74,443,16.7
+2016,502000,Medical City Arlington,2401,602,3003,20
+2017,502000,Medical City Arlington,2355,569,2924,19.5
+2018,502000,Medical City Arlington,2248,528,2776,19
+2019,502000,Medical City Arlington,1829,426,2255,18.9
+2016,340000,Medical City Dallas Hospital,1831,653,2484,26.3
+2017,340000,Medical City Dallas Hospital,1691,620,2311,26.8
+2018,340000,Medical City Dallas Hospital,2078,701,2779,25.2
+2019,340000,Medical City Dallas Hospital,1626,511,2137,23.9
+2019,975139,Medical City Frisco,365,66,431,15.3
+2016,814000,Medical City Las Colinas,862,299,1161,25.8
+2017,814000,Medical City Las Colinas,967,350,1317,26.6
+2018,814000,Medical City Las Colinas,1209,398,1607,24.8
+2019,814000,Medical City Las Colinas,863,268,1131,23.7
+2016,394000,Medical City Lewisville,924,200,1124,17.8
+2017,394000,Medical City Lewisville,863,160,1023,15.6
+2018,394000,Medical City Lewisville,791,202,993,20.3
+2019,394000,Medical City Lewisville,583,133,716,18.6
+2016,214000,Medical City Plano,1331,452,1783,25.4
+2017,214000,Medical City Plano,1375,429,1804,23.8
+2018,214000,Medical City Plano,1409,430,1839,23.4
+2019,214000,Medical City Plano,1100,336,1436,23.4
+2017,975241,Medical City Weatherford,141,20,161,12.4
+2018,975241,Medical City Weatherford,551,57,608,9.4
+2019,975241,Medical City Weatherford,444,47,491,9.6
+2016,246000,Medical City-McKinney,640,191,831,23
+2017,246000,Medical City-McKinney,569,169,738,22.9
+2018,246000,Medical City-McKinney,738,182,920,19.8
+2019,246000,Medical City-McKinney,673,148,821,18
+2017,427000,Medina Regional Hospital,76,30,106,28.3
+2016,347000,Memorial Hermann - Texas Medical Center,2550,806,3356,24
+2017,347000,Memorial Hermann - Texas Medical Center,2477,717,3194,22.4
+2018,347000,Memorial Hermann - Texas Medical Center,2234,735,2969,24.8
+2019,347000,Memorial Hermann - Texas Medical Center,1534,482,2016,23.9
+2017,975201,Memorial Hermann Cypress Hospital,296,58,354,16.4
+2018,975201,Memorial Hermann Cypress Hospital,577,130,707,18.4
+2019,975201,Memorial Hermann Cypress Hospital,703,149,852,17.5
+2016,172000,Memorial Hermann Greater Heights Hospital,1328,249,1577,15.8
+2017,172000,Memorial Hermann Greater Heights Hospital,1192,224,1416,15.8
+2018,172000,Memorial Hermann Greater Heights Hospital,1311,222,1533,14.5
+2019,172000,Memorial Hermann Greater Heights Hospital,1038,176,1214,14.5
+2016,534001,Memorial Hermann Katy Hospital,1478,279,1757,15.9
+2017,534001,Memorial Hermann Katy Hospital,1395,266,1661,16
+2018,534001,Memorial Hermann Katy Hospital,1325,247,1572,15.7
+2019,534001,Memorial Hermann Katy Hospital,1058,203,1261,16.1
+2016,302000,Memorial Hermann Memorial City Medical Center,2180,499,2679,18.6
+2017,302000,Memorial Hermann Memorial City Medical Center,2121,512,2633,19.4
+2018,302000,Memorial Hermann Memorial City Medical Center,2071,471,2542,18.5
+2019,302000,Memorial Hermann Memorial City Medical Center,1598,369,1967,18.8
+2016,847100,Memorial Hermann Northeast,752,172,924,18.6
+2017,847100,Memorial Hermann Northeast,709,180,889,20.2
+2018,847100,Memorial Hermann Northeast,662,184,846,21.7
+2019,847100,Memorial Hermann Northeast,449,116,565,20.5
+2017,975138,Memorial Hermann Pearland Hospital,220,39,259,15.1
+2018,975138,Memorial Hermann Pearland Hospital,254,35,289,12.1
+2019,975138,Memorial Hermann Pearland Hospital,214,38,252,15.1
+2016,119000,Memorial Hermann Southeast Hospital,680,182,862,21.1
+2017,119000,Memorial Hermann Southeast Hospital,511,155,666,23.3
+2018,119000,Memorial Hermann Southeast Hospital,471,114,585,19.5
+2019,119000,Memorial Hermann Southeast Hospital,378,86,464,18.5
+2016,407000,Memorial Hermann Southwest Hospital,2046,344,2390,14.4
+2017,407000,Memorial Hermann Southwest Hospital,2103,402,2505,16
+2018,407000,Memorial Hermann Southwest Hospital,1992,317,2309,13.7
+2019,407000,Memorial Hermann Southwest Hospital,1661,278,1939,14.3
+2016,609001,Memorial Hermann Sugar Land,1050,228,1278,17.8
+2017,609001,Memorial Hermann Sugar Land,1232,244,1476,16.5
+2018,609001,Memorial Hermann Sugar Land,1235,244,1479,16.5
+2019,609001,Memorial Hermann Sugar Land,878,223,1101,20.3
+2016,615000,Memorial Hermann The Woodlands Medical Center,2354,622,2976,20.9
+2017,615000,Memorial Hermann The Woodlands Medical Center,2015,574,2589,22.2
+2018,615000,Memorial Hermann The Woodlands Medical Center,1850,516,2366,21.8
+2019,615000,Memorial Hermann The Woodlands Medical Center,1478,402,1880,21.4
+2016,113000,Memorial Hospital,227,64,291,22
+2016,103000,Memorial Hospital,100,20,120,16.7
+2016,199000,Memorial Hospital,226,40,266,15
+2017,113000,Memorial Hospital,230,52,282,18.4
+2017,103000,Memorial Hospital,86,16,102,15.7
+2017,199000,Memorial Hospital,199,35,234,15
+2018,113000,Memorial Hospital,250,67,317,21.1
+2018,199000,Memorial Hospital,179,46,225,20.4
+2019,113000,Memorial Hospital,260,70,330,21.2
+2019,199000,Memorial Hospital,90,18,108,16.7
+2016,142000,Methodist Charlton Medical Center,1234,195,1429,13.6
+2017,142000,Methodist Charlton Medical Center,1161,171,1332,12.8
+2018,142000,Methodist Charlton Medical Center,1145,229,1374,16.7
+2019,142000,Methodist Charlton Medical Center,710,142,852,16.7
+2016,255000,Methodist Dallas Medical Center,1852,208,2060,10.1
+2017,255000,Methodist Dallas Medical Center,1722,237,1959,12.1
+2018,255000,Methodist Dallas Medical Center,1482,232,1714,13.5
+2019,255000,Methodist Dallas Medical Center,1022,141,1163,12.1
+2016,154000,Methodist Hospital,3258,904,4162,21.7
+2017,154000,Methodist Hospital,2994,733,3727,19.7
+2018,154000,Methodist Hospital,2880,767,3647,21
+2019,154000,Methodist Hospital,2304,539,2843,19
+2018,975221,Methodist Hospital South,158,15,173,8.7
+2019,975221,Methodist Hospital South,121,8,129,6.2
+2016,842800,Methodist Mansfield Medical Center,1231,272,1503,18.1
+2017,842800,Methodist Mansfield Medical Center,1189,249,1438,17.3
+2018,842800,Methodist Mansfield Medical Center,1206,226,1432,15.8
+2019,842800,Methodist Mansfield Medical Center,886,186,1072,17.4
+2016,874100,Methodist Stone Oak Hospital,1080,348,1428,24.4
+2017,874100,Methodist Stone Oak Hospital,963,308,1271,24.2
+2018,874100,Methodist Stone Oak Hospital,1034,303,1337,22.7
+2019,874100,Methodist Stone Oak Hospital,826,231,1057,21.9
+2016,283000,Metropolitan Methodist Hospital,2061,530,2591,20.5
+2017,283000,Metropolitan Methodist Hospital,1932,582,2514,23.2
+2018,283000,Metropolitan Methodist Hospital,1977,481,2458,19.6
+2019,283000,Metropolitan Methodist Hospital,1476,406,1882,21.6
+2016,452000,Midland Memorial Hospital,1505,296,1801,16.4
+2017,452000,Midland Memorial Hospital,1506,335,1841,18.2
+2018,452000,Midland Memorial Hospital,1667,276,1943,14.2
+2019,452000,Midland Memorial Hospital,1263,224,1487,15.1
+2016,370000,Mission Regional Medical Center,1045,315,1360,23.2
+2017,370000,Mission Regional Medical Center,932,241,1173,20.5
+2018,370000,Mission Regional Medical Center,749,183,932,19.6
+2019,370000,Mission Regional Medical Center,478,108,586,18.4
+2016,392000,Nacogdoches Medical Center,287,78,365,21.4
+2017,392000,Nacogdoches Medical Center,273,75,348,21.6
+2018,392000,Nacogdoches Medical Center,370,90,460,19.6
+2019,392000,Nacogdoches Medical Center,289,62,351,17.7
+2016,141000,Navarro Regional Hospital,326,71,397,17.9
+2017,141000,Navarro Regional Hospital,346,80,426,18.8
+2018,141000,Navarro Regional Hospital,296,69,365,18.9
+2019,141000,Navarro Regional Hospital,218,66,284,23.2
+2016,829900,North Austin Medical Center,3876,962,4838,19.9
+2017,829900,North Austin Medical Center,3844,1003,4847,20.7
+2018,829900,North Austin Medical Center,4158,1030,5188,19.9
+2019,829900,North Austin Medical Center,3199,831,4030,20.6
+2016,677001,North Central Baptist Hospital,2311,626,2937,21.3
+2017,677001,North Central Baptist Hospital,2339,673,3012,22.3
+2018,677001,North Central Baptist Hospital,2356,614,2970,20.7
+2019,677001,North Central Baptist Hospital,1851,531,2382,22.3
+2016,298000,North Texas Medical Center,194,27,221,12.2
+2017,298000,North Texas Medical Center,178,27,205,13.2
+2018,298000,North Texas Medical Center,151,17,168,10.1
+2016,134001,Northeast Baptist Hospital,666,116,782,14.8
+2017,134001,Northeast Baptist Hospital,768,126,894,14.1
+2018,134001,Northeast Baptist Hospital,710,105,815,12.9
+2019,134001,Northeast Baptist Hospital,531,101,632,16
+2016,318000,Northwest Texas Hospital,1459,208,1667,12.5
+2017,318000,Northwest Texas Hospital,1310,179,1489,12
+2018,318000,Northwest Texas Hospital,1260,165,1425,11.6
+2019,318000,Northwest Texas Hospital,1014,154,1168,13.2
+2016,230001,Oakbend Medical Center,795,191,986,19.4
+2017,230001,Oakbend Medical Center,866,229,1095,20.9
+2018,230001,Oakbend Medical Center,830,192,1022,18.8
+2019,230001,Oakbend Medical Center,502,76,578,13.1
+2016,098000,Ochiltree General Hospital,81,23,104,22.1
+2016,425000,Odessa Regional Medical Center,1351,264,1615,16.3
+2017,425000,Odessa Regional Medical Center,1257,262,1519,17.2
+2018,425000,Odessa Regional Medical Center,1322,258,1580,16.3
+2019,425000,Odessa Regional Medical Center,999,234,1233,19
+2016,629001,Palestine Regional Medical Center,396,96,492,19.5
+2017,629001,Palestine Regional Medical Center,354,97,451,21.5
+2018,629001,Palestine Regional Medical Center,340,108,448,24.1
+2019,629001,Palestine Regional Medical Center,219,71,290,24.5
+2016,034000,Palo Pinto General Hospital,170,28,198,14.1
+2017,034000,Palo Pinto General Hospital,191,26,217,12
+2018,034000,Palo Pinto General Hospital,188,32,220,14.5
+2019,034000,Palo Pinto General Hospital,140,16,156,10.3
+2016,832900,Pampa Regional Medical Center,154,19,173,11
+2017,832900,Pampa Regional Medical Center,102,12,114,10.5
+2018,095003,Paris Regional Medical Center North Campus,358,94,452,20.8
+2019,095003,Paris Regional Medical Center North Campus,351,84,435,19.3
+2016,095002,Paris Regional Medical Center South Campus,489,110,599,18.4
+2017,095002,Paris Regional Medical Center South Campus,432,104,536,19.4
+2018,095002,Paris Regional Medical Center South Campus,100,27,127,21.3
+2016,474000,Parkland Memorial Hospital,7606,1273,8879,14.3
+2017,474000,Parkland Memorial Hospital,7632,1352,8984,15
+2018,474000,Parkland Memorial Hospital,7741,1308,9049,14.5
+2019,474000,Parkland Memorial Hospital,5861,820,6681,12.3
+2016,356000,Pecos County Memorial Hospital,84,18,102,17.6
+2018,356000,Pecos County Memorial Hospital,98,6,104,5.8
+2016,187000,Permian Regional Medical Center,213,30,243,12.3
+2017,187000,Permian Regional Medical Center,183,29,212,13.7
+2018,187000,Permian Regional Medical Center,207,20,227,8.8
+2019,187000,Permian Regional Medical Center,159,12,171,7
+2016,406000,Peterson Regional Medical Center,355,29,384,7.6
+2017,406000,Peterson Regional Medical Center,308,47,355,13.2
+2018,406000,Peterson Regional Medical Center,302,30,332,9
+2019,406000,Peterson Regional Medical Center,221,29,250,11.6
+2016,367000,Reeves County Hospital,86,22,108,20.4
+2017,367000,Reeves County Hospital,95,15,110,13.6
+2016,973850,Resolute Health,361,73,434,16.8
+2017,973850,Resolute Health,393,88,481,18.3
+2018,973850,Resolute Health,389,93,482,19.3
+2019,973850,Resolute Health,199,41,240,17.1
+2016,601000,Rio Grande Regional Hospital,1482,354,1836,19.3
+2017,601000,Rio Grande Regional Hospital,1201,280,1481,18.9
+2018,601000,Rio Grande Regional Hospital,1216,275,1491,18.4
+2019,601000,Rio Grande Regional Hospital,857,179,1036,17.3
+2016,471000,Rolling Plains Memorial Hospital,145,24,169,14.2
+2017,471000,Rolling Plains Memorial Hospital,129,20,149,13.4
+2018,471000,Rolling Plains Memorial Hospital,140,9,149,6
+2019,471000,Rolling Plains Memorial Hospital,107,13,120,10.8
+2016,608000,Round Rock Medical Center,1079,223,1302,17.1
+2017,608000,Round Rock Medical Center,999,197,1196,16.5
+2018,608000,Round Rock Medical Center,969,219,1188,18.4
+2019,608000,Round Rock Medical Center,690,142,832,17.1
+2016,056000,San Angelo Community Medical Center,523,93,616,15.1
+2017,056000,San Angelo Community Medical Center,527,99,626,15.8
+2018,056000,San Angelo Community Medical Center,422,74,496,14.9
+2019,056000,San Angelo Community Medical Center,297,55,352,15.6
+2016,221000,Scenic Mountain Medical Center,158,28,186,15.1
+2017,221000,Scenic Mountain Medical Center,126,27,153,17.6
+2018,221000,Scenic Mountain Medical Center,114,27,141,19.1
+2016,971000,Seton Medical Center Harker Heights,647,90,737,12.2
+2017,971000,Seton Medical Center Harker Heights,539,79,618,12.8
+2018,971000,Seton Medical Center Harker Heights,597,63,660,9.5
+2019,971000,Seton Medical Center Harker Heights,448,51,499,10.2
+2016,168000,Shannon West Texas Memorial Hospital,652,151,803,18.8
+2017,168000,Shannon West Texas Memorial Hospital,660,114,774,14.7
+2018,168000,Shannon West Texas Memorial Hospital,697,189,886,21.3
+2019,168000,Shannon West Texas Memorial Hospital,593,132,725,18.2
+2016,140002,South Texas Health System Edinburg,455,91,546,16.7
+2017,140002,South Texas Health System Edinburg,496,79,575,13.7
+2018,140002,South Texas Health System Edinburg,503,58,561,10.3
+2019,140002,South Texas Health System Edinburg,332,39,371,10.5
+2016,802001,South Texas Health System McAllen,436,122,558,21.9
+2017,802001,South Texas Health System McAllen,430,142,572,24.8
+2018,802001,South Texas Health System McAllen,439,103,542,19
+2019,802001,South Texas Health System McAllen,292,85,377,22.5
+2016,334002,South Texas Regional Medical Center,171,25,196,12.8
+2016,228001,Southwest General Hospital,848,193,1041,18.5
+2017,228001,Southwest General Hospital,783,199,982,20.3
+2018,228001,Southwest General Hospital,639,165,804,20.5
+2019,228001,Southwest General Hospital,450,89,539,16.5
+2016,835700,St Davids Georgetown Hospital,710,121,831,14.6
+2017,835700,St Davids Georgetown Hospital,741,118,859,13.7
+2018,835700,St Davids Georgetown Hospital,778,117,895,13.1
+2019,835700,St Davids Georgetown Hospital,564,100,664,15.1
+2016,035000,St Davids Hospital,2337,501,2838,17.7
+2017,035000,St Davids Hospital,2391,485,2876,16.9
+2018,035000,St Davids Hospital,2235,398,2633,15.1
+2019,035000,St Davids Hospital,1548,300,1848,16.2
+2016,602000,St Davids South Austin Hospital,968,306,1274,24
+2017,602000,St Davids South Austin Hospital,1426,383,1809,21.2
+2018,602000,St Davids South Austin Hospital,1446,379,1825,20.8
+2019,602000,St Davids South Austin Hospital,1189,252,1441,17.5
+2016,838600,St Joseph Medical Center,2667,387,3054,12.7
+2017,838600,St Joseph Medical Center,2609,422,3031,13.9
+2018,838600,St Joseph Medical Center,2643,509,3152,16.1
+2019,838600,St Joseph Medical Center,1840,279,2119,13.2
+2016,002001,St Joseph Regional Health Center,903,140,1043,13.4
+2017,002001,St Joseph Regional Health Center,781,131,912,14.4
+2018,002001,St Joseph Regional Health Center,1052,189,1241,15.2
+2019,002001,St Joseph Regional Health Center,1036,181,1217,14.9
+2016,503001,St Lukes Baptist Hospital,2203,440,2643,16.6
+2017,503001,St Lukes Baptist Hospital,2205,497,2702,18.4
+2018,503001,St Lukes Baptist Hospital,1955,411,2366,17.4
+2019,503001,St Lukes Baptist Hospital,1503,334,1837,18.2
+2016,740000,St Lukes Hospital at the Vintage,761,122,883,13.8
+2017,740000,St Lukes Hospital at the Vintage,662,130,792,16.4
+2018,740000,St Lukes Hospital at the Vintage,366,80,446,17.9
+2019,740000,St Lukes Hospital at the Vintage,366,100,466,21.5
+2016,869700,St Lukes Sugar Land Hospital,569,125,694,18
+2017,869700,St Lukes Sugar Land Hospital,637,122,759,16.1
+2018,869700,St Lukes Sugar Land Hospital,639,139,778,17.9
+2019,869700,St Lukes Sugar Land Hospital,445,103,548,18.8
+2016,793100,St Lukes The Woodlands Hospital,1152,296,1448,20.4
+2017,793100,St Lukes The Woodlands Hospital,1000,230,1230,18.7
+2018,793100,St Lukes The Woodlands Hospital,1022,243,1265,19.2
+2019,793100,St Lukes The Woodlands Hospital,725,176,901,19.5
+2016,823400,St Marks Medical Center,101,17,118,14.4
+2017,823400,St Marks Medical Center,88,15,103,14.6
+2016,393000,Starr County Memorial Hospital,82,22,104,21.2
+2016,117100,Texas Childrens Hospital-Pavilion for Women,3091,837,3928,21.3
+2017,117100,Texas Childrens Hospital-Pavilion for Women,3083,673,3756,17.9
+2018,117100,Texas Childrens Hospital-Pavilion for Women,3452,909,4361,20.8
+2019,117100,Texas Childrens Hospital-Pavilion for Women,2692,663,3355,19.8
+2016,422000,Texas Health Arlington Memorial Hospital,1197,228,1425,16
+2017,422000,Texas Health Arlington Memorial Hospital,1184,212,1396,15.2
+2018,422000,Texas Health Arlington Memorial Hospital,1124,184,1308,14.1
+2019,422000,Texas Health Arlington Memorial Hospital,606,111,717,15.5
+2016,182000,Texas Health Harris Methodist HEB,1260,323,1583,20.4
+2017,182000,Texas Health Harris Methodist HEB,1255,280,1535,18.2
+2018,182000,Texas Health Harris Methodist HEB,1231,335,1566,21.4
+2019,182000,Texas Health Harris Methodist HEB,889,294,1183,24.9
+2016,972900,Texas Health Harris Methodist Hospital Alliance,1021,230,1251,18.4
+2017,972900,Texas Health Harris Methodist Hospital Alliance,1137,256,1393,18.4
+2018,972900,Texas Health Harris Methodist Hospital Alliance,1104,297,1401,21.2
+2019,972900,Texas Health Harris Methodist Hospital Alliance,864,229,1093,21
+2016,323000,Texas Health Harris Methodist Hospital Cleburne,271,47,318,14.8
+2017,323000,Texas Health Harris Methodist Hospital Cleburne,214,28,242,11.6
+2018,323000,Texas Health Harris Methodist Hospital Cleburne,258,37,295,12.5
+2019,323000,Texas Health Harris Methodist Hospital Cleburne,205,26,231,11.3
+2016,235000,Texas Health Harris Methodist Hospital-Fort Worth,1915,429,2344,18.3
+2017,235000,Texas Health Harris Methodist Hospital-Fort Worth,1728,375,2103,17.8
+2018,235000,Texas Health Harris Methodist Hospital-Fort Worth,1534,288,1822,15.8
+2019,235000,Texas Health Harris Methodist Hospital-Fort Worth,1219,235,1454,16.2
+2016,627000,Texas Health Harris Methodist Hospital-Southwest Fort Worth,1832,444,2276,19.5
+2017,627000,Texas Health Harris Methodist Hospital-Southwest Fort Worth,1793,417,2210,18.9
+2018,627000,Texas Health Harris Methodist Hospital-Southwest Fort Worth,1824,382,2206,17.3
+2019,627000,Texas Health Harris Methodist Hospital-Southwest Fort Worth,1343,320,1663,19.2
+2016,256000,Texas Health Harris Methodist Hospital-Stephenville,299,32,331,9.7
+2017,256000,Texas Health Harris Methodist Hospital-Stephenville,298,29,327,8.9
+2018,256000,Texas Health Harris Methodist Hospital-Stephenville,253,31,284,10.9
+2019,256000,Texas Health Harris Methodist Hospital-Stephenville,144,10,154,6.5
+2016,859900,Texas Health Hospital Rockwall,448,158,606,26.1
+2017,859900,Texas Health Hospital Rockwall,447,108,555,19.5
+2018,859900,Texas Health Hospital Rockwall,430,101,531,19
+2019,859900,Texas Health Hospital Rockwall,291,86,377,22.8
+2016,047000,Texas Health Huguley Hospital,838,126,964,13.1
+2017,047000,Texas Health Huguley Hospital,921,132,1053,12.5
+2018,047000,Texas Health Huguley Hospital,770,138,908,15.2
+2019,047000,Texas Health Huguley Hospital,610,102,712,14.3
+2016,724200,Texas Health Presbyterian Hospital Allen,432,91,523,17.4
+2017,724200,Texas Health Presbyterian Hospital Allen,450,91,541,16.8
+2018,724200,Texas Health Presbyterian Hospital Allen,214,39,253,15.4
+2016,431000,Texas Health Presbyterian Hospital Dallas,2909,772,3681,21
+2017,431000,Texas Health Presbyterian Hospital Dallas,2810,719,3529,20.4
+2018,431000,Texas Health Presbyterian Hospital Dallas,2720,738,3458,21.3
+2019,431000,Texas Health Presbyterian Hospital Dallas,2107,526,2633,20
+2016,943000,Texas Health Presbyterian Hospital Flower Mound,1149,242,1391,17.4
+2017,943000,Texas Health Presbyterian Hospital Flower Mound,1102,247,1349,18.3
+2018,943000,Texas Health Presbyterian Hospital Flower Mound,1137,227,1364,16.6
+2019,943000,Texas Health Presbyterian Hospital Flower Mound,898,153,1051,14.6
+2016,820800,Texas Health Presbyterian Hospital-Denton,1509,231,1740,13.3
+2017,820800,Texas Health Presbyterian Hospital-Denton,1324,228,1552,14.7
+2018,820800,Texas Health Presbyterian Hospital-Denton,1302,232,1534,15.1
+2019,820800,Texas Health Presbyterian Hospital-Denton,974,174,1148,15.2
+2016,664000,Texas Health Presbyterian Hospital-Plano,2215,653,2868,22.8
+2017,664000,Texas Health Presbyterian Hospital-Plano,2243,574,2817,20.4
+2018,664000,Texas Health Presbyterian Hospital-Plano,2334,658,2992,22
+2019,664000,Texas Health Presbyterian Hospital-Plano,1657,451,2108,21.4
+2016,847000,Texoma Medical Center,630,185,815,22.7
+2017,847000,Texoma Medical Center,631,146,777,18.8
+2018,847000,Texoma Medical Center,684,180,864,20.8
+2019,847000,Texoma Medical Center,486,118,604,19.5
+2016,865000,The Hospitals of Providence East Campus,1387,290,1677,17.3
+2017,865000,The Hospitals of Providence East Campus,1395,292,1687,17.3
+2018,865000,The Hospitals of Providence East Campus,1309,291,1600,18.2
+2019,865000,The Hospitals of Providence East Campus,916,168,1084,15.5
+2016,130000,The Hospitals of Providence Memorial Campus,1622,584,2206,26.5
+2017,130000,The Hospitals of Providence Memorial Campus,1566,563,2129,26.4
+2018,130000,The Hospitals of Providence Memorial Campus,1493,550,2043,26.9
+2019,130000,The Hospitals of Providence Memorial Campus,992,351,1343,26.1
+2016,266000,The Hospitals of Providence Sierra Campus,559,228,787,29
+2017,266000,The Hospitals of Providence Sierra Campus,416,199,615,32.4
+2018,266000,The Hospitals of Providence Sierra Campus,143,59,202,29.2
+2017,975188,The Hospitals of Providence Transmountain Campus,128,35,163,21.5
+2018,975188,The Hospitals of Providence Transmountain Campus,269,67,336,19.9
+2019,975188,The Hospitals of Providence Transmountain Campus,216,30,246,12.2
+2016,137000,Titus Regional Medical Center,625,75,700,10.7
+2017,137000,Titus Regional Medical Center,586,89,675,13.2
+2018,137000,Titus Regional Medical Center,614,77,691,11.1
+2019,137000,Titus Regional Medical Center,363,45,408,11
+2016,417000,United Regional Health Care System,1370,197,1567,12.6
+2017,417000,United Regional Health Care System,1257,200,1457,13.7
+2018,417000,United Regional Health Care System,1279,177,1456,12.2
+2019,417000,United Regional Health Care System,798,109,907,12
+2016,158000,University Hospital,1577,412,1989,20.7
+2017,158000,University Hospital,1663,389,2052,19
+2018,158000,University Hospital,1752,391,2143,18.2
+2019,158000,University Hospital,1219,249,1468,17
+2016,145000,University Medical Center,2178,183,2361,7.8
+2017,145000,University Medical Center,2240,201,2441,8.2
+2018,145000,University Medical Center,2110,189,2299,8.2
+2019,145000,University Medical Center,1634,110,1744,6.3
+2016,263000,University Medical Center of El Paso,2039,409,2448,16.7
+2017,263000,University Medical Center of El Paso,1787,277,2064,13.4
+2018,263000,University Medical Center of El Paso,1682,239,1921,12.4
+2019,263000,University Medical Center of El Paso,1099,117,1216,9.6
+2016,335000,University Medical Center-Brackenridge,92,12,104,11.5
+2018,975293,UT Health East Texas Athens Hospital,430,75,505,14.9
+2019,975293,UT Health East Texas Athens Hospital,366,64,430,14.9
+2018,975295,UT Health East Texas Henderson Hospital,103,22,125,17.6
+2019,975295,UT Health East Texas Henderson Hospital,95,14,109,12.8
+2018,975296,UT Health East Texas Jacksonville Hospital,127,16,143,11.2
+2019,975296,UT Health East Texas Jacksonville Hospital,106,24,130,18.5
+2018,975299,UT Health East Texas Tyler Regional Hospital,335,58,393,14.8
+2019,975299,UT Health East Texas Tyler Regional Hospital,350,57,407,14
+2016,000102,UT Medical Branch Hospital,3121,559,3680,15.2
+2017,000102,UT Medical Branch Hospital,2924,598,3522,17
+2018,000102,UT Medical Branch Hospital,3050,618,3668,16.8
+2019,000102,UT Medical Branch Hospital,2140,465,2605,17.9
+2016,448001,UT Southwestern University Hospital-Clements University,1075,206,1281,16.1
+2017,448001,UT Southwestern University Hospital-Clements University,1092,248,1340,18.5
+2018,448001,UT Southwestern University Hospital-Clements University,1102,261,1363,19.1
+2019,448001,UT Southwestern University Hospital-Clements University,890,178,1068,16.7
+2016,126000,UTMB Angleton Danbury Medical Center,202,44,246,17.9
+2017,126000,UTMB Angleton Danbury Medical Center,167,50,217,23
+2018,126000,UTMB Angleton Danbury Medical Center,195,50,245,20.4
+2019,126000,UTMB Angleton Danbury Medical Center,159,33,192,17.2
+2019,975354,UTMB Clear Lake Hospital,271,59,330,17.9
+2016,975140,UTMB League City Campus Hospital,219,44,263,16.7
+2017,975140,UTMB League City Campus Hospital,520,133,653,20.4
+2018,975140,UTMB League City Campus Hospital,512,145,657,22.1
+2019,975140,UTMB League City Campus Hospital,126,28,154,18.2
+2016,063000,Uvalde Memorial Hospital,273,20,293,6.8
+2017,063000,Uvalde Memorial Hospital,258,24,282,8.5
+2018,063000,Uvalde Memorial Hospital,290,31,321,9.7
+2019,063000,Uvalde Memorial Hospital,225,14,239,5.9
+2016,462000,Val Verde Regional Medical Center,520,88,608,14.5
+2017,462000,Val Verde Regional Medical Center,443,84,527,15.9
+2018,462000,Val Verde Regional Medical Center,495,95,590,16.1
+2019,462000,Val Verde Regional Medical Center,375,63,438,14.4
+2016,400000,Valley Baptist Medical Center,1185,253,1438,17.6
+2017,400000,Valley Baptist Medical Center,933,213,1146,18.6
+2018,400000,Valley Baptist Medical Center,890,232,1122,20.7
+2019,400000,Valley Baptist Medical Center,503,164,667,24.6
+2016,314001,Valley Baptist Medical Center-Brownsville,898,286,1184,24.2
+2017,314001,Valley Baptist Medical Center-Brownsville,786,291,1077,27
+2018,314001,Valley Baptist Medical Center-Brownsville,763,255,1018,25
+2019,314001,Valley Baptist Medical Center-Brownsville,429,163,592,27.5
+2016,019000,Valley Regional Medical Center,965,465,1430,32.5
+2017,019000,Valley Regional Medical Center,880,422,1302,32.4
+2018,019000,Valley Regional Medical Center,947,444,1391,31.9
+2019,019000,Valley Regional Medical Center,671,296,967,30.6
+2016,144000,Wadley Regional Medical Center,668,111,779,14.2
+2017,144000,Wadley Regional Medical Center,567,98,665,14.7
+2018,144000,Wadley Regional Medical Center,526,87,613,14.2
+2019,144000,Wadley Regional Medical Center,341,71,412,17.2
+2016,844800,Weatherford Regional Medical Center,518,39,557,7
+2017,844800,Weatherford Regional Medical Center,217,12,229,5.2
+2016,297000,Wilson N Jones Regional Medical Center,263,45,308,14.6
+2017,297000,Wilson N Jones Regional Medical Center,296,69,365,18.9
+2018,297000,Wilson N Jones Regional Medical Center,230,38,268,14.2
+2019,297000,Wilson N Jones Regional Medical Center,193,24,217,11.1
+2016,254001,Wise Health System,379,54,433,12.5
+2017,254001,Wise Health System,383,57,440,13
+2018,254001,Wise Health System,400,43,443,9.7
+2019,254001,Wise Health System,315,36,351,10.3
+2016,007000,Womans Hospital-Texas,5471,2056,7527,27.3
+2017,007000,Womans Hospital-Texas,5292,1857,7149,26
+2018,007000,Womans Hospital-Texas,5358,1865,7223,25.8
+2019,007000,Womans Hospital-Texas,4195,1440,5635,25.6
+2016,797101,Womens Hospital-Renaissance,4241,936,5177,18.1
+2017,797101,Womens Hospital-Renaissance,4397,833,5230,15.9
+2018,797101,Womens Hospital-Renaissance,4639,846,5485,15.4
+2019,797101,Womens Hospital-Renaissance,3517,584,4101,14.2
+2016,481000,Woodland Heights Medical Center,634,90,724,12.4
+2017,481000,Woodland Heights Medical Center,613,88,701,12.6
+2018,481000,Woodland Heights Medical Center,646,94,740,12.7
+2019,481000,Woodland Heights Medical Center,497,73,570,12.8
+2016,485000,Yoakum County Hospital,144,39,183,21.3
+2017,485000,Yoakum County Hospital,157,35,192,18.2
+2018,485000,Yoakum County Hospital,148,41,189,21.7
+2019,485000,Yoakum County Hospital,103,21,124,16.9

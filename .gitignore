@@ -3,7 +3,6 @@ comments/
 data*
 notes/
 resources-thcic-dictionaries/
-exports/
 zz-*
 
 # Created by https://www.gitignore.io/api/r,macos,python,windows,jupyternotebooks

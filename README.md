@@ -10,7 +10,7 @@ knit: (function(inputFile, encoding) { rmarkdown::render(
   ) })
 ---
 
-> This repo is not yet public though some knitted workbooks are. We can do so once we are all ready.
+> This repo is not yet public though some knitted workbooks are. We make public once we are all ready.
 
 # Birth outcomes for Texas
 
@@ -42,7 +42,6 @@ The University of Texas at Austin
 
 - [The methodology](https://utdata.github.io/thcic-pudf/methodology.html) of the measures and calculations used in the analysis.
 
-
 ### Data processing notebooks
 
 - [00-process-lists](https://utdata.github.io/thcic-pudf/00-process-lists.html) defines various lists of codes and columns used within other notebooks.
@@ -55,7 +54,7 @@ The University of Texas at Austin
 
 ### Exports
 
-A series of aggreated datathat may prove useful will eventually make it to the `exports/` folder:
+A series of aggregated data that may prove useful. In the `exports/` folder:
 
 - ahrq_pcsec_rate_hosp_yr: Grouped by PROVIDER_NAME and UR. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
 - lf_epi_rate_hosp_yr: Grouped by YR, PROVIDER NAME. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.
@@ -63,3 +62,6 @@ A series of aggreated datathat may prove useful will eventually make it to the `
 - epicsec_rate_hosp_yr: Grouped by id, year and name. Observations are NEPICSEC (Not either epi or csec), EPICSEC (is either), TOTAL and RATE
 - summary_data: Summary data for the major categories.
 
+### Music to get you through it
+
+A good portion of this project was made possible through [Iron Maiden Radio](https://www.pandora.com/station/play/847050113183194133) on Pandora.

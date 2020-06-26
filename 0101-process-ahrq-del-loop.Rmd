@@ -1,5 +1,6 @@
 ---
 title: "AHRQ all deliveries processing"
+date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged

@@ -370,9 +370,6 @@ ahrq_pcsec %>%
   adorn_pct_formatting()
 ```
 
-
-> DONT THINK I NEED THIS SINCE IT IS ALL CASES STATEWIDE. This filters out hospitals with fewer than 300 deliveries over the total data period. 
-
 ```{r ahrq_pcsec_rate_tx_summary}
 ahrq_pcsec_rate_tx_summary <- ahrq_pcsec %>% 
   group_by(PCSEC) %>% 
@@ -385,7 +382,6 @@ ahrq_pcsec_rate_tx_summary <- ahrq_pcsec %>%
   mutate(
     TOTAL = NPCSEC_CNT + PCSEC_CNT
   ) %>% 
-  filter(TOTAL >= 300) %>% # I DON'T THINK I NEED THIS FOR THIS SUMMARY
   mutate(
    SUMMARY = "TX",
    CATEGORY = "PRIMARY CESAREAN",
