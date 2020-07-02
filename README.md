@@ -65,6 +65,7 @@ A series of aggregated data that may prove useful. In the `exports/` folder:
 - csec_hosp_rate_yr: Grouped by id, year and name. Observations are NCSEC (not cesarean), CSEC (cesarean), TOTAL and RATE.
 - epicsec_rate_hosp_yr: Grouped by id, year and name. Observations are NEPICSEC (Not either epi or csec), EPICSEC (is either), TOTAL and RATE
 - summary_data: Summary data for the major categories.
+- providers_export: Names and addresses of hospitals in the analysis.
 
 ### Music to get you through it
 
