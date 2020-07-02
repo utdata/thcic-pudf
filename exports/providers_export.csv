@@ -1,0 +1,286 @@
+THCIC_ID,PROVIDER_NAME_CLEANED,address,city,county,zip,facility_type,state_license_number
+000102,UT Medical Branch Hospital,301 University Blvd,Galveston,Galveston,77550,Hospital,000
+000105,UT MD Anderson Cancer Center,1515 Holcombe Blvd,Houston,Harris,77030,Hospital,000
+001000,Baptist St Anthonys Hospital,1600 Wallace Blvd,Amarillo,Potter,79106,Hospital,100187
+002001,St Joseph Regional Health Center,2801 Franciscan Drive,Bryan,Brazos,77802,Hospital,000002
+006000,Matagorda Regional Medical Center,104 7th Street,Bay City,Matagorda,77414,Hospital,100019
+007000,Womans Hospital-Texas,7600 Fannin Street,Houston,Harris,77054,Hospital,000007
+010000,WJ Mangold Memorial Hospital,320 North Main Street/PO Box 37,Lockney,Floyd,79241,Critical Access Hospital,000010
+014000,Columbus Community Hospital,110 Shult Drive,Columbus,Colorado,78934,Hospital,000014
+019000,Valley Regional Medical Center,100A Alton Gloor Boulevard,Brownsville,Cameron,78526,Hospital,000019
+020000,CHRISTUS Good Shepherd Medical Center-Marshall,811 South Washington,Marshall,Harrison,75671,Hospital,000020
+023000,Yoakum Community Hospital,1200 Carl Ramert Drive,Yoakum,Lavaca,77995,Critical Access Hospital,000023
+026000,Childress Regional Medical Center,Highway 83 North,Childress,Childress,79201,Hospital,000026
+029000,CHRISTUS Good Shepherd Medical Center-Longview,700 East Marshall Avenue,Longview,Gregg,75601,Hospital,000020
+034000,Palo Pinto General Hospital,400 Southwest 25th Avenue,Mineral Wells,Palo Pinto,76067,Hospital,000034
+035000,St Davids Hospital,919 East 32nd Street,Austin,Travis,78705,Hospital,000035
+038001,CHRISTUS Southeast Texas - Jasper Memorial,1275 Marvin Hancock Drive,Jasper,Jasper,75951,Hospital,000038
+040000,Ascension Providence,6901 Medical Parkway,Waco,McLennan,76702,Hospital,000040
+042000,Baylor Scott & White Medical Center Carrollton,NA,NA,NA,NA,NA,NA
+046000,Faith Community Hospital,215 Chisholm Trail,Jacksboro,Jack,76458,Hospital,100322
+047000,Texas Health Huguley Hospital,11801 South Freeway,Fort Worth,Tarrant,76115,Hospital,100157
+049000,Coleman County Medical Center,310 South Pecos Street,Coleman,Coleman,76834,Critical Access Hospital,100168
+056000,San Angelo Community Medical Center,3501 Knickerbocker Road,San Angelo,Tom Green,76904,Hospital,000056
+058000,Brownwood Regional Medical Center,1501 Burnet Drive,Brownwood,Brown,76801,Hospital,000058
+061000,Huntsville Memorial Hospital,110 MEMORIAL HOSPITAL DRIVE,Huntsville,Walker,77340,Hospital,100511
+063000,Uvalde Memorial Hospital,1025 Garner Field Road,Uvalde,Uvalde,78801,Hospital,000063
+064000,Citizens Medical Center,2701 Hospital Drive,Victoria,Victoria,77901,Hospital,000064
+066000,Baylor Scott & White Hospital-Brenham,700 Medical Parkway,Brenham,Washington,77833,Hospital,100098
+070000,Goodall - Witcher Hospital,101 South Avenue T,Clifton,Bosque,76634,Critical Access Hospital,100467
+071000,College Station Medical Center,NA,NA,NA,NA,NA,NA
+074000,Cuero Regional Hospital,2550 North Esplanade,Cuero,DeWitt,77954,Hospital,000074
+076000,HCA Houston Healthcare Tomball,605 Holderrieth Blvd,Tomball,Harris,77375,Hospital,100409
+078000,Brownfield Regional Medical Center,705 East Felt Street,Brownfield,Terry,79316,Hospital,000078
+085000,Hunt Regional Medical Center Greenville,4215 Joe Ramsey Boulevard,Greenville,Hunt,75402,Hospital,000085
+091001,Abilene Regional Medical Center,6250 Highway 83-84,Abilene,Taylor,79606,Hospital,000091
+095002,Paris Regional Medical Center South Campus,NA,NA,NA,NA,NA,NA
+095003,Paris Regional Medical Center North Campus,865 DeShong Drive,Paris,Lamar,75461,Hospital,000095
+098000,Ochiltree General Hospital,3101 Garrett Drive,Perryton,Ochiltree,79070,Critical Access Hospital,000098
+103000,Memorial Hospital,1110 N SARAH DEWITT DRIVE,Gonzales,Gonzales,78629,Hospital,000103
+109000,Covenant Medical Center-Lakeside,NA,NA,NA,NA,NA,NA
+113000,Memorial Hospital,209 NW 8th Street,Seminole,Gaines,79360,Critical Access Hospital,000113
+114001,Baptist Medical Center,111 Dallas Street,San Antonio,Bexar,78205,Hospital,000114
+117000,Texas Childrens Hospital,6621 Fannin,Houston,Harris,77030,Hospital,000117
+117100,Texas Childrens Hospital-Pavilion for Women,6651 Main Street,Houston,Harris,77030,Hospital,000117
+119000,Memorial Hermann Southeast Hospital,11800 Astoria Boulevard,Houston,Harris,77089,Hospital,000119
+124000,Houston Methodist Hospital,6565 Fannin,Houston,Harris,77030,Hospital,000124
+126000,UTMB Angleton Danbury Medical Center,132 Hospital Drive,Angleton,Brazoria,77515,Hospital,000
+129000,CHI St Lukes Health Memorial Lufkin,1201 West Frank Street,Lufkin,Angelina,75904,Hospital,000129
+130000,The Hospitals of Providence Memorial Campus,2001 North Oregon Street,El Paso,El Paso,79902,Hospital,000130
+134001,Northeast Baptist Hospital,8811 Village Drive,San Antonio,Bexar,78217,Hospital,000114
+137000,Titus Regional Medical Center,2001 North Jefferson,Mount Pleasant,Titus,75455,Hospital,000137
+140002,South Texas Health System Edinburg,1102 West Trenton Road,Edinburg,Hidalgo,78539,Hospital,000140
+141000,Navarro Regional Hospital,3201 West Highway 22,Corsicana,Navarro,75110,Hospital,000141
+142000,Methodist Charlton Medical Center,3500 Wheatland Road,Dallas,Dallas,75237,Hospital,000142
+144000,Wadley Regional Medical Center,1000 Pine Street,Texarkana,Bowie,75501,Hospital,100002
+145000,University Medical Center,602 Indiana Avenue,Lubbock,Lubbock,79415,Hospital,000145
+146000,Covenant Hospital-Plainview,2601 Dimmit Road,Plainview,Hale,79072,Hospital,000146
+154000,Methodist Hospital,7700 Floyd Curl Drive,San Antonio,Bexar,78229,Hospital,000154
+154002,Northeast Methodist Hospital,12412 Judson Road,San Antonio,Bexar,78233,Hospital,000154
+155000,Guadalupe Regional Medical Center,1215 East Court Street,Seguin,Guadalupe,78155,Hospital,000155
+156000,Dimmit Regional Hospital,704 Hospital Drive,Carrizo Springs,Dimmit,78834,Hospital,100175
+158000,University Hospital,4502 Medical Drive,San Antonio,Bexar,78229,Hospital,000158
+168000,Shannon West Texas Memorial Hospital,120 East Harris Avenue,San Angelo,Tom Green,76902,Hospital,000168
+172000,Memorial Hermann Greater Heights Hospital,1635 North Loop West,Houston,Harris,77008,Hospital,000172
+180000,Las Palmas Medical Center,1801 North Oregon Street,El Paso,El Paso,79902,Hospital,000180
+181000,Medical Center Hospital,500 West 4th Street,Odessa,Ector,79760,Hospital,000181
+182000,Texas Health Harris Methodist HEB,1600 Hospital Parkway,Bedford,Tarrant,76022,Hospital,000182
+187000,Permian Regional Medical Center,720 Hospital Drive,Andrews,Andrews,79714,Hospital,000187
+199000,Memorial Hospital,224 East Second Street,Dumas,Moore,79029,Hospital,000199
+206100,Baylor Scott & White Hospital College Station,700 Scott & White Drive,College Station,Brazos,77845,Hospital,100206
+207001,Laredo Medical Center,1700 East Saunders Street,Laredo,Webb,78041,Hospital,000207
+212000,HCA Houston Healthcare Clear Lake,500 Medical Center Boulevard,Webster,Harris,77598,Hospital,000212
+214000,Medical City Plano,3901 West 15th Street,Plano,Collin,75075,Hospital,000214
+216001,CHRISTUS Spohn Hospital-Kleberg,1311 East General Cavazos Boulevard,Kingsville,Kleberg,78363,Hospital,000216
+217000,Lamb Healthcare Center,1500 South Sunset,Littlefield,Lamb,79339,Hospital,000217
+219000,Hill Country Memorial Hospital,1020 State Highway 16 South,Fredericksburg,Gillespie,78624,Hospital,000219
+221000,Scenic Mountain Medical Center,NA,NA,NA,NA,NA,NA
+228001,Southwest General Hospital,7400 Barlite Boulevard,San Antonio,Bexar,78224,Hospital,000228
+229000,HCA Houston Healthcare Northwest,710 Cypress Creek Parkway,Houston,Harris,77090,Hospital,008655
+230000,Oakbend Medical Center,1705 Jackson Street,Richmond,Fort Bend,77469,Hospital,000230
+230001,Oakbend Medical Center,22003 Southwest Freeway,Richmond,Fort Bend,77469,Hospital,000230
+235000,Texas Health Harris Methodist Hospital-Fort Worth,1301 Pennsylvania Avenue,Fort Worth,Tarrant,76104,Hospital,000235
+246000,Medical City-McKinney,4500 Medical Center Drive,McKinney,Collin,75069,Hospital,000246
+248000,East Texas Medical Center-Henderson,NA,NA,NA,NA,NA,NA
+254001,Wise Health System,609 Medical Center Drive,Decatur,Wise,76234,Hospital,000254
+255000,Methodist Dallas Medical Center,1441 North Beckley Avenue,Dallas,Dallas,75265,Hospital,000255
+256000,Texas Health Harris Methodist Hospital-Stephenville,411 North Belknap,Stephenville,Erath,76401,Hospital,000256
+262000,Coon Memorial Hospital & Home,1411 Denver Avenue,Dalhart,Hartley,79022,Critical Access Hospital,000262
+263000,University Medical Center of El Paso,4815 Alameda Avenue,El Paso,El Paso,79905,Hospital,000263
+266000,The Hospitals of Providence Sierra Campus,1625 Medical Center Drive,El Paso,El Paso,79902,Hospital,000266
+280000,Hopkins County Memorial Hospital,NA,NA,NA,NA,NA,NA
+283000,Metropolitan Methodist Hospital,1310 McCullough Avenue,San Antonio,Bexar,78212,Hospital,000154
+285000,Baylor Scott & White Medical Center Waxahachie,2400 N I-35 E,Waxahachie,Ellis,75165,Hospital,100275
+286000,Christus Mother Frances Hospital Tyler,800 East Dawson,Tyler,Smith,75701,Hospital,000286
+294000,Hamilton Hospital,901 West Hamilton Street,Olney,Young,76374,Critical Access Hospital,000294
+297000,Wilson N Jones Regional Medical Center,500 North Highland Avenue,Sherman,Grayson,75092,Hospital,100066
+298000,North Texas Medical Center,1900 Hospital Boulevard,Gainesville,Cooke,76240,Hospital,100453
+300000,Baylor Scott & White Medical Center-Irving,1901 North Macarthur Boulevard,Irving,Dallas,75061,Hospital,000300
+301000,Doctors Hospital-Laredo,10700 McPherson Road,Laredo,Webb,78045,Hospital,000301
+302000,Memorial Hermann Memorial City Medical Center,921 Gessner Road,Houston,Harris,77024,Hospital,000302
+303000,Texas Health Presbyterian Hospital-Kaufman,850 Ed Hall Drive,Kaufman,Kaufman,75142,Hospital,000303
+307000,Covenant Hospital-Levelland,1900 College Avenue,Levelland,Hockley,79336,Hospital,000307
+314001,Valley Baptist Medical Center-Brownsville,1040 West Jefferson Street,Brownsville,Cameron,78520,Hospital,100105
+315003,Dallas Regional Medical Center,1011 North Galloway Ave,Mesquite,Dallas,75149,Hospital,100292
+318000,Northwest Texas Hospital,1501 Coulter Road,Amarillo,Potter,79106,Hospital,000318
+319000,Del Sol Medical Center,10301 Gateway West,El Paso,El Paso,79925,Hospital,000180
+323000,Texas Health Harris Methodist Hospital Cleburne,201 Walls Drive,Cleburne,Johnson,76031,Hospital,000323
+331000,Baylor University Medical Center,3500 Gaston Avenue,Dallas,Dallas,75246,Hospital,000331
+334002,South Texas Regional Medical Center,NA,NA,NA,NA,NA,NA
+335000,University Medical Center-Brackenridge,NA,NA,NA,NA,NA,NA
+337001,HCA Houston Healthcare West,12141 Richmond Avenue,Houston,Harris,77082,Hospital,000337
+339002,CHRISTUS Santa Rosa Hospital-Westover Hills,11212 State Highway 151,San Antonio,Bexar,78251,Hospital,000339
+340000,Medical City Dallas Hospital,7777 Forest Lane,Dallas,Dallas,75230,Hospital,000340
+341000,Medical Arts Hospital,2200 North Bryan Ave,Lamesa,Dawson,79331,Hospital,100011
+347000,Memorial Hermann - Texas Medical Center,6411 Fannin,Houston,Harris,77030,Hospital,000347
+348000,Nocona General Hospital,100 Park Road,Nocona,Montague,76255,Hospital,000348
+349001,HCA Houston Healthcare Southeast,4000 Spencer Highway,Pasadena,Harris,77504,Hospital,000349
+356000,Pecos County Memorial Hospital,387 West I-10,Fort Stockton,Pecos,79735,Hospital,000356
+363000,Baylor Scott & White All Saints Medical Center-Fort Worth,1400 Eighth Avenue,Fort Worth,Tarrant,76101,Hospital,000363
+367000,Reeves County Hospital,2323 Texas Street,Pecos,Reeves,79772,Critical Access Hospital,000367
+370000,Mission Regional Medical Center,900 South Bryan Road,Mission,Hidalgo,78572,Hospital,000370
+374000,East Texas Medical Center-Athens,NA,NA,NA,NA,NA,NA
+383000,Hill Regional Hospital,101 CIRCLE DRIVE,Hillsboro,Hill,76645,Hospital,000383
+384000,Harris Health System Lyndon B Johnson Hospital,5656 Kelley Street,Houston,Harris,77026,Hospital,000459
+389000,Baptist Hospitals of Southeast Texas,3080 College Street,Beaumont,Jefferson,77704,Hospital,000389
+392000,Nacogdoches Medical Center,4920 N. E. Stallings Drive,Nacogdoches,Nacogdoches,75965,Hospital,000392
+393000,Starr County Memorial Hospital,128 North FM 3167,Rio Grande City,Starr,78582,Hospital,000393
+394000,Medical City Lewisville,500 West Main Street,Lewisville,Denton,75057,Hospital,000394
+396002,Nix Health Care System,NA,NA,NA,NA,NA,NA
+397001,Adventhealth Central Texas,2201 South Clear Creek Road,Killeen,Bell,76549,Hospital,000397
+398000,CHRISTUS Spohn Hospital Corpus Christi,2606 Hospital Boulevard,Corpus Christi,Nueces,78405,Hospital,000398
+398001,CHRISTUS Spohn Hospital Corpus Christi-Shoreline,600 Elizabeth Street,Corpus Christi,Nueces,78404,Hospital,000398
+398002,CHRISTUS Spohn Hospital Corpus Christi-South,5950 Saratoga Boulevard,Corpus Christi,Nueces,78414,Hospital,000398
+400000,Valley Baptist Medical Center,2101 Pease Street,Harlingen,Cameron,78550,Hospital,100104
+405000,Houston Methodist Baytown Hospital,4401 Garth Road,Baytown,Harris,77521,Hospital,000405
+406000,Peterson Regional Medical Center,551 Hill Country Drive,Kerrville,Kerr,78028,Hospital,008642
+407000,Memorial Hermann Southwest Hospital,7600 Beechnut,Houston,Harris,77074,Hospital,000407
+409000,John Peter Smith Hospital,1500 South Main Street,Fort Worth,Tarrant,76104,Hospital,000409
+410000,East Texas Medical Center,NA,NA,NA,NA,NA,NA
+416000,East Texas Medical Center-Jacksonville,NA,NA,NA,NA,NA,NA
+417000,United Regional Health Care System,1600 Eleventh Street,Wichita Falls,Wichita,76301,Hospital,000417
+420000,Hereford Regional Medical Center,540 W 15th Street,Hereford,Deaf Smith,79045,Hospital,100121
+422000,Texas Health Arlington Memorial Hospital,800 West Randol Mill Road,Arlington,Tarrant,76012,Hospital,000422
+424000,Lake Granbury Medical Center,1310 Paluxy Road,Granbury,Hood,76048,Hospital,000424
+425000,Odessa Regional Medical Center,520 East Sixth Street,Odessa,Ector,79761,Hospital,000425
+427000,Medina Regional Hospital,3100 Avenue E,Hondo,Medina,78861,Critical Access Hospital,100046
+429001,CHRISTUS Spohn Hospital-Beeville,1500 East Houston Highway,Beeville,Bee,78102,Hospital,000429
+431000,Texas Health Presbyterian Hospital Dallas,8200 Walnut Hill Lane,Dallas,Dallas,75231,Hospital,000431
+436000,CHI St Lukes Health Brazosport,100 Medical Drive,Lake Jackson,Brazoria,77566,Hospital,000436
+439000,Cogdell Memorial Hospital,1700 Cogdell Boulevard,Snyder,Scurry,79549,Critical Access Hospital,008691
+441000,Frio Regional Hospital,200 S IH-35,Pearsall,Frio,78061,Hospital,000441
+444001,CHRISTUS Southeast Texas - St Elizabeth,2830 Calder Avenue,Beaumont,Jefferson,77726,Hospital,000444
+448001,UT Southwestern University Hospital-Clements University,6201 Harry Hines Blvd,Dallas,Dallas,75390,Hospital,000
+449000,Dallas Medical Center,Seven Medical Parkway,Dallas,Dallas,75234,Hospital,100214
+452000,Midland Memorial Hospital,400 Rosalind Redfern Grover Parkway,Midland,Midland,79701,Hospital,000452
+453000,DeTar Hospital-Navarro,506 East San Antonio Street,Victoria,Victoria,77901,Hospital,000453
+453001,DeTar Hospital-North,101 Medical Drive,Victoria,Victoria,77904,Hospital,000453
+458001,East Houston Regional Medical Center,NA,NA,NA,NA,NA,NA
+459000,Harris Health System Ben Taub Hospital,1504 Taub Loop,Houston,Harris,77030,Hospital,000459
+462000,Val Verde Regional Medical Center,801 Bedell Avenue,Del Rio,Val Verde,78840,Hospital,000462
+464002,Medical Center-Southeast Texas,2555 Jimmy Johnson Blvd,Port Arthur,Jefferson,77640,Hospital,000464
+465000,Covenant Medical Center,3615 19th Street,Lubbock,Lubbock,79408,Hospital,100454
+466000,CHI St Lukes Health - Memorial Livingston,1717 Highway 59 Bypass,Livingston,Polk,77351,Hospital,000466
+471000,Rolling Plains Memorial Hospital,200 East Arizona Ave,Sweetwater,Nolan,79556,Hospital,000471
+474000,Parkland Memorial Hospital,5201 Harry Hines Boulevard,Dallas,Dallas,75235,Hospital,000474
+478000,Nacogdoches Memorial Hospital,1204 North Mound Street,Nacogdoches,Nacogdoches,75961,Hospital,000478
+480000,Knapp Medical Center,1401 East Eighth Street,Weslaco,Hidalgo,78599,Hospital,000480
+481000,Woodland Heights Medical Center,505 South John Redditt Drive,Lufkin,Angelina,75901,Hospital,000481
+485000,Yoakum County Hospital,412 North Mustang Avenue,Denver City,Yoakum,79323,Critical Access Hospital,000485
+487000,Memorial Medical Center,815 North Virginia Street,Port Lavaca,Calhoun,77979,Critical Access Hospital,000487
+497000,Ascension Seton Medical Center,1201 West 38th Street,Austin,Travis,78705,Hospital,000497
+500000,Hendrick Medical Center,1900 Pine,Abilene,Taylor,79601,Hospital,000500
+502000,Medical City Arlington,3301 Matlock Road,Arlington,Tarrant,76015,Hospital,000502
+503001,St Lukes Baptist Hospital,7930 Floyd Curl Drive,San Antonio,Bexar,78229,Hospital,000114
+506000,Baylor Scott & White Medical Center Hillcrest,NA,NA,NA,NA,NA,NA
+506001,Baylor Scott & White Medical Center Hillcrest,100 Hillcrest Medical Center Blvd,Waco,McLennan,76712,Hospital,000506
+508001,HCA Houston Healthcare Conroe,504 Medical Center Boulevard,Conroe,Montgomery,77304,Hospital,000508
+511000,Baylor Scott & White Medical Center White Rock,NA,NA,NA,NA,NA,NA
+513000,Baylor Scott & White Medical Center-Grapevine,1650 West College Street,Grapevine,Tarrant,76051,Hospital,000513
+525000,Longview Regional Medical Center,2901 North Fourth Street,Longview,Gregg,75605,Hospital,000525
+534001,Memorial Hermann Katy Hospital,23900 Katy Freeway,Katy,Fort Bend,77494,Hospital,000534
+537000,Baylor Scott & White Medical Center Temple,2401 South 31st Street,Temple,Bell,76508,Hospital,000537
+537006,Baylor Scott & White McLane Childrens Medical Center,1901 Southwest H K Dodgen Loop,Temple,Bell,76502,Hospital,000537
+546000,Seymour Hospital,200 Stadium Drive,Seymour,Baylor,76380,Hospital,000546
+547001,Fort Duncan Regional Medical Center,3333 North Foster Maldonado,Eagle Pass,Maverick,78852,Hospital,000547
+549001,Bush Renner,2831 East President Bush Highway,Richardson,Collin,75082,Hospital,100131
+556000,Central Texas Medical Center,NA,NA,NA,NA,NA,NA
+559000,Ascension Seton Highland Lakes,3201 South Water Street,Burnet,Burnet,78611,Critical Access Hospital,000559
+560000,Rice Medical Center,600 South Austin Road,Eagle Lake,Colorado,77434,Critical Access Hospital,100136
+597000,Ascension Seton Edgar B Davis,130 Hays Street,Luling,Caldwell,78648,Critical Access Hospital,000597
+601000,Rio Grande Regional Hospital,101 East Ridge Road,McAllen,Hidalgo,78503,Hospital,000601
+602000,St Davids South Austin Hospital,901 West Ben White Boulevard,Austin,Travis,78704,Hospital,000602
+606000,HCA Houston Healthcare Cypress Fairbanks,NA,NA,NA,NA,NA,NA
+608000,Round Rock Medical Center,2400 Round Rock Avenue,Round Rock,Williamson,78681,Hospital,000608
+609001,Memorial Hermann Sugar Land,17500 WEST GRAND PARKWAY SOUTH,Sugar Land,Fort Bend,77459,Hospital,000609
+615000,Memorial Hermann The Woodlands Medical Center,9250 Pinecroft Drive,The Woodlands,Montgomery,77380,Hospital,000615
+622001,Texas NeuroRehab Center,1106 West Dittmar Road,Austin,Travis,78745,Hospital,000622
+625000,Baylor Scott & White Medical Center Lake Pointe,NA,NA,NA,NA,NA,NA
+627000,Texas Health Harris Methodist Hospital-Southwest Fort Worth,6100 Harris Parkway,Fort Worth,Tarrant,76132,Hospital,000627
+629001,Palestine Regional Medical Center,2900 South Loop 256,Palestine,Anderson,75801,Hospital,000629
+634000,Childrens Hospital of San Antonio,333 NORTH SANTA ROSA STREET,San Antonio,Bexar,78207,Hospital,100166
+654000,Golden Plains Community Hospital,100 Medical Drive,Borger,Hutchinson,79007,Critical Access Hospital,100111
+664000,Texas Health Presbyterian Hospital-Plano,6200 West Parker Road,Plano,Collin,75093,Hospital,000664
+675000,HCA Houston Healthcare Kingwood,22999 US Highway 59,Kingwood,Montgomery,77339,Hospital,000675
+677001,North Central Baptist Hospital,520 Madison Oak,San Antonio,Bexar,78258,Hospital,000114
+686000,Covenant Childrens Hospital,4015 22nd Place,Lubbock,Lubbock,79408,Hospital,008638
+689401,CHRISTUS Spohn Hospital Alice,2500 East Main Street,Alice,Jim Wells,78332,Hospital,006894
+703000,Corpus Christi Medical Center-Bay Area,7101 South Padre Island Drive,Corpus Christi,Nueces,78412,Hospital,000703
+703002,Corpus Christi Medical Center-Doctors Regional,3315 South Alameda,Corpus Christi,Nueces,78411,Hospital,000703
+703003,Corpus Christi Medical Center-Heart Hospital,7002 Williams Drive,Corpus Christi,Nueces,78413,Hospital,000703
+704004,Corpus Christi Medical Center-Northwest,13725 Northwest Blvd,Corpus Christi,Nueces,78410,Hospital,000703
+711900,Big Bend Regional Medical Center,2600 Highway 118 North,Alpine,Brewster,79830,Critical Access Hospital,007119
+714500,Ennis Regional Medical Center,2201 WEST LAMPASAS STREET,Ennis,Ellis,75119,Hospital,008531
+724200,Texas Health Presbyterian Hospital Allen,1105 Central Expressway North Suite 140,Allen,Collin,75013,Hospital,007242
+724700,Houston Methodist Willowbrook Hospital,18220 Tomball Parkway,Houston,Harris,77070,Hospital,007247
+740000,St Lukes Hospital at the Vintage,20171 Chasewood Park Drive,Houston,Harris,77070,Hospital,100235
+787400,Baylor Scott & White Medical Center-Frisco,5601 Warren Parkway,Frisco,Collin,75034,Hospital,007874
+788001,CHRISTUS St Michael Health System,2600 St Michael Drive,Texarkana,Bowie,75503,Hospital,000788
+788002,Harlingen Medical Center,5501 South Expressway 77,Harlingen,Cameron,78550,Hospital,007880
+793000,HCA Houston Healthcare Mainland,6801 Emmett F Lowry Expressway,Texas City,Galveston,77591,Hospital,000212
+793100,St Lukes The Woodlands Hospital,17200 St Lukes Way,The Woodlands,Montgomery,77385,Hospital,007931
+797100,Doctors Hospital-Renaissance,5501 South McColl,Edinburg,Hidalgo,78539,Hospital,007971
+797101,Womens Hospital-Renaissance,5502 South McColl,Edinburg,Hidalgo,78539,Hospital,007971
+797500,Ascension Seton Southwest,7900 FM 1826,Austin,Travis,78737,Hospital,007975
+797600,Ascension Seton Northwest,11113 Research Boulevard,Austin,Travis,78759,Hospital,007976
+800010,Houston Methodist West Hospital,18500 Katy Freeway,Houston,Harris,77094,Hospital,100080
+802001,South Texas Health System McAllen,301 West Expressway 83,McAllen,Hidalgo,78503,Hospital,000140
+806300,Baylor Scott & White Medical Center Centennial,NA,NA,NA,NA,NA,NA
+814000,Medical City Las Colinas,6800 North MacArthur Boulevard,Irving,Dallas,75039,Hospital,000814
+814001,Baylor Scott & White Medical Center-Plano,4700 Alliance Boulevard,Plano,Collin,75093,Hospital,008140
+820800,Texas Health Presbyterian Hospital-Denton,3000 I-35,Denton,Denton,76201,Hospital,008208
+823000,Houston Methodist Sugar Land Hospital,16655 Southwest Freeway,Sugar Land,Fort Bend,77479,Hospital,000823
+823400,St Marks Medical Center,One St Mark's Place,La Grange,Fayette,78945,Hospital,008234
+829900,North Austin Medical Center,12221 Mopac Expressway North,Austin,Travis,78758,Hospital,008299
+832900,Pampa Regional Medical Center,One Medical Plaza,Pampa,Gray,79065,Hospital,100154
+835700,St Davids Georgetown Hospital,2000 Scenic Drive,Georgetown,Williamson,78626,Hospital,000035
+838600,St Joseph Medical Center,1401 St Joseph Parkway,Houston,Harris,77002,Hospital,008386
+842800,Methodist Mansfield Medical Center,2700 Broad Street,Mansfield,Tarrant,76063,Hospital,008428
+844800,Weatherford Regional Medical Center,NA,NA,NA,NA,NA,NA
+847000,Texoma Medical Center,5016 South US Highway 75,Denison,Grayson,75020,Hospital,008470
+847100,Memorial Hermann Northeast,18951 Memorial North,Humble,Harris,77338,Hospital,008471
+852600,Baylor Scott & White Medical Center Round Rock,300 University Blvd,Round Rock,Williamson,78664,Hospital,008526
+858300,Cedar Park Regional Medical Center,1401 Medical Parkway,Cedar Park,Williamson,78613,Hospital,008583
+859900,Texas Health Hospital Rockwall,3150 Horizon Road,Rockwall,Rockwall,75032,Hospital,008599
+861700,Ascension Seton Williamson,201 Seton Parkway,Round Rock,Williamson,78665,Hospital,008617
+863300,CHRISTUS Santa Rosa Hospital New Braunfels,600 North Union Ave,New Braunfels,Comal,78130,Hospital,100165
+865000,The Hospitals of Providence East Campus,3280 Joe Battle Blvd,El Paso,El Paso,79938,Hospital,008650
+869700,St Lukes Sugar Land Hospital,1317 Lake Point Parkway,Sugar Land,Fort Bend,77479,Hospital,100134
+874100,Methodist Stone Oak Hospital,1139 East Sonterra Blvd,San Antonio,Bexar,78258,Hospital,008741
+919000,Baylor Scott & White Medical Center Sunnyvale,231 South Collins Road,Sunnyvale,Dallas,75182,Hospital,100033
+921000,Ascension Seton Hays,6001 Kyle Parkway,Kyle,Hays,78640,Hospital,100029
+943000,Texas Health Presbyterian Hospital Flower Mound,4400 Long Prairie Road,Flower Mound,Denton,75028,Hospital,100056
+970200,Lakeway Regional Medical Center,NA,NA,NA,NA,NA,NA
+971000,Seton Medical Center Harker Heights,850 West Central Texas Expressway,Harker Heights,Bell,76548,Hospital,100149
+971900,Baylor Scott & White Medical Center McKinney,5252 West University Drive,McKinney,Collin,75071,Hospital,100153
+972900,Texas Health Harris Methodist Hospital Alliance,10864 Texas Health Trail,Fort Worth,Tarrant,76131,Hospital,100162
+973640,Houston Methodist St John Hospital,18300 St John Drive,Nassau Bay,Harris,77058,Hospital,100241
+973840,Wise Health Surgical Hospital,3200 North Tarrant Parkway,Fort Worth,Tarrant,76177,Hospital,100335
+973850,Resolute Health,555 Creekside Crossing,New Braunfels,Comal,78130,Hospital,100255
+973960,Bay Area Regional Medical Center,NA,NA,NA,NA,NA,NA
+974390,HCA Houston Healthcare Pearland,11100 Shadow Creek Parkway,Pearland,Brazoria,77584,Hospital,100283
+974490,Medical City Alliance,3101 North Tarrant Parkway,Fort Worth,Tarrant,76177,Hospital,100288
+974710,Houston County Medical Center,NA,NA,NA,NA,NA,NA
+974940,Baylor Scott & White Medical Center Marble Falls,810 W Highway 71,Marble Falls,Burnet,78654,Hospital,100310
+975138,Memorial Hermann Pearland Hospital,16100 South Freeway,Pearland,Brazoria,77584,Hospital,000119
+975139,Medical City Frisco,5500 Frisco Square Blvd,Frisco,Collin,75034,Hospital,000214
+975140,UTMB League City Campus Hospital,2240 Gulf Freeway South,League City,Galveston,77573,Hospital,000
+975159,Christus Mother Frances Hospital Sulphur Springs,115 Airport Road,Sulphur Springs,Hopkins,75482,Hospital,100359
+975165,Baylor Scott & White Medical Center Lakeway,100 Medical Parkway,Lakeway,Travis,78738,Hospital,008526
+975180,Timberlands Hospital,NA,NA,NA,NA,NA,NA
+975188,The Hospitals of Providence Transmountain Campus,2000 Transmountain Road,El Paso,El Paso,79911,Hospital,100376
+975201,Memorial Hermann Cypress Hospital,27800 Northwest Freeway,Cypress,Harris,77433,Hospital,000347
+975208,Houston Methodist The Woodlands Hospital,17201 I-45 South,The Woodlands,Montgomery,77385,Hospital,100386
+975215,Dell Seton Medical Center at The University of Texas,1500 Red River Street,Austin,Travis,78701,Hospital,000335
+975221,Methodist Hospital South,1905 Highway 97 East,Jourdanton,Atascosa,78026,Hospital,100391
+975241,Medical City Weatherford,713 E Anderson St,Weatherford,Parker,76086,Hospital,100400
+975268,City Hospital at White Rock,9440 Poppy Drive,Dallas,Dallas,75218,Hospital,100422
+975285,Baylor Scott & White Medical Center Centennial,12505 Lebanon Road,Frisco,Collin,75035,Hospital,100421
+975286,Baylor Scott & White Medical Center Lake Pointe,6800 Scenic Drive,Rowlette,Rockwall,75088,Hospital,008618
+975293,UT Health East Texas Athens Hospital,2000 South Palestine Street,Athens,Henderson,75751,Hospital,100426
+975295,UT Health East Texas Henderson Hospital,300 Wilson Street,Henderson,Rusk,75652,Hospital,100428
+975296,UT Health East Texas Jacksonville Hospital,501 South Ragsdale Street,Jacksonville,Cherokee,75766,Hospital,100429
+975299,UT Health East Texas Tyler Regional Hospital,1000 South Beckham Avenue,Tyler,Smith,75701,Hospital,100433
+975354,UTMB Clear Lake Hospital,200 Blossom Street,Webster,Harris,77598,Hospital,000
+975372,Scenic Mountain Medical Center,1601 West Eleventh Place,Big Spring,Howard,79720,Hospital,100463
+999999,Low Volume Facility,NA,NA,NA,NA,NA,NA

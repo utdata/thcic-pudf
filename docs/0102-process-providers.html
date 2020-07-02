@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-06-25" />
+<meta name="date" content="2020-07-02" />
 
 <title>Clean provider names</title>
 
@@ -1634,7 +1634,7 @@ summary {
 
 
 <h1 class="title toc-ignore">Clean provider names</h1>
-<h4 class="date">2020-06-25</h4>
+<h4 class="date">2020-07-02</h4>
 
 </div>
 
@@ -1747,6 +1747,30 @@ providers_cleaned</code></pre>
 {"columns":[{"label":["PROVIDER_NAME"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Baylor Scott & White Medical Center Centennial","2":"2"},{"1":"Baylor Scott & White Medical Center Hillcrest","2":"2"},{"1":"Baylor Scott & White Medical Center Lake Pointe","2":"2"},{"1":"Memorial Hospital","2":"3"},{"1":"Oakbend Medical Center","2":"2"},{"1":"Scenic Mountain Medical Center","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
+</div>
+<div id="providers-export" class="section level2">
+<h2>Providers export</h2>
+<pre class="r"><code>providers_export &lt;- del %&gt;% 
+  distinct(THCIC_ID, PROVIDER_NAME, DISCHARGE) %&gt;% 
+  arrange(THCIC_ID, DISCHARGE) %&gt;% 
+  select(THCIC_ID, PROVIDER_NAME) %&gt;% 
+  group_by(THCIC_ID) %&gt;% 
+  slice(tail(row_number(), 1)) %&gt;% 
+  rename(PROVIDER_NAME_RECENT = PROVIDER_NAME) %&gt;% 
+  left_join(facilities_list, by = c(&quot;THCIC_ID&quot; = &quot;thcic_id&quot;)) %&gt;% 
+  select(THCIC_ID, PROVIDER_NAME_RECENT, facility, address, city, county, zip, facility_type, state_license_number) %&gt;% 
+  # Create new provider name and fill from facilities list
+  mutate(
+    PROVIDER_NAME_CLEANED = case_when(
+       is.na(facility) ~ PROVIDER_NAME_RECENT,
+       TRUE ~ facility
+    )
+  ) %&gt;% 
+  select(-PROVIDER_NAME_RECENT, -facility) %&gt;% 
+  select(THCIC_ID, PROVIDER_NAME_CLEANED, everything())
+
+providers_export %&gt;% 
+  write_csv(&quot;exports/providers_export.csv&quot;)</code></pre>
 </div>
 <div id="export-to-rds" class="section level2">
 <h2>Export to rds</h2>

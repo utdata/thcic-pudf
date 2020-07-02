@@ -118,6 +118,35 @@ del_cleaned %>%
   count(PROVIDER_NAME) %>% 
   filter(n > 1)
 ```
+## Providers export
+
+```{r providers_export}
+providers_export <- del %>% 
+  distinct(THCIC_ID, PROVIDER_NAME, DISCHARGE) %>% 
+  arrange(THCIC_ID, DISCHARGE) %>% 
+  select(THCIC_ID, PROVIDER_NAME) %>% 
+  group_by(THCIC_ID) %>% 
+  slice(tail(row_number(), 1)) %>% 
+  rename(PROVIDER_NAME_RECENT = PROVIDER_NAME) %>% 
+  left_join(facilities_list, by = c("THCIC_ID" = "thcic_id")) %>% 
+  select(THCIC_ID, PROVIDER_NAME_RECENT, facility, address, city, county, zip, facility_type, state_license_number) %>% 
+  # Create new provider name and fill from facilities list
+  mutate(
+    PROVIDER_NAME_CLEANED = case_when(
+       is.na(facility) ~ PROVIDER_NAME_RECENT,
+       TRUE ~ facility
+    )
+  ) %>% 
+  select(-PROVIDER_NAME_RECENT, -facility) %>% 
+  select(THCIC_ID, PROVIDER_NAME_CLEANED, everything())
+
+providers_export %>% 
+  write_csv("exports/providers_export.csv")
+
+```
+
+
+
 ## Export to rds
 
 ```{r export}
