@@ -19,7 +19,7 @@ This analysis looks at episiotomy rates using the [Texas Health Care Information
 library(tidyverse)
 library(janitor)
 library(DT)
-# library(data.table)
+library(tigris)
 ```
 
 ```{r imports}
@@ -223,6 +223,90 @@ lf_epi_rate_hosp_qr_laredo_plot %>%
 ```
 
 
+## Patient county
+
+Get FIPS codes lookup for county names.
+
+```{r tx_fips}
+tx_fips <- fips_codes %>% 
+  filter(state == "TX") %>% 
+  select(county_code, county)
+# peek
+tx_fips %>% head(2)
+```
+
+### Episiotomies by county, full data
+
+This looks at rates by the patient's county (the hospital could be elsewhere.). Currently not filtered for any minimum caseload since it is a 3+ year period.
+
+```{r lf_epi_rate_county}
+lf_epi_rate_county <- lf_epi %>%
+  group_by(PAT_COUNTY, EPI) %>% 
+  summarise(
+    EPI_CNT = n()
+  ) %>% 
+  # join for county names
+  left_join(tx_fips, by=c( "PAT_COUNTY" = "county_code")) %>% 
+  ungroup() %>% 
+  rename(COUNTY = county) %>% 
+  # pivot for mutates
+  pivot_wider(names_from = EPI, values_from = EPI_CNT) %>% 
+  rename(
+    EPIF = "FALSE",
+    EPIT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = EPIF + EPIT,
+    EPIRATE = round_half_up((EPIT / TOTAL) * 100,1)
+  ) %>% 
+  select(PAT_COUNTY, COUNTY, TOTAL, EPIF, EPIT, EPIRATE) %>% 
+  # filter by total
+  # filter(
+  #   TOTAL >= 300
+  #   ) %>% 
+  arrange(EPIRATE %>% desc())
+
+lf_epi_rate_county %>%   
+    datatable()
+```
+
+### Episiotimies by county, by year
+
+Group by patient county. This table excludes fewer than 10 cases in a county in a given year.
+
+
+```{r lf_epi_rate_county_yr}
+# pivot to crate the rate based on logical EPI column
+lf_epi_rate_county_yr <- lf_epi %>% 
+  group_by(YR, PAT_COUNTY, EPI) %>% 
+  summarise(
+    EPI_CNT = n()
+  ) %>% 
+  # Join to add county names
+  left_join(tx_fips, by=c( "PAT_COUNTY" = "county_code")) %>% 
+  ungroup() %>% 
+  rename(COUNTY = county) %>% 
+  pivot_wider(names_from = EPI, values_from = EPI_CNT) %>% 
+  rename(
+    EPIF = "FALSE",
+    EPIT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = EPIF + EPIT,
+    EPIRATE = round_half_up((EPIT / TOTAL) * 100,1) %>% 
+    # filter caseload
+    filter(TOTAL >= 10)
+  )
+
+# select, pivot to see years.
+lf_epi_rate_county_yr_table <- lf_epi_rate_county_yr %>% 
+  select(YR, COUNTY, EPIRATE) %>% 
+  pivot_wider(names_from = YR, values_from = EPIRATE) %>% 
+  arrange(`2019` %>% desc())
+
+lf_epi_rate_county_yr_table %>% datatable()
+```
+
 ## Summaries
 
 ### Statewide episiotomy rate
@@ -308,6 +392,7 @@ lf_epi_rate_hosp_yr_summary
 Writing out aggregate files. Here is a list of CSVs exports:
 
 - lf_epi_rate_hosp_yr: Grouped by YR, PROVIDER NAME. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.
+- lf_epi_rate_county_yr: Grouped by YR, PAT_COUNTY, COUNTY. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.
 
 
 ```{r write}
@@ -323,6 +408,8 @@ if (test_flag == F) lf_epi_rate_hosp_yr %>%
   arrange(PROVIDER_NAME,YR) %>%
   write_csv("exports/lf_epi_rate_hosp_yr.csv")
 
+if (test_flag == F) lf_epi_rate_county_yr %>%
+  write_csv("exports/lf_epi_rate_county_yr.CSV")
 
 beepr::beep(4)
 ```

@@ -40,6 +40,7 @@ Exclude cases:
 library(tidyverse)
 library(janitor)
 library(DT)
+library(tigris)
 ```
 
 ## Import of deliveries
@@ -356,6 +357,86 @@ ahrq_pcsec_rate_hosp_qr %>%
   labs(title = "Primary Cesarean rate by quarter, Laredo", x = "QUARTER", y = "Primary Cesarean Rate")
 ```
 
+## Patient County
+
+A look at episitomies by the county of the patient. Note the hospital could be elsewhere.
+
+```{r tx_fips}
+tx_fips <- fips_codes %>% 
+  filter(state == "TX") %>% 
+  select(county_code, county)
+# peek
+tx_fips %>% head(2)
+```
+### Primary cesarean by county, full data
+
+Currently not filtered for any minimum caseload since it is a 3+ year period.
+
+```{r ahrq_pcsec_rate_county}
+ahrq_pcsec_rate_county <- ahrq_pcsec %>% 
+  group_by(PAT_COUNTY, PCSEC) %>% 
+  summarize(CNT = n()) %>% 
+  ### join for county names
+  left_join(tx_fips, by=c( "PAT_COUNTY" = "county_code")) %>% 
+  ungroup() %>% 
+  rename(COUNTY = county) %>% 
+  pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
+  rename(
+    NPCSEC_CNT = "FALSE",
+    PCSEC_CNT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = NPCSEC_CNT + PCSEC_CNT
+  ) %>% 
+  ### filter by cases
+  # filter(TOTAL >= 10) %>%
+  mutate(
+    PCRATE = round_half_up((PCSEC_CNT / TOTAL) * 100,1)
+  ) %>%
+    arrange(PCRATE %>% desc())
+
+ahrq_pcsec_rate_county %>% 
+  select(-PAT_COUNTY) %>% 
+    datatable()
+```
+
+### Primary cesarean by county, by year
+
+This table excludes fewer than 10 cases in a county in a given year, which reduces the number of available counties.
+
+```{r ahrq_pcsec_rate_county_yr}
+ahrq_pcsec_rate_county_yr <- ahrq_pcsec %>% 
+  group_by(YR, PAT_COUNTY, PCSEC) %>% 
+  summarize(CNT = n()) %>% 
+  ### join for county names
+  left_join(tx_fips, by=c( "PAT_COUNTY" = "county_code")) %>% 
+  ungroup() %>% 
+  rename(COUNTY = county) %>% 
+  pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
+  rename(
+    NPCSEC_CNT = "FALSE",
+    PCSEC_CNT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = NPCSEC_CNT + PCSEC_CNT
+  ) %>% 
+  ### filter by caseload
+  filter(TOTAL >= 10) %>%
+  mutate(
+    PCRATE = round_half_up((PCSEC_CNT / TOTAL) * 100,1)
+  ) %>%
+    arrange(PCRATE %>% desc())
+
+ahrq_pcsec_rate_county_yr_table <- ahrq_pcsec_rate_county_yr %>% 
+  arrange(YR) %>% 
+  select(YR, COUNTY, PCRATE) %>% 
+  pivot_wider(names_from = YR, values_from = PCRATE) %>% 
+  arrange(`2019` %>% desc())
+
+ahrq_pcsec_rate_county_yr_table %>%  datatable()
+
+```
+
 
 ## Summaries
 
@@ -442,7 +523,8 @@ ahrq_pcsec_rate_hosp_yr_summary
 
 Writing out aggregate files. Here is a list of CSVs exports:
 
-- ahrq_pcsec_rate_hosp_yr: Grouped by PROVIDER_NAME and UR. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
+- ahrq_pcsec_rate_hosp_yr: Grouped by PROVIDER_NAME and YR. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
+- ahrq_pcsec_rate_hosp_yr: Grouped by PAT_COUNTY, COUNTY. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
 
 ```{r write}
 # if (test_flag == F) ahrq_pcsec %>% write_rds("data-processed/ahrq_pcsec.rds")
@@ -456,6 +538,9 @@ if (test_flag == F) ahrq_pcsec_rate_hosp_yr_summary %>%
 if (test_flag == F) ahrq_pcsec_rate_hosp_yr %>%
   arrange(PROVIDER_NAME,YR) %>%
   write_csv("exports/ahrq_pcsec_rate_hosp_yr.csv")
+
+if (test_flag == F) ahrq_pcsec_rate_county_yr %>%
+  write_csv("exports/ahrq_pcsec_rate_county_yr.csv")
 
 # A klaxon to indicate the processing is complete
 beepr::beep(4)
