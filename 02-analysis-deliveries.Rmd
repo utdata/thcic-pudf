@@ -36,6 +36,9 @@ library(tidyverse)
 library(dplyr)
 library(janitor)
 library(DT)
+
+# suppresses grouping warning
+options(dplyr.summarise.inform = FALSE)
 ```
 
 ### Import all deliveries
@@ -157,6 +160,25 @@ del %>%
 > At this point our data is processed.
 
 ---
+
+## Total deliveries per hospital per year
+
+Total deliveries after filtering years with fewer than 10. Note 2019 is partial year.
+
+```{r deliveries_yr}
+
+# group and count
+deliveries_yr <- del %>% 
+  group_by(YR, PROVIDER_NAME) %>% 
+  summarize(BIRTHS = n()) %>% 
+  filter(BIRTHS > 10)
+
+# pivot for table
+deliveries_yr %>%
+  pivot_wider(names_from = YR, values_from = BIRTHS) %>%
+  datatable()
+```
+
 
 ## Dealing with doctor suppressions
 
@@ -302,6 +324,82 @@ del %>%
   select(YR, PROVIDER_NAME, RATE) %>% 
   pivot_wider(names_from = YR, values_from = RATE)
 ```
+
+## Count of doctors delivering 2019
+
+Counts the number of different doctors delivering in hospitals in 2019. Starts with data that filters the suppressed doctors.
+
+Includes Laredo breakout.
+
+```{r docs_2019}
+
+docs_2019 <- del_supp %>% 
+  filter(
+    YR == 2019
+    ) %>% 
+  group_by(PROVIDER_NAME) %>% 
+  summarise(
+    DOCS = n_distinct(ATTENDING_PHYSICIAN_UNIF_ID)
+  )
+
+docs_2019 %>% 
+  datatable
+
+# filtering for laredo
+docs_2019 %>% 
+  filter(
+    str_detect(PROVIDER_NAME,"Laredo")
+  )
+```
+
+
+> Needs work
+
+## Average deliveries per doctor per hospital per quarter
+
+> Quarter is the smallest unit of datetime available
+
+This look computes the number of doctors and deliveries per each quarter in 2019 and then gets the average for each measure. It uses data after filtering for suppressed doctors (which would combine procedures by many doctors).
+  
+[rowwise](https://dplyr.tidyverse.org/dev/articles/rowwise.html) was very helpful for this.
+
+  
+```{r dels_qr}
+dels_qr <- del_supp %>% 
+  filter(YR == 2019) %>% 
+  group_by(DISCHARGE, PROVIDER_NAME) %>% 
+  summarize(
+    DOCS = n_distinct(ATTENDING_PHYSICIAN_UNIF_ID),
+    DELS = n()
+  )
+
+# mean docs
+docs_mean <- dels_qr %>% 
+  select(-DELS) %>% 
+  pivot_wider(names_from = DISCHARGE, values_from = DOCS) %>% 
+  mutate(
+    AVG_DOCS = rowMeans(across(where(is.numeric)), na.rm = TRUE) %>%
+      round_half_up(1)
+    )
+
+# mean deliveries
+dels_mean <- dels_qr %>% 
+  select(-DOCS) %>% 
+  pivot_wider(names_from = DISCHARGE, values_from = DELS) %>% 
+  mutate(
+    AVG_DELS = rowMeans(across(where(is.numeric)), na.rm = TRUE) %>%
+      round_half_up(1)
+    )
+
+docs_dels_mean <- docs_mean %>% 
+  inner_join(dels_mean, by = "PROVIDER_NAME") %>% 
+  select(PROVIDER_NAME, starts_with("AVG"))
+
+docs_dels_mean %>% 
+  datatable
+```
+
+
 ## Cesarean rates by hospital
 
 Here we look at all deliveries to see how many mothers have Cesareans. Note this starts with all ATTENDING_PHYSICIANS, including those who's IDs are suppressed. These are also all Cesareans, complicated or not. This is a simple rate of Cesarean births / All births in order to get an idea how many are performed.
@@ -582,8 +680,11 @@ epicsec_rate_hosp_yr_summary
 
 For export:
 
+- deliveries_yr: Grouped by year and provider. Observations are deliveries.
+- docs_dels_mean: Provider, average of doctors, average of deliveries over each quarter in 2019. (i.e, count by quarter, then the average of those.)
 - csec_hosp_rate_yr: Grouped by id, year and name. Observations are NCSEC (not cesarean), CSEC (cesarean), TOTAL and RATE.
 - epicsec_rate_hosp_yr: Grouped by id, year and name. Observations are NEPICSEC (Not either epi or csec), EPICSEC (is either), TOTAL and RATE
+
 
 Plus summary files for another notebook.
 
@@ -598,6 +699,14 @@ if (test_flag == F) epicsec_rate_tx_yr_summary %>%
 if (test_flag == F) epicsec_rate_hosp_yr_summary %>%
   write_rds("data-processed/epicsec_rate_hosp_yr_summary.rds")
 
+if (test_flag == F) deliveries_yr %>%
+  arrange(PROVIDER_NAME) %>%
+  write_csv("exports/deliveries_yr.csv")
+
+if (test_flag == F) docs_dels_mean %>%
+  arrange(PROVIDER_NAME) %>%
+  write_csv("exports/docs_dels_mean.csv")
+
 if (test_flag == F) csec_hosp_rate_yr %>%
   arrange(PROVIDER_NAME) %>%
   write_csv("exports/csec_hosp_rate_yr.csv")
@@ -605,8 +714,6 @@ if (test_flag == F) csec_hosp_rate_yr %>%
 if (test_flag == F) epicsec_rate_hosp_yr %>%
   arrange(PROVIDER_NAME) %>%
   write_csv("exports/epicsec_rate_hosp_yr.csv")
-
-
 
 
 # A klaxon to indicate the processing is complete

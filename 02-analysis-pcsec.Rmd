@@ -437,6 +437,46 @@ ahrq_pcsec_rate_county_yr_table %>%  datatable()
 
 ```
 
+## By First Payment Source
+
+Set a medi-value: MA, MB, MC
+FIRST_PAYMENT_SRC
+
+```{r set_medi}
+ahrq_pcsec %>% 
+  count(FIRST_PAYMENT_SRC)
+```
+
+
+```{r ahrq_pcsec_rate_payment}
+ahrq_pcsec_rate_county <- ahrq_pcsec %>% 
+  group_by(PAT_COUNTY, PCSEC) %>% 
+  summarize(CNT = n()) %>% 
+  ### join for county names
+  left_join(tx_fips, by=c( "PAT_COUNTY" = "county_code")) %>% 
+  ungroup() %>% 
+  rename(COUNTY = county) %>% 
+  pivot_wider(names_from = PCSEC, values_from = CNT) %>% 
+  rename(
+    NPCSEC_CNT = "FALSE",
+    PCSEC_CNT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = NPCSEC_CNT + PCSEC_CNT
+  ) %>% 
+  ### filter by cases
+  # filter(TOTAL >= 10) %>%
+  mutate(
+    PCRATE = round_half_up((PCSEC_CNT / TOTAL) * 100,1)
+  ) %>%
+    arrange(PCRATE %>% desc())
+
+ahrq_pcsec_rate_county %>% 
+  select(-PAT_COUNTY) %>% 
+    datatable()
+```
+
+
 
 ## Summaries
 

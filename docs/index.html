@@ -1697,8 +1697,11 @@ The University of Texas at Austin</p>
 <ul>
 <li>ahrq_pcsec_rate_hosp_yr: Grouped by PROVIDER_NAME and UR. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).</li>
 <li>lf_epi_rate_hosp_yr: Grouped by YR, PROVIDER NAME. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.</li>
+<li>lf_epi_rate_county_yr: Grouped by YR, PAT_COUNTY, COUNTY. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.</li>
 <li>csec_hosp_rate_yr: Grouped by id, year and name. Observations are NCSEC (not cesarean), CSEC (cesarean), TOTAL and RATE.</li>
 <li>epicsec_rate_hosp_yr: Grouped by id, year and name. Observations are NEPICSEC (Not either epi or csec), EPICSEC (is either), TOTAL and RATE</li>
+<li>deliveries_yr: Grouped by year and provider. Observations are deliveries.</li>
+<li>docs_dels_mean: Provider, average of doctors, average of deliveries over each quarter in 2019. (i.e, count by quarter, then the average of those.)</li>
 <li>summary_data: Summary data for the major categories.</li>
 <li>providers_export: Names and addresses of hospitals in the analysis.</li>
 </ul>

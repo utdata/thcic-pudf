@@ -293,10 +293,9 @@ lf_epi_rate_county_yr <- lf_epi %>%
   ) %>% 
   mutate(
     TOTAL = EPIF + EPIT,
-    EPIRATE = round_half_up((EPIT / TOTAL) * 100,1) %>% 
+    EPIRATE = round_half_up((EPIT / TOTAL) * 100,1)) %>% 
     # filter caseload
     filter(TOTAL >= 10)
-  )
 
 # select, pivot to see years.
 lf_epi_rate_county_yr_table <- lf_epi_rate_county_yr %>% 
@@ -409,7 +408,7 @@ if (test_flag == F) lf_epi_rate_hosp_yr %>%
   write_csv("exports/lf_epi_rate_hosp_yr.csv")
 
 if (test_flag == F) lf_epi_rate_county_yr %>%
-  write_csv("exports/lf_epi_rate_county_yr.CSV")
+  write_csv("exports/lf_epi_rate_county_yr.csv")
 
 beepr::beep(4)
 ```
