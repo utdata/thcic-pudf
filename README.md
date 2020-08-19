@@ -70,6 +70,10 @@ A series of aggregated data that may prove useful. In the `exports/` folder:
 - summary_data: Summary data for the major categories.
 - providers_export: Names and addresses of hospitals in the analysis.
 
+### Notes
+
+There was a data correction sent out 2020-08-14 to replace some fields for some records in the `PUDF_base1_3Q2019_tab.txt` data file. The replacement file is in data-raw, but not yet applied because we are not using the fields noted, `TOTAL_CHARGES` and `TOTAL_CHARGES_ACCOMM`. If that changes, I'll need to update them.
+
 ### Music to get you through it
 
 A good portion of this project was made possible through [Iron Maiden Radio](https://www.pandora.com/station/play/847050113183194133) on Pandora.
