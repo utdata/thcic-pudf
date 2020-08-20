@@ -64,9 +64,9 @@ A series of aggregated data that may prove useful. In the `exports/` folder:
 - lf_epi_rate_hosp_yr: Grouped by YR, PROVIDER NAME. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.
 - lf_epi_rate_county_yr: Grouped by YR, PAT_COUNTY, COUNTY. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.
 - csec_hosp_rate_yr: Grouped by id, year and name. Observations are NCSEC (not cesarean), CSEC (cesarean), TOTAL and RATE.
-- epicsec_rate_hosp_yr: Grouped by id, year and name. Observations are NEPICSEC (Not either epi or csec), EPICSEC (is either), TOTAL and RATE
+- epicsec_rate_hosp_yr: Grouped by ID, year and name. Observations are NEPICSEC (Not either epi or csec), EPICSEC (is either), TOTAL and RATE
 - deliveries_yr: Grouped by year and provider. Observations are deliveries.
-- docs_dels_mean: Provider, average of doctors, average of deliveries over each quarter in 2019. (i.e, count by quarter, then the average of those.)
+- del_doc_hosp_2019: Grouped by THCIC_ID, PROVIDER_NAME. Filtered for 2019. Provides total DELIVERIES, total PHYSICIANS, DELSPERDOC (deliveries per doctor in 2019), DELSPERWK (DELSPERDOC divided by number of weeks in data), SUSPECT (if hospital has lots of suppressed doctors).
 - summary_data: Summary data for the major categories.
 - providers_export: Names and addresses of hospitals in the analysis.
 

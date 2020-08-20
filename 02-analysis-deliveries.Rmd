@@ -11,22 +11,20 @@ By **Christian McDonald**, Assistant Professor of Practice\
 School of Journalism, Moody College of Communication\
 University of Texas at Austin
 
+> If we get 4q2019 then `week_var` will need to be updated.
+
 ## Purpose of this analysis
 
 The purpose of this notebook is to look at the number of deliveries per doctor and some subsets of that, answering the following questions:
 
-- How many doctors per hospital are doing deliveries and how many deliveries do they do each year?
+- How many doctors per hospital are doing deliveries and how many deliveries do they do each year? Extrapolate to deliveries per week.
 - Of all deliveries in a year, what percentage of women who went in to give birth got an episiotomy or C-section. Both statewide, and for hospitals of interest.
 
 I DO NOT filter for complications, fetal deaths or other factors. This could be revisited later, but the idea is to see how many people are served for these procedures regardless of complications.
 
-I use the `ATTENDING_PHYSICIAN_UNIF_ID` field to identify the attending physician, described as "Unique identifier assigned to the licensed physician expected to certify medical necessity of services rendered, with primary responsibility for the patient’s medical care and treatment." That indication does not guarantee the doctor performed a specific procedure.
+I use the `ATTENDING_PHYSICIAN_UNIF_ID` field to identify the attending physician, described as "Unique identifier assigned to the licensed physician expected to certify medical necessity of services rendered, with primary responsibility for the patient’s medical care and treatment." That indication does not guarantee the doctor performed a specific procedure but billing experts tell us this is a valid indication of a maternal patient's doctor.
 
-There is also a `OPERATING_PHYSICIAN_UNIF_ID` field for each patient: "Unique identifier assigned to the operating physician or physician other than the attending physician."
-
-> Both of the PHYSICIAN values are suppressed if there are fewer than 5 in a quarter, or if the license was temporary our could not be matched. That appears to be a significant suppression for many hospitals.
-
-As I understand these, there is no guarantee that either doctor actually performed a specific procedure, but the ATTENDING PHYSICIAN should be responsible for the patient's care.
+> The ATTENDING_PHYSICIAN_UNIF_ID values are suppressed if there are fewer than 5 in a quarter, or if the license was temporary our could not be matched. That appears to be a significant suppression for many hospitals.
 
 ## Project setup
 
@@ -157,19 +155,110 @@ del %>%
   rename(RECORD = n)
 ```
 
+### Doctor suppression indicator
+
+The ATTENDING_PHYSICIAN_UNIF_ID is "Suppressed when the number of physicians represented in a DRG for a hospital is less than the minimum cell size of five."
+
+- 9999999998: Cell size less than 5
+- 9999999999: Temporary license or license number could not be matched
+
+I create a variable if doctor is suppressed ...
+
+```{r supp_add}
+suppressed = c("9999999998", "9999999999")
+
+# add value of suppressed doctor to data
+del <- del %>% 
+  mutate(
+    PSUPP = if_else(ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed, T, F)
+  )
+
+```
+
 > At this point our data is processed.
 
 ---
 
+## Understanding the scope of doctor suppressions
+
+Use the created `PSPP` field to count overall suppressions to get idea of scope.
+
+```{r supp_look}
+del %>% 
+  tabyl(PSUPP) %>% 
+  rename(count = n) %>% 
+  adorn_pct_formatting()
+```
+
+The ATTENDING_PHYSICIAN is suppressed in 6.5% of deliveries. For some hospitals, like Brownwood Regional Medical Center, all the physician data is suppressed.
+
+```{r supp_count}
+del %>% 
+  filter(str_detect(PROVIDER_NAME, "Brownwood Regional Medical Center")) %>% 
+  tabyl(PSUPP) %>% 
+  rename(count = n) %>% 
+  adorn_pct_formatting()
+```
+
+### Laredo suppressions
+
+Since our hospitals of interest are in Laredo, let's check how many of those are suppressed as well.
+
+```{r supp_count_laredo}
+del %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo")) %>% 
+  tabyl(PSUPP, PROVIDER_NAME) %>% 
+  adorn_percentages("col") %>%
+  adorn_pct_formatting(digits = 2) %>%
+  adorn_ns()
+```
+
+### Doctor suppression rates per hospital in 2019
+
+Later we want to know which hospitals have high doctor suppression rates, which would indicate that our deliveries per doctor calculations could be suspect. If the value for `SUSPECT` is `TRUE`, then the suppression rate is higher than 10% or otherwise suspect.
+
+```{r supp_rate_hosp}
+supp_rate_hosp <- del %>% 
+  group_by(THCIC_ID, PROVIDER_NAME, PSUPP) %>% 
+  summarize(
+    CNT = n()
+  ) %>% 
+  pivot_wider(names_from = PSUPP, values_from = CNT) %>% 
+  rename(
+    NSUPP = `FALSE`,
+    YSUPP = `TRUE`
+  ) %>% 
+  mutate(
+    S_RT = (YSUPP / (NSUPP + YSUPP)) %>% round_half_up(2),
+    SUSPECT = case_when(S_RT < .1 ~ F,
+      TRUE ~ T)
+  )
+
+supp_rate_hosp %>% head(10)
+```
+
+### Removing suppressed doctors
+
+To achieve a count of deliveries per doctor, I remove the records where the ATTENDING_PHYSICIAN was suppressed as this could combine multiple doctors into the same group. This suppression may have more affect on some hospitals than others.
+
+```{r del_supp}
+del_supp <- del %>% 
+  filter(
+    !ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed
+  )
+```
+
 ## Total deliveries per hospital per year
 
-Total deliveries after filtering years with fewer than 10. Note 2019 is partial year.
+> Note 2019 is partial year.
+
+Total deliveries after filtering years with fewer than 10. 
 
 ```{r deliveries_yr}
 
 # group and count
 deliveries_yr <- del %>% 
-  group_by(YR, PROVIDER_NAME) %>% 
+  group_by(YR, THCIC_ID, PROVIDER_NAME) %>% 
   summarize(BIRTHS = n()) %>% 
   filter(BIRTHS > 10)
 
@@ -179,226 +268,38 @@ deliveries_yr %>%
   datatable()
 ```
 
+## 2019 deliveries per doctor, per week
 
-## Dealing with doctor suppressions
+> `week_var` will need update if we get 4q_2019 data.
 
-Both ATTENDING_PHYSICIAN_UNIF_ID and OPERATING_PHYSICIAN_UNIF_ID are "Suppressed when the number of physicians represented in a DRG for a hospital is less than the minimum cell size of five."
+How many deliveries per doctor were there in 2019? How does that extrapolate to average deliveries per week per doctor? Starts with suppressed doctors removed. I add the column `SUSPECT` to indicate hospitals with high doctor suppression rates.
 
-- 9999999998: Cell size less than 5
-- 9999999999: Temporary license or license number could not be matched
+```{r del_doc_hosp_2019}
+# weeks in 9 months of data for 2019. Update to 52.143 with 4Q.
+week_var = 39.107
 
-I create a variable to measure suppressions, and then count the difference.
-
-```{r supp_look}
-suppressed = c("9999999998", "9999999999")
-
-del %>% 
-  mutate(
-    PSUPP = if_else(ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed, T, F)
-  ) %>% 
-  tabyl(PSUPP) %>% 
-  rename(count = n) %>% 
-  adorn_pct_formatting()
-```
-
-The ATTENDING_PHYSICIAN is suppressed in 6.4% of deliveries. For some hospitals, like Brownwood Regional Medical Center, all the physician data is suppressed.
-
-```{r supp_count}
-del %>% 
-  filter(str_detect(PROVIDER_NAME, "Brownwood Regional Medical Center")) %>% 
-  mutate(
-    PSUPP = if_else(ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed, T, F)
-  ) %>% 
-  tabyl(PSUPP) %>% 
-  rename(count = n) %>% 
-  adorn_pct_formatting()
-```
-
-Since our hospitals of interest are in Laredo, let's check how many of those are suppressed as well.
-
-```{r supp_count_laredo}
-del %>% 
-  filter(str_detect(PROVIDER_NAME, "Laredo")) %>% 
-  mutate(
-    PSUPP = if_else(ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed, T, F)
-  ) %>% 
-  tabyl(PSUPP, PROVIDER_NAME) %>% 
-  adorn_percentages("col") %>%
-  adorn_pct_formatting(digits = 2) %>%
-  adorn_ns()
-```
-
-### Removing suppressed doctors
-
-To achieve a count of deliveries per doctor, I remove the records where the ATTENDING_PHYSICIAN was suppressed as this could combine multiple doctors into the same group. This supression may have more affect on some hospitals than others.
-
-```{r del_supp}
-del_supp <- del %>% 
-  filter(
-    !ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed
-  )
-```
-
-## Deliveries per hospital, per doctor
-
-How many deliveries by hospitals from 2016 to present. This is from the data where unknown doctors are suppressed, but does NOT filter for doctors who did few deliveries.
-
-```{r del_hosp_doc}
-del_supp %>% 
-  group_by(PROVIDER_NAME) %>% 
-  summarize(
-    DELIVERIES = n(),
-    PHYSICIANS = n_distinct(ATTENDING_PHYSICIAN_UNIF_ID)
-    ) %>% 
-  mutate(
-    RATE = round_half_up(DELIVERIES/PHYSICIANS, 1)
-  ) %>% 
-  arrange(RATE %>% desc()) %>% 
-  datatable()
-```
-
-### Difference removing infrequent deliveries
-
-In this view I remove doctors with fewer than 20 deliveries in a given year to give a more accurate look at the staff doctors that do the bulk of deliveries.
-
-> The choice of 20 deliveries as a threshold is arbitrary and could be changed if we deem necessary.
-
-```{r del_hosp_doc_freq}
-del_supp %>% 
-  group_by(YR, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  summarize(DELIVERIES = n()) %>% 
-  rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  filter(DELIVERIES >= 20) %>% 
-  group_by(PROVIDER_NAME) %>% 
-  summarize(
-    DELIVERIES = sum(DELIVERIES),
-    PHYSICIANS = n_distinct(PHYSICIAN)
-  ) %>% 
-  mutate(
-    RATE = round_half_up(DELIVERIES/PHYSICIANS,1)
-  ) %>% 
-  arrange(RATE %>% desc()) %>% 
-  datatable()
-```
-
-### Deliveries per doctor at Laredo hospitals
-
-Delivery rate per doctor by year. Unknown doctors are suppressed. Infrequent deliveries (<20/year) are filtered out.
-
-```{r del_hosp_doc_freq_yr_laredo}
-del_supp %>% 
-  filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
-  group_by(YR, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  summarize(DELIVERIES = n()) %>% 
-  rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  filter(DELIVERIES >= 20) %>% 
-  group_by(YR, PROVIDER_NAME) %>% 
-  summarize(
-    DELIVERIES = sum(DELIVERIES),
-    PHYSICIANS = n_distinct(PHYSICIAN)
-  ) %>% 
-  mutate(
-    RATE = round_half_up(DELIVERIES/PHYSICIANS, 1)
-  ) %>% 
-  select(YR, PROVIDER_NAME, RATE) %>% 
-  pivot_wider(names_from = YR, values_from = RATE)
-```
-
-Just how much do doctor suppressions affect these rates in Laredo? We'll do the same calculation on the data but without suppressig unknown doctors. Note this has limitations because multiple doctors could be counted in the two suppression values.
-
-```{r del_hosp_doc_freq_yr_laredo_nosupp}
-del %>% 
-  filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
-  group_by(YR, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  summarize(DELIVERIES = n()) %>% 
-  rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  filter(DELIVERIES >= 20) %>% 
-  group_by(YR, PROVIDER_NAME) %>% 
-  summarize(
-    DELIVERIES = sum(DELIVERIES),
-    PHYSICIANS = n_distinct(PHYSICIAN)
-  ) %>% 
-  mutate(
-    RATE = round_half_up(DELIVERIES/PHYSICIANS, 1)
-  ) %>% 
-  select(YR, PROVIDER_NAME, RATE) %>% 
-  pivot_wider(names_from = YR, values_from = RATE)
-```
-
-## Count of doctors delivering 2019
-
-Counts the number of different doctors delivering in hospitals in 2019. Starts with data that filters the suppressed doctors.
-
-Includes Laredo breakout.
-
-```{r docs_2019}
-
-docs_2019 <- del_supp %>% 
-  filter(
-    YR == 2019
-    ) %>% 
-  group_by(PROVIDER_NAME) %>% 
-  summarise(
-    DOCS = n_distinct(ATTENDING_PHYSICIAN_UNIF_ID)
-  )
-
-docs_2019 %>% 
-  datatable
-
-# filtering for laredo
-docs_2019 %>% 
-  filter(
-    str_detect(PROVIDER_NAME,"Laredo")
-  )
-```
-
-
-> Needs work
-
-## Average deliveries per doctor per hospital per quarter
-
-> Quarter is the smallest unit of datetime available
-
-This look computes the number of doctors and deliveries per each quarter in 2019 and then gets the average for each measure. It uses data after filtering for suppressed doctors (which would combine procedures by many doctors).
-  
-[rowwise](https://dplyr.tidyverse.org/dev/articles/rowwise.html) was very helpful for this.
-
-  
-```{r dels_qr}
-dels_qr <- del_supp %>% 
+del_doc_hosp_2019 <- del_supp %>% 
   filter(YR == 2019) %>% 
-  group_by(DISCHARGE, PROVIDER_NAME) %>% 
+  group_by(THCIC_ID,PROVIDER_NAME) %>% 
   summarize(
-    DOCS = n_distinct(ATTENDING_PHYSICIAN_UNIF_ID),
-    DELS = n()
-  )
-
-# mean docs
-docs_mean <- dels_qr %>% 
-  select(-DELS) %>% 
-  pivot_wider(names_from = DISCHARGE, values_from = DOCS) %>% 
+    PHYSICIANS = n_distinct(ATTENDING_PHYSICIAN_UNIF_ID),
+    DELIVERIES = n()
+  ) %>% 
   mutate(
-    AVG_DOCS = rowMeans(across(where(is.numeric)), na.rm = TRUE) %>%
-      round_half_up(1)
-    )
+    DELSPERDOC = (DELIVERIES / PHYSICIANS) %>% round_half_up(1),
+    DELSPERWK = (DELSPERDOC / week_var) %>% round_half_up(1)
+  ) %>%
+  arrange(DELSPERWK %>% desc())
 
-# mean deliveries
-dels_mean <- dels_qr %>% 
-  select(-DOCS) %>% 
-  pivot_wider(names_from = DISCHARGE, values_from = DELS) %>% 
-  mutate(
-    AVG_DELS = rowMeans(across(where(is.numeric)), na.rm = TRUE) %>%
-      round_half_up(1)
-    )
+# get suppression suspect value
+srh <- supp_rate_hosp %>% 
+  select(THCIC_ID, SUSPECT)
 
-docs_dels_mean <- docs_mean %>% 
-  inner_join(dels_mean, by = "PROVIDER_NAME") %>% 
-  select(PROVIDER_NAME, starts_with("AVG"))
+del_doc_hosp_2019 <- del_doc_hosp_2019 %>% 
+  left_join(srh)
 
-docs_dels_mean %>% 
-  datatable
+del_doc_hosp_2019 %>% datatable()
 ```
-
 
 ## Cesarean rates by hospital
 
@@ -408,7 +309,7 @@ Excludes hospitals with fewer than 300 deliveries in our time span.
 
 ```{r csec_rate_hosp}
 csec_rate_hosp <- del %>% 
-  group_by(PROVIDER_NAME, PRCSE2G) %>% 
+  group_by(THCIC_ID, PROVIDER_NAME, PRCSE2G) %>% 
   count(PRCSE2G) %>% 
   rename(CASES = n) %>%
   pivot_wider(names_from = PRCSE2G, values_from = CASES) %>% 
@@ -480,7 +381,7 @@ Like the simple Cesarean rate above, here we look at all deliveries and note how
 
 ```{r epi_rate_hosp}
 epi_rate_hosp <- del %>% 
-  group_by(PROVIDER_NAME, EPI) %>% 
+  group_by(THCIC_ID, PROVIDER_NAME, EPI) %>% 
   count(EPI) %>% 
   rename(CASES = n) %>% 
   pivot_wider(names_from = EPI, values_from = CASES) %>% 
@@ -510,7 +411,7 @@ epi_rate_hosp %>%
 
 ```{r epi_rate_hosp_yr}
 epi_rate_hosp_yr <- del %>% 
-  group_by(YR, PROVIDER_NAME, EPI) %>% 
+  group_by(YR, THCIC_ID, PROVIDER_NAME, EPI) %>% 
   count(YR, EPI) %>% 
   rename(CASES = n) %>% 
   pivot_wider(names_from = EPI, values_from = CASES) %>% 
@@ -546,7 +447,7 @@ epicsec_rate_hosp <- del %>%
   mutate(
         EPICSEC = if_else((EPI == T | PRCSE2G) == T, T, F)
   ) %>% 
-  count(PROVIDER_NAME, EPICSEC) %>% 
+  count(THCIC_ID, PROVIDER_NAME, EPICSEC) %>% 
   rename(CASES = n) %>% 
   pivot_wider(names_from = EPICSEC, values_from = CASES) %>% 
   rename(
@@ -608,6 +509,79 @@ epicsec_rate_hosp_yr_table %>%
 epicsec_rate_hosp_yr_table %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
+
+## Quality checks
+
+### Difference when removing infrequent deliveries
+
+In this view I remove doctors with fewer than 20 deliveries in a given year to give a more accurate look at the staff doctors that do the bulk of deliveries.
+
+> The choice of 20 deliveries as a threshold is arbitrary and could be changed if we deem necessary.
+
+```{r del_hosp_doc_freq}
+del_hosp_doc_freq <- del_supp %>% 
+  group_by(YR, THCIC_ID, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  summarize(DELIVERIES = n()) %>% 
+  rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  filter(DELIVERIES >= 20) %>% 
+  group_by(THCIC_ID, PROVIDER_NAME) %>% 
+  summarize(
+    DELIVERIES = sum(DELIVERIES),
+    PHYSICIANS = n_distinct(PHYSICIAN)
+  ) %>% 
+  mutate(
+    RATE = round_half_up(DELIVERIES/PHYSICIANS,1)
+  ) %>% 
+  arrange(RATE %>% desc())
+
+del_hosp_doc_freq %>% 
+  datatable()
+```
+
+### Deliveries per doctor at Laredo hospitals
+
+Delivery rate per doctor by year. Unknown doctors are suppressed. Infrequent deliveries (<20/year) are filtered out.
+
+```{r del_hosp_doc_freq_yr_laredo}
+del_supp %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
+  group_by(YR, THCIC_ID, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  summarize(DELIVERIES = n()) %>% 
+  rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  filter(DELIVERIES >= 20) %>% 
+  group_by(YR, THCIC_ID, PROVIDER_NAME) %>% 
+  summarize(
+    DELIVERIES = sum(DELIVERIES),
+    PHYSICIANS = n_distinct(PHYSICIAN)
+  ) %>% 
+  mutate(
+    RATE = round_half_up(DELIVERIES/PHYSICIANS, 1)
+  ) %>% 
+  select(YR, THCIC_ID, PROVIDER_NAME, RATE) %>% 
+  pivot_wider(names_from = YR, values_from = RATE)
+```
+
+Just how much does doctor suppression affect these rates in Laredo? We'll do the same calculation on the data but without suppressing unknown doctors. Note this has limitations because multiple doctors could be counted in the two suppression values.
+
+```{r del_hosp_doc_freq_yr_laredo_nosupp}
+del %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo")) %>%
+  group_by(YR, THCIC_ID, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  summarize(DELIVERIES = n()) %>% 
+  rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
+  filter(DELIVERIES >= 20) %>% 
+  group_by(YR, THCIC_ID, PROVIDER_NAME) %>% 
+  summarize(
+    DELIVERIES = sum(DELIVERIES),
+    PHYSICIANS = n_distinct(PHYSICIAN)
+  ) %>% 
+  mutate(
+    RATE = round_half_up(DELIVERIES/PHYSICIANS, 1)
+  ) %>% 
+  select(YR, THCIC_ID, PROVIDER_NAME, RATE) %>% 
+  pivot_wider(names_from = YR, values_from = RATE)
+```
+
 
 ## Summaries
 
@@ -681,7 +655,7 @@ epicsec_rate_hosp_yr_summary
 For export:
 
 - deliveries_yr: Grouped by year and provider. Observations are deliveries.
-- docs_dels_mean: Provider, average of doctors, average of deliveries over each quarter in 2019. (i.e, count by quarter, then the average of those.)
+- del_doc_hosp_2019: Grouped by THCIC_ID, PROVIDER_NAME. Filtered for 2019. Provides total DELIVERIES, total PHYSICIANS, DELSPERDOC (deliveries per doctor in 2019), DELSPERWK (DELSPERDOC divided by number of weeks in data), SUSPECT (if hospital has lots of suppressed doctors).
 - csec_hosp_rate_yr: Grouped by id, year and name. Observations are NCSEC (not cesarean), CSEC (cesarean), TOTAL and RATE.
 - epicsec_rate_hosp_yr: Grouped by id, year and name. Observations are NEPICSEC (Not either epi or csec), EPICSEC (is either), TOTAL and RATE
 
@@ -703,9 +677,9 @@ if (test_flag == F) deliveries_yr %>%
   arrange(PROVIDER_NAME) %>%
   write_csv("exports/deliveries_yr.csv")
 
-if (test_flag == F) docs_dels_mean %>%
+if (test_flag == F) del_doc_hosp_2019 %>%
   arrange(PROVIDER_NAME) %>%
-  write_csv("exports/docs_dels_mean.csv")
+  write_csv("exports/del_doc_hosp_2019.csv")
 
 if (test_flag == F) csec_hosp_rate_yr %>%
   arrange(PROVIDER_NAME) %>%
