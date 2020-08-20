@@ -106,7 +106,7 @@ Hospitals with fewer than 300 deliveries excluded.
 
 ```{r lf_epi_rate_hosp}
 lf_epi_rate_hosp <- lf_epi %>%
-  group_by(PROVIDER_NAME, EPI) %>% 
+  group_by(THCIC_ID, PROVIDER_NAME, EPI) %>% 
   summarise(
     EPI_CNT = n()
   ) %>% 
@@ -119,7 +119,7 @@ lf_epi_rate_hosp <- lf_epi %>%
     TOTAL = EPIF + EPIT,
     EPIRATE = round_half_up((EPIT / TOTAL) * 100,1)
   ) %>% 
-  select(PROVIDER_NAME, TOTAL, EPIF, EPIT, EPIRATE) %>% 
+  select(THCIC_ID, PROVIDER_NAME, TOTAL, EPIF, EPIT, EPIRATE) %>% 
   filter(
     TOTAL >= 300
     ) %>% 
