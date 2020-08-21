@@ -1,4 +1,4 @@
-THCIC_ID,PROVIDER_NAME_CLEANED,address,city,county,zip,facility_type,state_license_number
+thcic_id,provider_name_cleaned,address,city,county,zip,facility_type,state_license_number
 000102,UT Medical Branch Hospital,301 University Blvd,Galveston,Galveston,77550,Hospital,000
 000105,UT MD Anderson Cancer Center,1515 Holcombe Blvd,Houston,Harris,77030,Hospital,000
 001000,Baptist St Anthonys Hospital,1600 Wallace Blvd,Amarillo,Potter,79106,Hospital,100187
