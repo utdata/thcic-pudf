@@ -7,11 +7,13 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
+> Check for these exclusions, but probably in processing: with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)
+
 By **Christian McDonald**, Assistant Professor of Practice\
 School of Journalism, Moody College of Communication\
 University of Texas at Austin
 
-This is an analysis of the Primary Cesarean Delivery Rate, Uncomplicated, as defined by [AHRQ IQI 33](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf) in 2019:
+This is an analysis of the Primary Cesarean Delivery Rate, Uncomplicated, as defined by [IQI 33 Primary Cesarean Delivery Rate, Uncomplicated](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2020/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf) in 2020:
 
 "First-time Cesarean deliveries without a hysterotomy procedure per 1,000 deliveries. Excludes deliveries with complications (abnormal presentation, preterm delivery, fetal death, multiple gestation diagnoses, or breech procedure)."
 
@@ -19,12 +21,11 @@ This analysis has enough results to avoid defining as "per 1,000 deliveries". I 
 
 ## AHRQ definition
 
+This was updated for 2020.
+
 ### Numerator
 
-Discharges, among cases meeting the inclusion and exclusion rules for the denominator, with either:
-
-- MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P* ) or
-- any-listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP* ) without any-listed ICD- 10-PCS procedure codes for hysterotomy (PRCSE2P* ).
+Discharges, among cases meeting the inclusion and exclusion rules for the denominator, with any- listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP) and without any-listed ICD- 10-PCS procedure codes for hysterotomy (PRCSE2P).
 
 ### Denominator
 
@@ -34,6 +35,7 @@ Exclude cases:
 
 - with any-listed ICD-10-CM diagnosis codes for abnormal presentation, preterm, fetal death, or multiple gestation (Appendix A: PRCSECD)
 - with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD* )
+- with an ungroupable DRG (DRG=999)
 - with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)
 
 ```{r setup, echo=T, results='hide', message=F, warning=F}
@@ -80,8 +82,11 @@ surg_cols <- read_rds("procedures-lists/cols_surg.rds") %>% .$surg
 # appendix a complications list
 prcsecd_list <- read_rds("procedures-lists/ahrq_prcsecd.rds") %>% .$prcsecd
 
+# ICD-10-PCS procedure codes for Cesarean delivery
+prcsecp_list <- read_rds("procedures-lists/ahrq_prcsecp.rds") %>% .$prcsecp
+
 # Cesarean delivery MS-DRG codes, updated
-prcse2g_v2_list <- read_rds("procedures-lists/ahrq_prcse2g_v2.rds") %>% .$prcse2g
+# prcse2g_v2_list <- read_rds("procedures-lists/ahrq_prcse2g_v2.rds") %>% .$prcse2g
 
 # Hysterotomy procedure codes: (PRCSE2P)
 prcse2p_list <- read_rds("procedures-lists/ahrq_prcse2p.rds") %>% .$prcse2p
@@ -139,32 +144,72 @@ del_ucmp <- del_ucmp %>%
 del_ucmp %>% nrow()
 ```
 
+### Filter out ungroupable DRG (DRG=999)
+
+There are two Diagnosis Related Groups in the data, `MS_DRG`: Centers for Medicare and Medicaid Services (CMS) Diagnosis Related Group (DRG), as assigned for hospital payment for Medicare beneficiaries; and `APR_DRG`: All Patient Refined (APR) Diagnosis Related Group (DRG) as assigned by 3M APR-DRG Grouper). I filter out records with "999" in either of them.
+
+```{r}
+del_ucmp <- del_ucmp %>% 
+  filter(
+    (APR_DRG != "999"),
+    (MS_DRG != "999")
+  )
+
+del_ucmp %>% nrow()
+```
+
 This completes our "denominator" set of data. This is saved in `del_ucmp`.
 
 ## Code records for numerator
 
-The AHRQ spec defines two ways to find this. I use the first listed:
-
-"MS-DRG codes for Cesarean delivery (PRCSE2G* ) without any-listed ICD-10-PCS procedure codes for hysterotomy (PRCSE2P)."
+To review: Discharges, among cases meeting the inclusion and exclusion rules for the denominator, with any- listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP) and without any-listed ICD- 10-PCS procedure codes for hysterotomy (PRCSE2P).
 
 > NOTE: In 2019, MS-DRG codes for Cesarean delivery changed and that is not reflected in the AHRQ June 2019 specification. See 01-process-lists for more information.
 
 How I handle this:
 
-- Create a cesarean column updated `PRCSE2G` based on MS-DRG codes. This is an easy `if_else`.
-- Create a column `PRCSE2P` that are hysterotomy cases. This is more complicated because I have to look through each SURG_PROC column for any value in the prcse2p_v2_list.
+- Create a column `PRCSECP` that looks through each SURG_PROC column for any value in the prcecp_list.
+- Create a column `PRCSE2P` that are hysterotomy cases that looks through each SURG_PROC column for any value in the prcse2p_v2_list.
 - Create a primary Cesarean column `PCSEC` based on Cesarean being TRUE and hysterotomy being FALSE.
 
-### Create column for PRCSE2G or cesarean deliveries
 
-```{r csec}
-del_csec <- del_ucmp %>% 
+### Create column PRCSECP for cesarean deliveries
+
+```{r prcsecp}
+del_ucmp <- del_ucmp %>% 
   mutate(
-    PRCSE2G = if_else(MS_DRG %in% prcse2g_v2_list, T, F)
+    PRCSECP = case_when(
+      PRINC_SURG_PROC_CODE %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_1 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_2 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_3 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_4 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_5 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_6 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_7 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_8 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_9 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_10 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_11 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_12 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_13 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_14 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_15 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_16 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_17 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_18 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_19 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_20 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_21 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_22 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_23 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_24 %in% prcsecp_list ~ TRUE,
+      TRUE                     ~  FALSE
+    )
   )
 
-del_csec %>% 
-  count(PRCSE2G)
+del_ucmp %>% 
+  count(PRCSECP)
 ```
 
 ### Create column based on hysterotomy
@@ -179,7 +224,7 @@ I did test the code against unfiltered data to ensure that it does catch the PRC
 
 ```{r hyst}
 #case_when version
-del_csec <- del_csec %>% 
+del_ucmp <- del_ucmp %>% 
   mutate(
     PRCSE2P = case_when(
       PRINC_SURG_PROC_CODE %in% prcse2p_list ~ TRUE,
@@ -212,7 +257,7 @@ del_csec <- del_csec %>%
   )
 
 # peek at results
-del_csec %>% 
+del_ucmp %>% 
   count(PRCSE2P)
 ```
 
@@ -222,16 +267,17 @@ Created the `PCSEC` column and set as **TRUE** only if both PRCSE2G is TRUE and 
 
 ```{r pcsec_indicator}
 
-del_csec <- del_csec %>% 
+del_csec <- del_ucmp %>% 
   mutate(
-    PCSEC = if_else((PRCSE2G == T & PRCSE2P == F), T, F)
+    PCSEC = if_else((PRCSECP == T & PRCSE2P == F), T, F)
   )
 
 # peek at data
-# ahrq_pcsec %>% head()
+del_csec %>% count(PCSEC)
 ```
+This completes our "numerator" set of data. This is saved in `del_csec`.
 
-### Create Medicaid indicator column
+## Create Medicaid indicator column
 
 Creates an `MC` column to indicate **TRUE** if `FIRST_PAYMENT_SRC` value is "MC", which is the indication for Medicaid Also changes NA values to **FASLE** since those would be unknown.
 
@@ -243,7 +289,7 @@ ahrq_pcsec <- del_csec %>%
   )
 ```
 
-This completes the processing of the data.
+This completes the processing of the data. `ahrq_pcsec` is our working dataframe.
 
 ---
 

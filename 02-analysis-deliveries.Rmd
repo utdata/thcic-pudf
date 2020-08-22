@@ -7,6 +7,9 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
+> Needs check for 2020 updates
+
+
 By **Christian McDonald**, Assistant Professor of Practice\
 School of Journalism, Moody College of Communication\
 University of Texas at Austin
@@ -41,7 +44,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ### Import all deliveries
 
-I start with a subset of the [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) that include all deliveries as outlined in AHRQ's [Inpatient Quality Indicators Technical Specifications](https://www.qualityindicators.ahrq.gov/Modules/IQI_TechSpec_ICD10_v2019.aspx). The `DELOCMD` specification in IQI 21 is "All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery". Some cleaning was applied as outlined in the `01-process-ahrq-del-loop` notebook. The result is imported here.
+I start with a subset of the [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) that include all deliveries as outlined in AHRQ's [Inpatient Quality Indicators Technical Specifications](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2020/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf). The `DELOCMD` specification in IQI 33 is "All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery". Some cleaning was applied as outlined in the `01-process-ahrq-del-loop` notebook. The result is imported here.
 
 (I also have test data options, which is a small subset of the data for faster processing in testing.)
 

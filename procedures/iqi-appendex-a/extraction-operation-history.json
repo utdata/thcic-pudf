@@ -1,0 +1,102 @@
+[
+  {
+    "op": "core/column-removal",
+    "columnName": "Column 2",
+    "description": "Remove column Column 2"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "Column 4",
+    "description": "Remove column Column 4"
+  },
+  {
+    "op": "core/row-removal",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "Column 1",
+          "expression": "value",
+          "columnName": "Column 1",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [],
+          "selectBlank": true,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "description": "Remove rows"
+  },
+  {
+    "op": "core/row-removal",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "Column 3",
+          "expression": "value",
+          "columnName": "Column 3",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [],
+          "selectBlank": true,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "description": "Remove rows"
+  },
+  {
+    "op": "core/row-removal",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "text",
+          "name": "Column 1",
+          "columnName": "Column 1",
+          "query": "t",
+          "mode": "regex",
+          "caseSensitive": false,
+          "invert": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "description": "Remove rows"
+  },
+  {
+    "op": "core/transpose-columns-into-rows",
+    "combinedColumnName": "codes",
+    "startColumnName": "Column 1",
+    "columnCount": -1,
+    "ignoreBlankCells": true,
+    "fillDown": false,
+    "prependColumnName": false,
+    "separator": ":",
+    "keyColumnName": null,
+    "valueColumnName": null,
+    "description": "Transpose cells in columns starting with Column 1 into rows in one new column named codes"
+  },
+  {
+    "op": "core/row-reorder",
+    "mode": "row-based",
+    "sorting": {
+      "criteria": [
+        {
+          "valueType": "string",
+          "column": "codes",
+          "blankPosition": 2,
+          "errorPosition": 1,
+          "reverse": false,
+          "caseSensitive": false
+        }
+      ]
+    },
+    "description": "Reorder rows"
+  }
+]
