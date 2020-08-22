@@ -378,7 +378,7 @@ lf_epi_rate_hosp_yr_summary <- lf_epi_rate_hosp_yr %>%
   summarize(
     SUMMARY = "HOSPITAL",
     CATEGORY = "EPISIOTOMY",
-    MEASUREMENT = "MEAN OF RATE",
+    MEASUREMENT = "MEAN_OF_RATE",
     # MEDIAN = median(EPIRATE),
     VALUE = round_half_up(mean(EPIRATE, na.rm = TRUE),1) #MEAN
   )

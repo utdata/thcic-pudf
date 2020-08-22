@@ -730,7 +730,7 @@ epicsec_rate_tx_yr_summary <- del %>%
   ) %>% 
   mutate(
     SUMMARY = "TX",
-    CATEGORY = "EPISIOTOMY OR CESAREAN",
+    CATEGORY = "EPI_OR_CSEC",
     MEASUREMENT = "RATE",
     TOTAL = EPICSEC + NEPICSEC,
     VALUE = round_half_up((EPICSEC / TOTAL * 100), 1) # RATE
@@ -749,7 +749,7 @@ epicsec_rate_hosp_yr_summary <- epicsec_rate_hosp_yr %>%
   summarize(
     SUMMARY = "HOSPITAL",
     CATEGORY = "EPI_OR_CSEC",
-    MEASUREMENT = "MEAN OF RATE",
+    MEASUREMENT = "MEAN_OF_RATE",
     # MEDIAN = median(RATE),
     VALUE = round_half_up(mean(ECRATE, na.rm = TRUE),1) # MEAN OF RATE
   )

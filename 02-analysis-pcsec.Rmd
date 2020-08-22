@@ -541,7 +541,7 @@ ahrq_pcsec_rate_tx_yr_summary <- ahrq_pcsec %>%
   filter(TOTAL >= 100) %>% 
   mutate(
    SUMMARY = "TX",
-   CATEGORY = "PRIMARY CESAREAN",
+   CATEGORY = "PRIMARY_CESAREAN",
    MEASUREMENT = "RATE",
    VALUE = round_half_up((PCSEC_CNT / TOTAL) * 100,1) # RATE
   ) %>%
@@ -558,8 +558,8 @@ ahrq_pcsec_rate_hosp_yr_summary <- ahrq_pcsec_rate_hosp_yr %>%
   group_by(YR) %>% 
   summarize(
     SUMMARY = "HOSPITAL",
-    CATEGORY = "PRIMARY CESAREAN",
-    MEASUREMENT = "MEAN OF RATE",
+    CATEGORY = "PRIMARY_CESAREAN",
+    MEASUREMENT = "MEAN_OF_RATE",
     # MEDIAN = median(PCRATE),
     VALUE = round_half_up(mean(PCRATE),1) #MEAN
   )
