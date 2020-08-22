@@ -692,7 +692,36 @@ del %>%
 
 ## Summaries
 
+### Medicaid summary
+
+Get the rate of medicaid deliveries statewide.
+
+```{r medi_rate_tx_yr_summary}
+medi_rate_tx_yr_summary <- del %>% 
+  mutate(
+    MC = if_else(FIRST_PAYMENT_SRC == "MC", T, F),
+    MC = if_else(is.na(MC), F, MC)
+  ) %>% 
+  count(YR, MC) %>% 
+  rename(CASES = n) %>% 
+  pivot_wider(names_from = MC, values_from = CASES) %>% 
+  rename(MCF = `FALSE`, MCT = `TRUE`) %>% 
+  mutate(
+    SUMMARY = "TX",
+    CATEGORY = "MEDICARE",
+    MEASUREMENT = "RATE",
+    TOTAL = MCF + MCT,
+    VALUE = round_half_up((MCT / TOTAL) * 100, 1) # RATE
+  ) %>% 
+  select(YR, SUMMARY, CATEGORY, MEASUREMENT, VALUE)
+
+medi_rate_tx_yr_summary
+```
+
+
 ### Cesarean summary
+
+Get the rate of cesearean deliveries across the state.
 
 ```{r csec_rate_tx_yr_summary}
 csec_rate_tx_yr_summary <- del %>% 
@@ -714,6 +743,8 @@ csec_rate_tx_yr_summary
 ```
 
 ### Episiotomy & Cesarean summary
+
+Get the percentage of deliveries where either an episiotomy or cesarean were performed.
 
 ```{r epicsec_rate_tx_yr_summary}
 epicsec_rate_tx_yr_summary <- del %>% 
@@ -763,11 +794,14 @@ epicsec_rate_hosp_yr_summary
 
 For export:
 
-- hosp_sums_2019: (Selected characterisics by hospital for 2019). Grouped by YR, THCIC_ID and PROVIDER_NAME. Includes ECRATE (Episiotomy or Cesarean rate), ERATE (Episiotomy rate), CRATE (Cesarean rate), MCRATE (Medicaid rate) and DELSPERWK (Deliveries per doctor per week).
+- hosp_sums_2019: (Selected characteristics by hospital for 2019). Grouped by YR, THCIC_ID and PROVIDER_NAME. Includes ECRATE (Episiotomy or Cesarean rate), ERATE (Episiotomy rate), CRATE (Cesarean rate), MCRATE (Medicaid rate) and DELSPERWK (Deliveries per doctor per week).
 
 Plus summary files for another notebook.
 
 ```{r write}
+
+if (test_flag == F) medi_rate_tx_yr_summary %>%
+  write_rds("data-processed/medi_rate_tx_yr_summary.rds")
 
 if (test_flag == F) csec_rate_tx_yr_summary %>%
   write_rds("data-processed/csec_rate_tx_yr_summary.rds")
