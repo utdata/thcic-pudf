@@ -293,10 +293,10 @@ del_doc_hosp_2019 <- del_supp %>%
 
 # get suppression suspect value
 srh <- supp_rate_hosp %>% 
-  select(THCIC_ID, SUSPECT)
+  select(THCIC_ID, PROVIDER_NAME, SUSPECT)
 
 del_doc_hosp_2019 <- del_doc_hosp_2019 %>% 
-  left_join(srh)
+  left_join(srh, by = c("THCIC_ID", "PROVIDER_NAME"))
 
 del_doc_hosp_2019 %>% datatable()
 ```
@@ -347,7 +347,7 @@ csec_hosp_rate_yr <- del %>%
   rename(NCSEC = "FALSE", CSEC = "TRUE") %>%
   mutate(
     TOTAL = NCSEC + CSEC,
-    RATE = round_half_up((CSEC / TOTAL) * 100, 1)
+    CRATE = round_half_up((CSEC / TOTAL) * 100, 1)
   ) %>%
   filter(
     TOTAL >= 100
@@ -358,8 +358,8 @@ Present the rate as table.
 
 ```{r csec_hosp_rate_yr_table}
 csec_hosp_rate_yr_table <- csec_hosp_rate_yr %>%
-  select(THCIC_ID, YR, PROVIDER_NAME, RATE) %>%
-  pivot_wider(names_from = YR, values_from = RATE) %>%
+  select(THCIC_ID, YR, PROVIDER_NAME, CRATE) %>%
+  pivot_wider(names_from = YR, values_from = CRATE) %>%
   arrange(`2019` %>% desc())
 
 csec_hosp_rate_yr_table %>% 
@@ -391,10 +391,10 @@ epi_rate_hosp <- del %>%
   ) %>% 
   mutate(
     TOTAL = NEPI + EPI,
-    RATE = round_half_up((EPI / TOTAL * 100), 1)
+    ERATE = round_half_up((EPI / TOTAL * 100), 1)
   ) %>% 
   filter(TOTAL >= 300) %>% 
-  arrange(RATE %>% desc())
+  arrange(ERATE %>% desc())
 
 epi_rate_hosp %>% 
   datatable()
@@ -412,22 +412,26 @@ epi_rate_hosp %>%
 ```{r epi_rate_hosp_yr}
 epi_rate_hosp_yr <- del %>% 
   group_by(YR, THCIC_ID, PROVIDER_NAME, EPI) %>% 
-  count(YR, EPI) %>% 
+  count(YR, EPI) %>%
   rename(CASES = n) %>% 
   pivot_wider(names_from = EPI, values_from = CASES) %>% 
   rename(NEPI = "FALSE", EPI = "TRUE") %>% 
   mutate(
     TOTAL = NEPI + EPI,
-    RATE = round_half_up((EPI / TOTAL) * 100, 1)
+    ERATE = round_half_up((EPI / TOTAL) * 100, 1)
   ) %>% 
   filter(
     TOTAL >= 100 
   ) %>% 
-  select(YR, PROVIDER_NAME, RATE) %>% 
-  pivot_wider(names_from = YR, values_from = RATE) %>% 
+  select(YR, THCIC_ID, PROVIDER_NAME, ERATE)
+  
+# pivot for table
+epi_rate_hosp_yr_table <- epi_rate_hosp_yr %>% 
+  pivot_wider(names_from = YR, values_from = ERATE) %>% 
   arrange(`2019` %>% desc())
 
-epi_rate_hosp_yr %>% 
+#peek at table
+epi_rate_hosp_yr_table %>% 
   datatable()
 ```
 
@@ -456,10 +460,10 @@ epicsec_rate_hosp <- del %>%
   ) %>% 
   mutate(
     TOTAL = EPICSEC + NEPICSEC,
-    RATE = round_half_up((EPICSEC / TOTAL * 100), 1)
+    ECRATE = round_half_up((EPICSEC / TOTAL * 100), 1)
   ) %>% 
   filter(TOTAL >= 300) %>% 
-  arrange(RATE %>% desc())
+  arrange(ECRATE %>% desc())
 
 epicsec_rate_hosp %>% 
   datatable()
@@ -474,8 +478,10 @@ epicsec_rate_hosp %>%
 
 ### Episiotomy or Cesarean rate by hospital by year
 
+This uses all deliveries
+
 ```{r epicsec_rate_hosp_yr}
-# prep data for export and table
+# prep data for table
 epicsec_rate_hosp_yr <- del %>% 
   mutate(
     EPICSEC = if_else((EPI == T | PRCSE2G) == T, T, F)
@@ -489,14 +495,16 @@ epicsec_rate_hosp_yr <- del %>%
   ) %>% 
   mutate(
     TOTAL = EPICSEC + NEPICSEC,
-    RATE = round_half_up((EPICSEC / TOTAL * 100), 1)
+    ECRATE = round_half_up((EPICSEC / TOTAL * 100), 1)
   ) %>% 
   filter(TOTAL >= 100)
 
+epicsec_rate_hosp_yr
+
 # pivot data for table
 epicsec_rate_hosp_yr_table <- epicsec_rate_hosp_yr %>% 
-  select(THCIC_ID, YR, PROVIDER_NAME, RATE) %>% 
-  pivot_wider(names_from = YR, values_from = RATE) %>% 
+  select(THCIC_ID, YR, PROVIDER_NAME, ECRATE) %>% 
+  pivot_wider(names_from = YR, values_from = ECRATE) %>% 
   arrange(`2019` %>% desc())
 
 epicsec_rate_hosp_yr_table %>% 
@@ -508,6 +516,105 @@ epicsec_rate_hosp_yr_table %>%
 ```{r epicsec_rate_hosp_yr_laredo}
 epicsec_rate_hosp_yr_table %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo"))
+```
+
+## Get Medicaid rate 2019
+
+One value we don't have yet is the percentage of patients using Medicaid.
+
+```{r mediciad_2019}
+mediciad_2019 <- del %>% 
+  # filter for 2019
+  filter(
+    YR == 2019
+  ) %>% 
+  # create MC col
+  mutate(
+    MC = if_else(FIRST_PAYMENT_SRC == "MC", T, F),
+    MC = if_else(is.na(MC), F, MC)
+  ) %>% 
+  # group and count MC
+  group_by(THCIC_ID, PROVIDER_NAME, PROVIDER_CITY) %>% 
+  count(MC) %>% 
+  # pivot to shape to get rate
+  pivot_wider(names_from = MC, values_from = n) %>% 
+  # get rate
+  mutate(
+    MCRATE = ((`TRUE` / (`TRUE` + `FALSE`)) * 100) %>% round_half_up(1)
+  )
+
+# peek as table
+mediciad_2019 %>% datatable()
+```
+
+## 2019 by hospital summary
+
+Building a single dataframe that has summary data by hospital. This is for the interactive. Before we can join them all, we need to pare some calcs down to 2019 only.
+
+### Get epi rate for 2019
+
+Extrating 2019 for joining later.
+
+```{r epi_rate_hosp_2019}
+epi_rate_hosp_2019 <- epi_rate_hosp_yr %>% 
+  filter(
+    YR == 2019
+  ) %>% 
+  ungroup() %>% 
+  select(THCIC_ID, ERATE)
+```
+
+### Get cesarean rate for 2019
+
+```{r csec_hosp_rate_2019}
+csec_hosp_rate_2019 <- csec_hosp_rate_yr %>% 
+  filter(
+    YR == 2019
+  ) %>% 
+  ungroup() %>% 
+  select(THCIC_ID, CRATE)
+```
+
+
+
+### Combine values
+
+I'm joining various dataframes together, removing unnecessary columns along the way. Some values were calculated from data where doctors were suppresed, and so may be NA.
+
+```{r hosp_sums_2019}
+hosp_sums_2019 <- epicsec_rate_hosp_yr %>% 
+  filter(
+    YR == 2019
+  ) %>% 
+  select(-c("NEPICSEC", "EPICSEC", "TOTAL")) %>% 
+  left_join(
+    providers_list %>% ungroup() %>% select(THCIC_ID, PROVIDER_CITY),
+    by = "THCIC_ID"
+    ) %>% 
+  # reorder
+  select(YR, THCIC_ID, PROVIDER_NAME, PROVIDER_CITY, ECRATE) %>% 
+  # get epirate
+  left_join(epi_rate_hosp_2019, by = "THCIC_ID") %>% 
+  # get crate
+  left_join(csec_hosp_rate_2019, by = "THCIC_ID") %>% 
+  # get medicaid
+  left_join(
+    mediciad_2019 %>%
+      ungroup() %>% 
+      select(THCIC_ID, MCRATE),
+    by = "THCIC_ID") %>% 
+  # get deliveries per wk
+  left_join(
+    del_doc_hosp_2019 %>%
+      ungroup() %>%
+      # remove DELSPERWK where rate is suspect
+      filter(
+        SUSPECT == F
+      ) %>% 
+      select(THCIC_ID, DELSPERWK),
+    by = "THCIC_ID")
+
+hosp_sums_2019 %>% head(20)
 ```
 
 ## Quality checks
@@ -530,9 +637,9 @@ del_hosp_doc_freq <- del_supp %>%
     PHYSICIANS = n_distinct(PHYSICIAN)
   ) %>% 
   mutate(
-    RATE = round_half_up(DELIVERIES/PHYSICIANS,1)
+    DRATE = round_half_up(DELIVERIES/PHYSICIANS,1)
   ) %>% 
-  arrange(RATE %>% desc())
+  arrange(DRATE %>% desc())
 
 del_hosp_doc_freq %>% 
   datatable()
@@ -644,7 +751,7 @@ epicsec_rate_hosp_yr_summary <- epicsec_rate_hosp_yr %>%
     CATEGORY = "EPI_OR_CSEC",
     MEASUREMENT = "MEAN OF RATE",
     # MEDIAN = median(RATE),
-    VALUE = round_half_up(mean(RATE, na.rm = TRUE),1) # MEAN OF RATE
+    VALUE = round_half_up(mean(ECRATE, na.rm = TRUE),1) # MEAN OF RATE
   )
 
 epicsec_rate_hosp_yr_summary
@@ -652,13 +759,11 @@ epicsec_rate_hosp_yr_summary
 
 ## Writing files and closing out
 
+> Make a 2010 hospital-based output for interactive
+
 For export:
 
-- deliveries_yr: Grouped by year and provider. Observations are deliveries.
-- del_doc_hosp_2019: Grouped by THCIC_ID, PROVIDER_NAME. Filtered for 2019. Provides total DELIVERIES, total PHYSICIANS, DELSPERDOC (deliveries per doctor in 2019), DELSPERWK (DELSPERDOC divided by number of weeks in data), SUSPECT (if hospital has lots of suppressed doctors).
-- csec_hosp_rate_yr: Grouped by id, year and name. Observations are NCSEC (not cesarean), CSEC (cesarean), TOTAL and RATE.
-- epicsec_rate_hosp_yr: Grouped by id, year and name. Observations are NEPICSEC (Not either epi or csec), EPICSEC (is either), TOTAL and RATE
-
+- hosp_sums_2019: (Selected characterisics by hospital for 2019). Grouped by YR, THCIC_ID and PROVIDER_NAME. Includes ECRATE (Episiotomy or Cesarean rate), ERATE (Episiotomy rate), CRATE (Cesarean rate), MCRATE (Medicaid rate) and DELSPERWK (Deliveries per doctor per week).
 
 Plus summary files for another notebook.
 
@@ -673,22 +778,9 @@ if (test_flag == F) epicsec_rate_tx_yr_summary %>%
 if (test_flag == F) epicsec_rate_hosp_yr_summary %>%
   write_rds("data-processed/epicsec_rate_hosp_yr_summary.rds")
 
-if (test_flag == F) deliveries_yr %>%
+if (test_flag == F) hosp_sums_2019 %>%
   arrange(PROVIDER_NAME) %>%
-  write_csv("exports/deliveries_yr.csv")
-
-if (test_flag == F) del_doc_hosp_2019 %>%
-  arrange(PROVIDER_NAME) %>%
-  write_csv("exports/del_doc_hosp_2019.csv")
-
-if (test_flag == F) csec_hosp_rate_yr %>%
-  arrange(PROVIDER_NAME) %>%
-  write_csv("exports/csec_hosp_rate_yr.csv")
-
-if (test_flag == F) epicsec_rate_hosp_yr %>%
-  arrange(PROVIDER_NAME) %>%
-  write_csv("exports/epicsec_rate_hosp_yr.csv")
-
+  write_csv("exports/hosp_sums_2019.csv")
 
 # A klaxon to indicate the processing is complete
 beepr::beep(4)

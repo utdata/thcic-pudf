@@ -41,6 +41,9 @@ library(tidyverse)
 library(janitor)
 library(DT)
 library(tigris)
+
+# suppresses grouping warning
+options(dplyr.summarise.inform = FALSE)
 ```
 
 ## Import of deliveries
@@ -101,7 +104,6 @@ del <- del %>%
   rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED)
 ```
 
-
 ## Filter deliveries to set denominator
 
 ### Filter out complicated deliveries
@@ -126,7 +128,7 @@ del_ucmp %>% nrow()
 For this analysis, I need to additionally exclude outcomes "with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD)". This prvbacd_list comes from the AHRQ specification.
 
 ```{r nprv}
-del_nprv <- del_ucmp %>% 
+del_ucmp <- del_ucmp %>% 
   filter_at(
     vars(all_of(diag_cols)),
     all_vars(
@@ -134,10 +136,10 @@ del_nprv <- del_ucmp %>%
     )
   )
 
-del_nprv %>% nrow()
+del_ucmp %>% nrow()
 ```
 
-This completes our "denominator" set of data. This is saved in `del_nprv`.
+This completes our "denominator" set of data. This is saved in `del_ucmp`.
 
 ## Code records for numerator
 
@@ -156,7 +158,7 @@ How I handle this:
 ### Create column for PRCSE2G or cesarean deliveries
 
 ```{r csec}
-del_csec <- del_nprv %>% 
+del_csec <- del_ucmp %>% 
   mutate(
     PRCSE2G = if_else(MS_DRG %in% prcse2g_v2_list, T, F)
   )
@@ -214,19 +216,31 @@ del_csec %>%
   count(PRCSE2P)
 ```
 
-### Create Primary Cesarean column
+### Create Primary Cesarean indicator column
 
-Create `PCSEC` and set as TRUE only if both PRCSE2G is TRUE and PRCSE2P is FALSE.
+Created the `PCSEC` column and set as **TRUE** only if both PRCSE2G is TRUE and PRCSE2P is FALSE.
 
-```{r pcsec}
+```{r pcsec_indicator}
 
-ahrq_pcsec <- del_csec %>% 
+del_csec <- del_csec %>% 
   mutate(
     PCSEC = if_else((PRCSE2G == T & PRCSE2P == F), T, F)
   )
 
 # peek at data
 # ahrq_pcsec %>% head()
+```
+
+### Create Medicaid indicator column
+
+Creates an `MC` column to indicate **TRUE** if `FIRST_PAYMENT_SRC` value is "MC", which is the indication for Medicaid Also changes NA values to **FASLE** since those would be unknown.
+
+```{r mc_indicator}
+ahrq_pcsec <- del_csec %>% 
+  mutate(
+    MC = if_else(FIRST_PAYMENT_SRC == "MC", T, F),
+    MC = if_else(is.na(MC), F, MC)
+  )
 ```
 
 This completes the processing of the data.
@@ -316,7 +330,6 @@ ahrq_pcsec_rate_hosp_yr_table %>%
   filter(str_detect(PROVIDER_NAME, "Laredo"))
 ```
 
-
 ### Chart: Primary Cesarean Rates by year, Laredo
 
 ```{r ahrq_pcsec_rate_hosp_yr_laredo_plot}
@@ -357,9 +370,43 @@ ahrq_pcsec_rate_hosp_qr %>%
   labs(title = "Primary Cesarean rate by quarter, Laredo", x = "QUARTER", y = "Primary Cesarean Rate")
 ```
 
+## Table: Considering Medicaid
+
+The questions we wanted to answer here is: What is the percentage of patients on Medicaid that get a primary cesarean? How does that compare to patients not on medicare?
+
+`MEDI_W_PCSEC` is the percentage of Medicaid (as first payment option) patients that get primary cesareans. `NOT_MEDI_W_PCSEC` is the percentage of patients NOT using Medicaid that get primary cesareans. Printed table filters out hospitals with less than 20 Medicaid births.
+
+```{r mc_compare}
+mc_compare <- ahrq_pcsec %>% 
+  group_by(THCIC_ID, PROVIDER_NAME) %>% 
+  summarize(
+    MCT = sum(MC == T), # medicaid count
+    MCPCT = sum(MC == T & PCSEC == T), # medicaid with primary csection
+    MEDI_W_PCSEC = ((MCPCT/MCT) * 100) %>% round_half_up(1),
+    NMCT = sum(MC != T), # not medicare count
+    NMCPCT = sum(MC != T & PCSEC == T), #not medicaid with primary csection
+    NOT_MEDI_W_PCSEC = ((NMCPCT / NMCT) * 100) %>% round_half_up(1),
+    PDIFF =  MEDI_W_PCSEC - NOT_MEDI_W_PCSEC
+  )
+
+# select fewer cols for easy comparison
+mc_compare %>% 
+  filter(MCT >= 20) %>% # at lest 20 medicaid patients
+  select(THCIC_ID, PROVIDER_NAME, MEDI_W_PCSEC, NOT_MEDI_W_PCSEC, PDIFF) %>%
+  arrange(PDIFF %>% desc()) %>% 
+  datatable()
+```
+### Considering Medicaid, Laredo hospitals
+
+```{r medi_compare_laredo}
+mc_compare %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo"))
+
+```
+
 ## Patient County
 
-A look at episitomies by the county of the patient. Note the hospital could be elsewhere.
+A look at Primary cesarean by the county of the patient. Note the hospital could be elsewhere.
 
 ```{r tx_fips}
 tx_fips <- fips_codes %>% 
@@ -368,6 +415,7 @@ tx_fips <- fips_codes %>%
 # peek
 tx_fips %>% head(2)
 ```
+
 ### Primary cesarean by county, full data
 
 Currently not filtered for any minimum caseload since it is a 3+ year period.
@@ -402,7 +450,7 @@ ahrq_pcsec_rate_county %>%
 
 ### Primary cesarean by county, by year
 
-This table excludes fewer than 10 cases in a county in a given year, which reduces the number of available counties.
+This table excludes records with fewer than 10 cases in a county in a given year, which reduces the number of available counties.
 
 ```{r ahrq_pcsec_rate_county_yr}
 ahrq_pcsec_rate_county_yr <- ahrq_pcsec %>% 
@@ -436,6 +484,7 @@ ahrq_pcsec_rate_county_yr_table <- ahrq_pcsec_rate_county_yr %>%
 ahrq_pcsec_rate_county_yr_table %>%  datatable()
 
 ```
+
 
 ## Summaries
 
@@ -522,8 +571,8 @@ ahrq_pcsec_rate_hosp_yr_summary
 
 Writing out aggregate files. Here is a list of CSVs exports:
 
-- ahrq_pcsec_rate_hosp_yr: Grouped by PROVIDER_NAME and YR. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
-- ahrq_pcsec_rate_hosp_yr: Grouped by PAT_COUNTY, COUNTY. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
+- ahrq_pcsec_rate_hosp_yr: Grouped by PROVIDER_NAME and YR. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate). Includes PROVIDER_CITY.
+- ahrq_pcsec_rate_county_yr: Grouped by PAT_COUNTY, COUNTY. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
 
 ```{r write}
 # if (test_flag == F) ahrq_pcsec %>% write_rds("data-processed/ahrq_pcsec.rds")
@@ -534,7 +583,7 @@ if (test_flag == F) ahrq_pcsec_rate_tx_yr_summary %>%
 if (test_flag == F) ahrq_pcsec_rate_hosp_yr_summary %>%
   write_rds("data-processed/ahrq_pcsec_rate_hosp_yr_summary.rds")
 
-if (test_flag == F) ahrq_pcsec_rate_hosp_yr %>%
+if (test_flag == F) ahrq_pcsec_rate_hosp_yr %>% 
   arrange(PROVIDER_NAME,YR) %>%
   write_csv("exports/ahrq_pcsec_rate_hosp_yr.csv")
 

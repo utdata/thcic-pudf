@@ -1647,6 +1647,12 @@ summary {
 <p><strong>CHRISTIAN MCDONALD</strong>, Assistant Professor of Practice<br />
 School of Journalism, Moody College ofCommunication<br />
 The University of Texas at Austin</p>
+<div id="methodology" class="section level2">
+<h2>Methodology</h2>
+<ul>
+<li><a href="https://utdata.github.io/thcic-pudf/methodology.html">The methodology</a> of the measures and calculations used in the analysis.</li>
+</ul>
+</div>
 <div id="notebooks" class="section level2">
 <h2>Notebooks</h2>
 <div id="primary-cesareans-study" class="section level3">
@@ -1673,14 +1679,9 @@ The University of Texas at Austin</p>
 <li><a href="https://utdata.github.io/thcic-pudf/03-analysis-summaries.html">03-analysis-summaries</a> gives statewide rates and by-hospital averages by year for our key measures.</li>
 </ul>
 </div>
-<div id="methodology" class="section level3">
-<h3>Methodology</h3>
-<ul>
-<li><a href="https://utdata.github.io/thcic-pudf/methodology.html">The methodology</a> of the measures and calculations used in the analysis.</li>
-</ul>
 </div>
-<div id="data-processing-notebooks" class="section level3">
-<h3>Data processing notebooks</h3>
+<div id="data-processing-notebooks" class="section level2">
+<h2>Data processing notebooks</h2>
 <ul>
 <li><a href="https://utdata.github.io/thcic-pudf/00-process-lists.html">00-process-lists</a> defines various lists of codes and columns used within other notebooks.</li>
 <li><a href="https://utdata.github.io/thcic-pudf/0101-process-ahrq-del-loop.html">0101-process-ahrq-del-loop</a> is the method used to find all deliveries from the raw THCIC files.</li>
@@ -1691,29 +1692,49 @@ The University of Texas at Austin</p>
 <li><a href="https://utdata.github.io/thcic-pudf/0102-process-providers.html">0102-process-providers</a> creates a list of the most recent names for hospitals to assist analysis. Can’t be run until the deliveries data is generated.</li>
 </ul>
 </div>
-<div id="exports" class="section level3">
-<h3>Exports</h3>
+<div id="exports" class="section level2">
+<h2>Exports</h2>
 <p>A series of aggregated data that may prove useful. In the <code>exports/</code> folder:</p>
+<div id="from-02-analysis-pcsec" class="section level3">
+<h3>From 02-analysis-pcsec</h3>
 <ul>
-<li>ahrq_pcsec_rate_hosp_yr: Grouped by PROVIDER_NAME and UR. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).</li>
+<li>ahrq_pcsec_rate_hosp_yr: (Primary cesarean rates for uncomplicated deliveries by hospital.) Grouped by PROVIDER_NAME and YR. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate). Includes PROVIDER_CITY.</li>
+<li>ahrq_pcsec_rate_county_yr: (Primary cesarean rates for uncomplicated deliveries by county.) Grouped by PAT_COUNTY, COUNTY. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).</li>
+</ul>
+</div>
+<div id="from-02-analysis-episiotomy" class="section level3">
+<h3>From 02-analysis-episiotomy</h3>
+<ul>
 <li>lf_epi_rate_hosp_yr: Grouped by YR, PROVIDER NAME. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.</li>
 <li>lf_epi_rate_county_yr: Grouped by YR, PAT_COUNTY, COUNTY. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.</li>
-<li>csec_hosp_rate_yr: Grouped by id, year and name. Observations are NCSEC (not cesarean), CSEC (cesarean), TOTAL and RATE.</li>
-<li>epicsec_rate_hosp_yr: Grouped by ID, year and name. Observations are NEPICSEC (Not either epi or csec), EPICSEC (is either), TOTAL and RATE</li>
-<li>deliveries_yr: Grouped by year and provider. Observations are deliveries.</li>
-<li>del_doc_hosp_2019: Grouped by THCIC_ID, PROVIDER_NAME. Filtered for 2019. Provides total DELIVERIES, total PHYSICIANS, DELSPERDOC (deliveries per doctor in 2019), DELSPERWK (DELSPERDOC divided by number of weeks in data), SUSPECT (if hospital has lots of suppressed doctors).</li>
+</ul>
+</div>
+<div id="from-02-analysis-deliveries" class="section level3">
+<h3>From 02-analysis-deliveries</h3>
+<ul>
+<li>hosp_sums_2019: (Selected characterisics by hospital for 2019). Grouped by YR, THCIC_ID, PROVIDER_NAME and PROVIDER_CITY. Includes ECRATE (Episiotomy of Cesarean rate), ERATE (Episiotomy rate), CRATE (Cesarean rate), MCRATE (Medicaid rate) and DELSPERWK (Deliveries per doctor per week).</li>
+</ul>
+</div>
+<div id="from-03-analysis-summaries" class="section level3">
+<h3>From 03-analysis-summaries</h3>
+<ul>
 <li>summary_data: Summary data for the major categories.</li>
+</ul>
+</div>
+<div id="from-0102-process-providers" class="section level3">
+<h3>From 0102-process-providers</h3>
+<ul>
 <li>providers_export: Names and addresses of hospitals in the analysis.</li>
 </ul>
 </div>
-<div id="notes" class="section level3">
-<h3>Notes</h3>
+</div>
+<div id="notes" class="section level2">
+<h2>Notes</h2>
 <p>There was a data correction sent out 2020-08-14 to replace some fields for some records in the <code>PUDF_base1_3Q2019_tab.txt</code> data file. The replacement file is in data-raw, but not yet applied because we are not using the fields noted, <code>TOTAL_CHARGES</code> and <code>TOTAL_CHARGES_ACCOMM</code>. If that changes, I’ll need to update them.</p>
 </div>
-<div id="music-to-get-you-through-it" class="section level3">
-<h3>Music to get you through it</h3>
+<div id="music-to-get-you-through-it" class="section level2">
+<h2>Music to get you through it</h2>
 <p>A good portion of this project was made possible through <a href="https://www.pandora.com/station/play/847050113183194133">Iron Maiden Radio</a> on Pandora.</p>
-</div>
 </div>
 </div>
 
