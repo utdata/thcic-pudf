@@ -16,6 +16,8 @@ The purpose of this file is to identify different data points for interactives.
 
 <img src="resources/thcic_mockup_marked.png" width="300px">
 
+All hosp_sums_2019 values are == THCIC_ID.
+
 - 1: hosp_sums_2019[PROVIDER_NAME]
 - 2: hosp_sums_2019[PROVIDER_CITY]
 - 3: hosp_sums_2019[ECRATE]
