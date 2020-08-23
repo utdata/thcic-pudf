@@ -217,10 +217,9 @@ prcse2p_list %>%
 prcse2p_list %>% nrow()
 ```
 
-
 ### Previous Cesarean delivery diagnosis codes: (PRVBACD)
 
-As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated (2020)
+As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated (2020). Also used for IQI 22 Vaginal Birth After Cesarean (VBAC) Delivery Rate, Uncomplicated (2020).
 
 - with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD*)
 
@@ -264,48 +263,15 @@ vagdelp_list %>%
 vagdelp_list %>% nrow()
 ```
 
-## Other lists used
-
-### Child-bearing age codes
-
-Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest filtering deliveries to women of normal child-bearing age, 15-49.
-
-The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs).
-
-```{r age}
-age_list <- c(
-  "05",
-  "06",
-  "07",
-  "08",
-  "09",
-  "10",
-  "11",
-  "12",
-  "23"
-) %>%  
-  tibble::enframe(name = NULL) %>% 
-  rename(age = value)
-
-age_list %>% 
-  write_rds("procedures-lists/utoha_age.rds")
-
-age_list %>% nrow()
-
-```
-
 ## Leapfrog Episiotomy lists
 
-These definitions come from [Leapfrog Hospital survey measure specifications](https://www.leapfroggroup.org/sites/default/files/Files/2019HospitalSurvey_20190529_v8.0%20%28version%203%29.pdf). There is also a copy in the `resources` directory of this repo.
+These definitions come from [Leapfrog Hospital survey measure specifications](https://www.leapfroggroup.org/sites/default/files/Files/2020HospitalSurvey_20200413_8.1%20%28version%201%29.pdf). There is also a copy in the `resources` directory of this repo.
 
 ### Vaginal MS_DRG codes
 
 ```{r vag_msdrg}
 vag_msdrg_list <- c(
-  "767",
   "768",
-  "774",
-  "775",
   "796",
   "797",
   "798",
@@ -342,6 +308,8 @@ vag_aprdrg_list %>% nrow()
 
 ### Vaginal birth exclusions
 
+Obstructed labor due to shoulder dystocia.
+ 
 ```{r vag_excl}
 vag_excl_list <- c(
   "O660"
@@ -368,6 +336,36 @@ epi_list %>%
   write_rds("procedures-lists/lf_epi.rds")
 
 epi_list %>% nrow()
+```
+
+## Other lists used
+
+### Child-bearing age codes
+
+Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest filtering deliveries to women of normal child-bearing age, 15-49.
+
+The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs).
+
+```{r age}
+age_list <- c(
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "23"
+) %>%  
+  tibble::enframe(name = NULL) %>% 
+  rename(age = value)
+
+age_list %>% 
+  write_rds("procedures-lists/utoha_age.rds")
+
+age_list %>% nrow()
+
 ```
 
 ## Closing out

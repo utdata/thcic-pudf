@@ -9,7 +9,7 @@ knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = e
 
 The purpose of this notebook is to process multiple quarters of [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) into a single data file of all births. This requires importing and applying several filtering options.
 
-We are using AHRQ's [IQI 33 Primary Cesarean Delivery Rate, Uncomplicated](https://qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf) method to define a birth, but do not apply further filtering for complicaitons. We do apply some data filtering/cleaning for missing data as outlined in IQI 33.
+We are using AHRQ's [IQI 33 Primary Cesarean Delivery Rate, Uncomplicated](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2020/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf) method to define a birth, but do not apply further filtering for complicaitons. We do apply some data filtering/cleaning for missing data as outlined in IQI 33.
 
 The output is all `data-processed/ahrq_del_all.rds`, which we can then analyzed in future files.
 
@@ -57,7 +57,7 @@ The functions are set up first, then used later in the processing loop.
 
 ### Filter for birth deliveries
 
-In this case, we are looking at all the diagnostic columns for values in the `delocmd_list` list, which comes from "DELOCMD" in the AHRQ IQI 33 reference.
+In this case, we are looking at all the diagnostic columns for values in the `delocmd_list` list, which comes from "DELOCMD" in the AHRQ IQI 33 reference. It uses the 2020 definitions.
 
 ```{r fun_del}
 delocmd_list <- read_rds("procedures-lists/ahrq_delocmd.rds") %>% .$delocmd

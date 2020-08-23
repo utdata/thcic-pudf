@@ -148,7 +148,7 @@ del_ucmp %>% nrow()
 
 There are two Diagnosis Related Groups in the data, `MS_DRG`: Centers for Medicare and Medicaid Services (CMS) Diagnosis Related Group (DRG), as assigned for hospital payment for Medicare beneficiaries; and `APR_DRG`: All Patient Refined (APR) Diagnosis Related Group (DRG) as assigned by 3M APR-DRG Grouper). I filter out records with "999" in either of them.
 
-```{r}
+```{r drg_ungroupable}
 del_ucmp <- del_ucmp %>% 
   filter(
     (APR_DRG != "999"),

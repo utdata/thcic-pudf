@@ -1822,7 +1822,7 @@ prcse2p_list %&gt;% nrow()</code></pre>
 </div>
 <div id="previous-cesarean-delivery-diagnosis-codes-prvbacd" class="section level3">
 <h3>Previous Cesarean delivery diagnosis codes: (PRVBACD)</h3>
-<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated (2020)</p>
+<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated (2020). Also used for IQI 22 Vaginal Birth After Cesarean (VBAC) Delivery Rate, Uncomplicated (2020).</p>
 <ul>
 <li>with any-listed ICD-10-CM diagnosis codes for previous Cesarean delivery (PRVBACD*)</li>
 </ul>
@@ -1864,43 +1864,13 @@ vagdelp_list %&gt;% nrow()</code></pre>
 <pre><code>## [1] 7</code></pre>
 </div>
 </div>
-<div id="other-lists-used" class="section level2">
-<h2>Other lists used</h2>
-<div id="child-bearing-age-codes" class="section level3">
-<h3>Child-bearing age codes</h3>
-<p>Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest filtering deliveries to women of normal child-bearing age, 15-49.</p>
-<p>The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs).</p>
-<pre class="r"><code>age_list &lt;- c(
-  &quot;05&quot;,
-  &quot;06&quot;,
-  &quot;07&quot;,
-  &quot;08&quot;,
-  &quot;09&quot;,
-  &quot;10&quot;,
-  &quot;11&quot;,
-  &quot;12&quot;,
-  &quot;23&quot;
-) %&gt;%  
-  tibble::enframe(name = NULL) %&gt;% 
-  rename(age = value)
-
-age_list %&gt;% 
-  write_rds(&quot;procedures-lists/utoha_age.rds&quot;)
-
-age_list %&gt;% nrow()</code></pre>
-<pre><code>## [1] 9</code></pre>
-</div>
-</div>
 <div id="leapfrog-episiotomy-lists" class="section level2">
 <h2>Leapfrog Episiotomy lists</h2>
-<p>These definitions come from <a href="https://www.leapfroggroup.org/sites/default/files/Files/2019HospitalSurvey_20190529_v8.0%20%28version%203%29.pdf">Leapfrog Hospital survey measure specifications</a>. There is also a copy in the <code>resources</code> directory of this repo.</p>
+<p>These definitions come from <a href="https://www.leapfroggroup.org/sites/default/files/Files/2020HospitalSurvey_20200413_8.1%20%28version%201%29.pdf">Leapfrog Hospital survey measure specifications</a>. There is also a copy in the <code>resources</code> directory of this repo.</p>
 <div id="vaginal-ms_drg-codes" class="section level3">
 <h3>Vaginal MS_DRG codes</h3>
 <pre class="r"><code>vag_msdrg_list &lt;- c(
-  &quot;767&quot;,
   &quot;768&quot;,
-  &quot;774&quot;,
-  &quot;775&quot;,
   &quot;796&quot;,
   &quot;797&quot;,
   &quot;798&quot;,
@@ -1915,7 +1885,7 @@ vag_msdrg_list %&gt;%
   write_rds(&quot;procedures-lists/lf_vag_msdrg.rds&quot;)
 
 vag_msdrg_list %&gt;% nrow()</code></pre>
-<pre><code>## [1] 10</code></pre>
+<pre><code>## [1] 7</code></pre>
 </div>
 <div id="vaginal-apr_drg-codes" class="section level3">
 <h3>Vaginal APR_DRG codes</h3>
@@ -1935,6 +1905,7 @@ vag_aprdrg_list %&gt;% nrow()</code></pre>
 </div>
 <div id="vaginal-birth-exclusions" class="section level3">
 <h3>Vaginal birth exclusions</h3>
+<p>Obstructed labor due to shoulder dystocia.</p>
 <pre class="r"><code>vag_excl_list &lt;- c(
   &quot;O660&quot;
 ) %&gt;%  
@@ -1960,6 +1931,33 @@ epi_list %&gt;%
 
 epi_list %&gt;% nrow()</code></pre>
 <pre><code>## [1] 1</code></pre>
+</div>
+</div>
+<div id="other-lists-used" class="section level2">
+<h2>Other lists used</h2>
+<div id="child-bearing-age-codes" class="section level3">
+<h3>Child-bearing age codes</h3>
+<p>Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest filtering deliveries to women of normal child-bearing age, 15-49.</p>
+<p>The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs).</p>
+<pre class="r"><code>age_list &lt;- c(
+  &quot;05&quot;,
+  &quot;06&quot;,
+  &quot;07&quot;,
+  &quot;08&quot;,
+  &quot;09&quot;,
+  &quot;10&quot;,
+  &quot;11&quot;,
+  &quot;12&quot;,
+  &quot;23&quot;
+) %&gt;%  
+  tibble::enframe(name = NULL) %&gt;% 
+  rename(age = value)
+
+age_list %&gt;% 
+  write_rds(&quot;procedures-lists/utoha_age.rds&quot;)
+
+age_list %&gt;% nrow()</code></pre>
+<pre><code>## [1] 9</code></pre>
 </div>
 </div>
 <div id="closing-out" class="section level2">

@@ -34,6 +34,10 @@ The University of Texas at Austin
 
 - [02-analysis-pcsec](https://utdata.github.io/thcic-pudf/02-analysis-pcsec.html) is an analysis of Primary Cesarean rates vs all uncomplicated births statewide and for Laredo hospitals.
 
+### Vaginal Births after Cesarean study
+
+- [02-analysis-vbac](https://utdata.github.io/thcic-pudf/02-analysis-vbac.html) is an analysis of Vaginal births after Ceseareans by hospital.
+
 ### Episiotomy study
 
 - [02-analysis-episiotomy](https://utdata.github.io/thcic-pudf/02-analysis-episiotomy.html) is an analysis of episiotomy procedures statewide and for Laredo hospitals.
