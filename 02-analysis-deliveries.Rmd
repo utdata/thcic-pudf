@@ -37,6 +37,7 @@ library(tidyverse)
 library(dplyr)
 library(janitor)
 library(DT)
+library(jsonlite)
 
 # suppresses grouping warning
 options(dplyr.summarise.inform = FALSE)
@@ -578,29 +579,21 @@ csec_hosp_rate_2019 <- csec_hosp_rate_yr %>%
   select(THCIC_ID, CRATE)
 ```
 
+### Data for Interactive: Hospital blurbs
+
+I'm joining various dataframes together, removing unnecessary columns along the way. Some values were calculated from data where doctors were suppressed, and so may be NA.
+
+```{r blurbs_2019}
+# Import maternal levels
+maternal_levels <- read_csv("resources/maternal-levels.csv") %>% 
+  mutate(
+    THCIC_ID = as.character(THCIC_ID)
+  )
 
 
-### Combine values
-
-I'm joining various dataframes together, removing unnecessary columns along the way. Some values were calculated from data where doctors were suppresed, and so may be NA.
-
-```{r hosp_sums_2019}
-hosp_sums_2019 <- epicsec_rate_hosp_yr %>% 
-  filter(
-    YR == 2019
-  ) %>% 
-  select(-c("NEPICSEC", "EPICSEC", "TOTAL")) %>% 
-  left_join(
-    providers_list %>% ungroup() %>% select(THCIC_ID, PROVIDER_CITY),
-    by = "THCIC_ID"
-    ) %>% 
-  # reorder
-  select(YR, THCIC_ID, PROVIDER_NAME, PROVIDER_CITY, ECRATE) %>% 
-  # get epirate
-  left_join(epi_rate_hosp_2019, by = "THCIC_ID") %>% 
-  # get crate
-  left_join(csec_hosp_rate_2019, by = "THCIC_ID") %>% 
-  # get medicaid
+blurbs_2019 <- providers_list %>% 
+  rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED) %>% 
+  select(-PROVIDER_CITY) %>% 
   left_join(
     mediciad_2019 %>%
       ungroup() %>% 
@@ -615,9 +608,11 @@ hosp_sums_2019 <- epicsec_rate_hosp_yr %>%
         SUSPECT == F
       ) %>% 
       select(THCIC_ID, DELSPERWK),
-    by = "THCIC_ID")
+      by = "THCIC_ID"
+    ) %>% 
+  left_join(maternal_levels %>% select(-PROVIDER_NAME))
 
-hosp_sums_2019 %>% head(20)
+blurbs_2019 %>% head(10)
 ```
 
 ## Quality checks
@@ -691,7 +686,6 @@ del %>%
   select(YR, THCIC_ID, PROVIDER_NAME, RATE) %>% 
   pivot_wider(names_from = YR, values_from = RATE)
 ```
-
 
 ## Summaries
 
@@ -793,11 +787,9 @@ epicsec_rate_hosp_yr_summary
 
 ## Writing files and closing out
 
-> Make a 2010 hospital-based output for interactive
-
 For export:
 
-- hosp_sums_2019: (Selected characteristics by hospital for 2019). Grouped by YR, THCIC_ID and PROVIDER_NAME. Includes ECRATE (Episiotomy or Cesarean rate), ERATE (Episiotomy rate), CRATE (Cesarean rate), MCRATE (Medicaid rate) and DELSPERWK (Deliveries per doctor per week).
+- blurbs_2019.json: Data: Hospital, birth per doc rate (weekly), Medicaid percentage, Maternal level.
 
 Plus summary files for another notebook.
 
@@ -815,9 +807,9 @@ if (test_flag == F) epicsec_rate_tx_yr_summary %>%
 if (test_flag == F) epicsec_rate_hosp_yr_summary %>%
   write_rds("data-processed/epicsec_rate_hosp_yr_summary.rds")
 
-if (test_flag == F) hosp_sums_2019 %>%
-  arrange(PROVIDER_NAME) %>%
-  write_csv("exports/hosp_sums_2019.csv")
+if (test_flag == F) blurbs_2019 %>%
+  arrange(PROVIDER_NAME) %>% 
+  write_json("exports/blurbs_2019.json")
 
 # A klaxon to indicate the processing is complete
 beepr::beep(4)

@@ -390,8 +390,9 @@ lf_epi_rate_hosp_yr_summary
 
 Writing out aggregate files. Here is a list of CSVs exports:
 
-- lf_epi_rate_hosp_yr: Grouped by YR, PROVIDER NAME. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.
 - lf_epi_rate_county_yr: Grouped by YR, PAT_COUNTY, COUNTY. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.
+
+Plus some data outputs for 03-analysis-summaries.
 
 
 ```{r write}
@@ -404,8 +405,7 @@ if (test_flag == F) lf_epi_rate_hosp_yr_summary %>%
   write_rds("data-processed/lf_epi_rate_hosp_yr_summary.rds")
 
 if (test_flag == F) lf_epi_rate_hosp_yr %>%
-  arrange(PROVIDER_NAME,YR) %>%
-  write_csv("exports/lf_epi_rate_hosp_yr.csv")
+  write_rds("data-processed/lf_epi_rate_hosp_yr.rds")
 
 if (test_flag == F) lf_epi_rate_county_yr %>%
   write_csv("exports/lf_epi_rate_county_yr.csv")

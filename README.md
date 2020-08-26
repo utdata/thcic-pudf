@@ -69,20 +69,20 @@ A series of aggregated data that may prove useful. In the `exports/` folder:
 
 ### From 02-analysis-pcsec
 
-- ahrq_pcsec_rate_hosp_yr: (Primary cesarean rates for uncomplicated deliveries by hospital.) Grouped by PROVIDER_NAME and YR. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate). Includes PROVIDER_CITY.
-- ahrq_pcsec_rate_county_yr: (Primary cesarean rates for uncomplicated deliveries by county.) Grouped by PAT_COUNTY, COUNTY. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
+- ahrq_pcsec_rate_county_yr: (Primary cesarean rates for uncomplicated deliveries by patient county.) Grouped by PAT_COUNTY, COUNTY. Aggregations are NPCSEC_CNT (Count not primary Cesarean), PCSEC_CNT (Count primary Cesarean), TOTAL, PCRATE (Primary Cesarean rate).
 
 ### From 02-analysis-episiotomy
 
-- lf_epi_rate_hosp_yr: Grouped by YR, PROVIDER NAME. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.
-- lf_epi_rate_county_yr: Grouped by YR, PAT_COUNTY, COUNTY. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.
+- lf_epi_rate_county_yr: (Episiotomy rates for uncomplicated deliveries by patient county.) Grouped by YR, PAT_COUNTY, COUNTY. Aggregations are EPIF (Count Epi False), EPIT (Count Epi True), TOTAL (Count of all vaginal deliveries), EPIRATE.
 
 ### From 02-analysis-deliveries
 
-- hosp_sums_2019: (Selected characterisics by hospital for 2019). Grouped by YR, THCIC_ID, PROVIDER_NAME and PROVIDER_CITY. Includes ECRATE (Episiotomy or Cesarean rate), ERATE (Episiotomy rate), CRATE (Cesarean rate), MCRATE (Medicaid rate) and DELSPERWK (Deliveries per doctor per week).
+- blurbs_2019.json: Data: Hospital, birth per doc rate (weekly), Medicaid percentage, Maternal level.
 
 ### From 03-analysis-summaries
 
+- table_2019.csv: Data: Hospital, location, episiotomy and primary cesarean rates for 2019 (or more the most up-to-date data available)
+- chart_date.json: Data: Year, ID, Hospital, episiotomy and primary cesarean rates.
 - summary_data: Summary data for the major categories.
 
 ### From 0102-process-providers

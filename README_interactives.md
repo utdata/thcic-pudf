@@ -10,39 +10,39 @@ knit: (function(inputFile, encoding) { rmarkdown::render(
   ) })
 ---
 
-# Data for interactives
+<div class="page">
 
-<img src="resources/thcic_mockup_marked.png">
+# Data for interactives
 
 The purpose of this file is to identify different data points for interactives.
 
-> Notes: All hosp_sums_2019 values are == THCIC_ID.I could remove other years from the summary_data, if you wish.
+> Notes: All hospital values are == THCIC_ID.
 
-- 1: hosp_sums_2019[PROVIDER_NAME]
-- 2: hosp_sums_2019[PROVIDER_CITY]
-- 3: hosp_sums_2019[ECRATE]
-- 4: hosp_sums_2019[DELSPERWK] (Phrase should not display if value missing)
-- 5: hosp_sums_2019[MCRATE]
-- 6: summary_data[VALUE] (YR == 2019, SUMMARY == TX, CATEGORY == MEDICAID, MEASUREMENT == RATE)
-- 7: ??
-- 8y: lf_epi_rate_hosp_yr[EPIRATE] (Match YR, THCIC_ID). **I could remove other values?**
-- 9y: ahrq_pcsec_rate_hosp_yr[PCRATE] (Match YR, THCIC_ID).  **I could remove other values?**
-- 10: summary_data[VALUE] (YR == 2019, SUMMARY == TX, CATEGORY == EPISIOTOMY, MEASUREMENT == RATE)
-- 11: summary_data[VALUE] (YR == 2019, SUMMARY == TX, CATEGORY == PRIMARY_CESAREAN, MEASUREMENT == RATE)
-- 12: hosp_sums_2019[PROVIDER_NAME]
-- 13: hosp_sums_2019[ERATE] (This is 2019 rate all deliveries)
-- 14: hosp_sums_2019[CRATE] (This is 2019 rate all deliveries)
-- 15: skipped
-- 16: ???
+<img src="resources/thcic_mockup_marked_v2.png" width="350">
+
+- 1: blurbs_2019[DELSPERWK] (Births per week on average)
+- 2: blurbs_2019[MCRATE]
+- 3: summary_data[VALUE] (YR == 2019, SUMMARY == TX, CATEGORY == MEDICAID, MEASUREMENT == RATE). **The value is currently 44.6%.**
+- 4: blurbs_2019[LEVEL] (The actual level based on [DSHS data](https://www.dshs.texas.gov/emstraumasystems/maternalfacilities.aspx) which I put into a spreadsheet.)
+- 5: chart_data[EPIRATE]
+- 6: chart_data[PCRATE]
+- Average: chart_data: TCHCIC_ID == TX. Value is [EPIRATE] and [PCRATE]
+
+<img src="resources/thcic_mockup_table_marked.png" width="350">
+
+- 1: table_2019[PROVIDER_NAME]
+- 2: table_2019[PROVIDER_LOCATION]
+- 3: table_2019[PCRATE]
+- 4: table_2019[EPIRATE]
+
+
+</div>
 
 <style>
-  ul {
-    margin-left: -25px;
-    list-style-type: square;
-  }
-  img {
-    width: 50%;
-    float:right;
-    margin-left:30px;
+  .page {
+  max-width: 350px;
+  margin-left: auto;
+  margin-right:auto;
   }
 </style>
+

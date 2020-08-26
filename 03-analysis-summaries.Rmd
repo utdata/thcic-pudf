@@ -15,12 +15,15 @@ University of Texas at Austin
 
 Each of the other analysis notebooks in the project export two types of summaries for each measure: statewide rates and averages of hospital rates. This notebook simply brings them all together into a single data file for export.
 
+There are some additional data combinations for interactives.
+
 ```{r setup, echo=T, results='hide', message=F, warning=F}
 library(fs)
 library(tidyverse)
+library(jsonlite)
 ```
 
-## Imports
+## Summary imports
 
 ```{r imports}
 # set up folder
@@ -39,13 +42,132 @@ summary_data <- summary_files %>%
 summary_data
 ```
 
-## Exports
+### Summary exports
 
-```{r write}
+```{r exports_summary}
 summary_data %>% 
   write_csv("exports/summary_data.csv")
+```
 
+
+## Interactives exports
+
+### Import pcsec and epi rates, providers
+
+```{r hospitals_import}
+pcsec <- read_rds("data-processed/ahrq_pcsec_rate_hosp_yr.rds")
+epi <- read_rds("data-processed/lf_epi_rate_hosp_yr.rds")
+providers_list <- read_rds("procedures-lists/providers_cleaned.rds")
+```
+
+### Hospitals table
+
+Filters and assembles 2019 data for hospitals table.
+
+```{r hosp_table_2019}
+## filter and select for 2019
+pcsec_2019 <- pcsec %>% 
+  filter(YR == 2019) %>% 
+  ungroup() %>% 
+  select(THCIC_ID, PCRATE)
+
+epi_2019 <- epi %>% 
+  filter(YR == 2019) %>% 
+  ungroup() %>% 
+  select(THCIC_ID, EPIRATE)
+```
+
+### Assemble table for output
+
+```{r hosp_table_assemble}
+# assemble
+table_2019 <- providers_list %>% 
+  rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED) %>% 
+  left_join(pcsec_2019, by = "THCIC_ID") %>% 
+  left_join(epi_2019, by = "THCIC_ID")
+
+# write
+table_2019 %>% 
+  write_csv("exports/table_2019.csv")
+
+# peek
+table_2019
+
+```
+
+## Data export: charts by year
+
+### Prepare Texas averages
+
+```{r}
+chart_texas <- summary_data %>% 
+  filter(
+    SUMMARY == "TX",
+    CATEGORY %in% c("EPISIOTOMY", "PRIMARY_CESAREAN")
+  ) %>% 
+  select(-MEASUREMENT) %>% 
+  pivot_wider(names_from = CATEGORY, values_from = VALUE) %>% 
+  rename(
+    EPIRATE = EPISIOTOMY,
+    PCRATE = PRIMARY_CESAREAN,
+    THCIC_ID = SUMMARY
+  ) %>% 
+  mutate(
+    PROVIDER_NAME = "Texas"
+  ) %>% 
+  # select to order
+  select(
+    YR, THCIC_ID, PROVIDER_NAME, PCRATE, EPIRATE
+  )
+
+# peek
+chart_texas
+```
+
+### Assemble charts by year
+
+```{r}
+# build table from data
+chart_rates <- pcsec %>% 
+  ungroup() %>% 
+  select(YR, THCIC_ID, PCRATE) %>% 
+  full_join(
+    epi %>%
+    ungroup() %>% 
+    select(YR, THCIC_ID, EPIRATE)
+  ) %>% 
+  left_join(
+    providers_list %>%
+      rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED) %>% 
+      select(-PROVIDER_CITY)
+    ) %>% 
+  # reselect cols to order
+  select(YR,THCIC_ID, PROVIDER_NAME, PCRATE, EPIRATE) %>% 
+  arrange(PROVIDER_NAME, YR)
+
+# peek
+chart_rates %>% head(8)
+```
+### Bind Texas to rates
+
+And write to JSON.
+
+```{r}
+chart_data <- chart_texas %>% 
+  rbind(chart_rates)
+
+chart_data %>% 
+  write_json("exports/chart_data.json")
+
+# peek
+chart_data %>% head(12)
+```
+
+## Closing
+
+```{r close}
 # A klaxon to indicate the processing is complete
 beepr::beep(4)
 ```
+
 
