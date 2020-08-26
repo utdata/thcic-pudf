@@ -26,7 +26,7 @@ The purpose of this file is to identify different data points for interactives.
 - 4: blurbs_2019[LEVEL] (The actual level based on [DSHS data](https://www.dshs.texas.gov/emstraumasystems/maternalfacilities.aspx) which I put into a spreadsheet.)
 - 5: chart_data[EPIRATE]
 - 6: chart_data[PCRATE]
-- Average: chart_data: TCHCIC_ID == TX. Value is [EPIRATE] and [PCRATE]
+- Average: chart_data: THCIC_ID == TX. Value is [EPIRATE] and [PCRATE]
 
 <img src="resources/thcic_mockup_table_marked.png" width="350">
 
