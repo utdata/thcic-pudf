@@ -97,7 +97,7 @@ table_2019
 
 ## Data export: charts by year
 
-### Prepare Texas averages
+### Assemble Texas averages
 
 ```{r}
 chart_texas <- summary_data %>% 
@@ -118,7 +118,8 @@ chart_texas <- summary_data %>%
   # select to order
   select(
     YR, THCIC_ID, PROVIDER_NAME, PCRATE, EPIRATE
-  )
+  ) %>% 
+  arrange(YR)
 
 # peek
 chart_texas
@@ -161,6 +162,25 @@ chart_data %>%
 
 # peek
 chart_data %>% head(12)
+```
+
+## Alt bind method for json
+
+This adds the texas values for a given year to each hospitals' yearly data.
+
+```{r}
+chart_data_v2 <- chart_rates %>%
+  left_join(
+    chart_texas %>%
+      select(YR, PCRATE, EPIRATE) %>% 
+      rename(TXPCRATE = PCRATE, TXEPIRATE = EPIRATE),
+    by = "YR")
+
+chart_data_v2 %>% 
+  write_json("exports/chart_data_v2.json")
+
+## peek
+chart_data_v2
 ```
 
 ## Closing
