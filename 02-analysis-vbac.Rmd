@@ -205,7 +205,11 @@ ahrq_vbac %>%
   adorn_pct_formatting()
 ```
 
-### VBAC by hospital by year
+### VBAC by hospital by year as long data
+
+This data is filtered for hospitals that have 30+ deliveries of patients with previous ceseareans in a given year.
+
+Instead of filtering, I _could_ create a column that indicates if they've had 30+ in a year.
 
 ```{r vbac_hosp_yr}
 vbac_hosp_yr <- ahrq_vbac %>% 
@@ -218,13 +222,30 @@ vbac_hosp_yr <- ahrq_vbac %>%
     YVBAC = `TRUE`
   ) %>% 
   mutate(
-    VBAC_RATE = ((YVBAC / (NVBAC + YVBAC)) * 100) %>% round_half_up(1)
+    PCTOT = NVBAC + YVBAC,
+    VBAC_RATE = ((YVBAC / PCTOT) * 100) %>% round_half_up(1)
   ) %>% 
-  arrange(VBAC_RATE %>% desc())
+  filter(PCTOT >= 30 ) %>% 
+  arrange(YR, PROVIDER_NAME)
   
 vbac_hosp_yr %>% datatable()
 
 ```
+
+### Rates in a table by year
+
+```{r vbac_hosp_yr_table}
+vbac_hosp_yr_table <- vbac_hosp_yr %>%
+  select(YR, THCIC_ID, PROVIDER_NAME, VBAC_RATE) %>% 
+  pivot_wider(names_from = YR, values_from = c(VBAC_RATE)) %>% 
+  arrange(PROVIDER_NAME)
+
+vbac_hosp_yr_table %>% datatable()
+```
+
+## Laredo by 
+
+
 
 ## Closing
 

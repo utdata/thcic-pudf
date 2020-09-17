@@ -1,8 +1,7 @@
 # folder exclusions
-comments/
 data*
 notes/
-resources-thcic-dictionaries/
+resources-thcic/
 zz-*
 
 # Created by https://www.gitignore.io/api/r,macos,python,windows,jupyternotebooks

@@ -11,9 +11,21 @@ By **Christian McDonald**, Assistant Professor of Practice\
 School of Journalism, Moody College of Communication\
 University of Texas at Austin
 
+---
+## Troubleshooting
+
+- Find out where this file came from: 20200204 THCIC Facility List.xlsx. It happens to list our problem hospitals with their double THCIC_ID values. Why don't these have info? Or why did they change TCHIC_ID (Baylor Scott & White hospitals). As the state?
+- Can I create a cleaning notebook that:
+  - takes del or prividers and fixes the IDs for those that changes, like BS&W? Could rename as _orig, fix and call THCIC_ID to preserve other notebooks?
+  - Adds missing info on places like Bay Area Regional Medical Center?
+---
+
+
 Hospital names change over time, causing problems for any analysis that groups or aggregates by the PROVIDER_NAME.
 
 This notebook provides a list of THCIC_IDs with first their official name from the Current Facility Contact Information found at [Outpatient Data Reporting Requirements](https://www.dshs.texas.gov/thcic/OutpatientFacilities/OutpatientReportingRequirements.shtm). If the case's THCIC_ID is not listed in the facilities list, then the facilities' most recent name is used.
+
+There are cases in the original data where possibly the ID changed for a hospital over time.
 
 Looking for the process that cleans provider names based on this notebook?
 
@@ -51,6 +63,29 @@ del %>% nrow()
 ### facilities list
 facilities_list <- read_excel("resources/FacilityList_20200623.xlsx") %>% clean_names()
 ```
+
+### Troubleshooting some things
+
+
+```{r}
+del %>% 
+  distinct(THCIC_ID, PROVIDER_NAME) %>% 
+  count(THCIC_ID, PROVIDER_NAME) %>% 
+  arrange(PROVIDER_NAME)
+```
+### Centennial
+
+```{r}
+del %>% 
+  filter(str_detect(PROVIDER_NAME, "Centennial")) %>% 
+  count(YR, THCIC_ID, PROVIDER_NAME)
+```
+```{r}
+facilities_list %>%
+  filter(str_detect(facility, "Centennial"))
+```
+
+
 
 ### How many distinct IDs are there?
 
@@ -167,6 +202,16 @@ del_cleaned %>%
   filter(is.na(PROVIDER_CITY)) %>% 
   nrow()
 ```
+### Memorial Hospital
+
+There are three different hospitals in three different cities with the name "Memorial Hospital".
+
+```{r}
+providers_list_full %>% 
+  filter(provider_name_cleaned == "Memorial Hospital")
+```
+
+
 
 ## Providers export
 

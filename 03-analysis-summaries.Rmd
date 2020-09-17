@@ -21,6 +21,7 @@ There are some additional data combinations for interactives.
 library(fs)
 library(tidyverse)
 library(jsonlite)
+library(janitor)
 ```
 
 ## Summary imports
@@ -94,6 +95,23 @@ table_2019 %>%
 table_2019
 
 ```
+
+### Troubleshooting table_2019
+
+```{r}
+table_2019 %>% 
+  filter(str_detect(PROVIDER_NAME, "Centennial"))
+```
+```{r}
+table_2019 %>% 
+  distinct(THCIC_ID, PROVIDER_NAME) %>% 
+  ungroup() %>% 
+  count(PROVIDER_NAME) %>% 
+  arrange(n %>% desc())
+```
+
+
+
 
 ## Data export: charts by year
 
