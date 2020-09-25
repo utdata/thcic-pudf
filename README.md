@@ -61,7 +61,8 @@ The University of Texas at Austin
 - [0102-process-ahrq-del-compare](https://utdata.github.io/thcic-pudf/0102-process-ahrq-del-compare.html) compares the results of the loop script to the test script when both are processed using test data.
 - [0101-process-lf-epi-loop](https://utdata.github.io/thcic-pudf/0101-process-lf-epi-loop.html) is the method used to capture vaginal births using Leapfrog's methods.
 - [0101-process-lf-epi-test](https://utdata.github.io/thcic-pudf/0101-process-lf-epi-test.html) shows the processing logic in more detail using test data.
-- [0102-process-providers](https://utdata.github.io/thcic-pudf/0102-process-providers.html) creates a list of the most recent names for hospitals to assist analysis. Can't be run until the deliveries data is generated.
+- [0103-ahrq-process-providers](https://utdata.github.io/thcic-pudf/0103-ahrq-process-providers.html) creates a list of the most recent names for hospitals in the AHRQ data to assist analysis. Can't be run until the deliveries data is generated.
+- [0104-lf-process-providers](https://utdata.github.io/thcic-pudf/0104-lf-process-providers.html) creates a list of the most recent names for hospitals in the Leapfrog to assist analysis. Can't be run until the the AHRQ providers are processed.
 
 ## Exports
 
