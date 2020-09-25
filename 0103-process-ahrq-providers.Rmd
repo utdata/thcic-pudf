@@ -253,8 +253,14 @@ Two exports needed.
 providers_full %>%
   write_rds("data-processed/providers_full.rds")
 
+providers_full %>%
+  write_csv("exports/providers_full.csv")
+
 providers_current %>%
   write_rds("data-processed/providers_current.rds")
+
+providers_current %>%
+  write_csv("exports/providers_current.csv")
 
 del_names %>% 
   write_rds("data-processed/ahrq_del_cleaned.rds")

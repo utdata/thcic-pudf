@@ -314,10 +314,11 @@ ahrq_vbac_rate_hosp_yr_summary
 
 ## Exports
 
-Writing out some summary data, including:
+Writing out some summary data for other notebooks, including:
 
-- ahrq_vbac_rate_tx_yr_summary
+- ahrq_vbac_rate_hosp_yr
 - ahrq_vbac_rate_hosp_yr_summary
+- ahrq_vbac_rate_tx_yr_summary
 
 ```{r exports}
 if (test_flag == F) ahrq_vbac_rate_tx_yr_summary %>%
@@ -325,6 +326,9 @@ if (test_flag == F) ahrq_vbac_rate_tx_yr_summary %>%
 
 if (test_flag == F) ahrq_vbac_rate_hosp_yr_summary %>%
   write_rds("data-processed/ahrq_vbac_rate_hosp_yr_summary.rds")
+
+if (test_flag == F) ahrq_vbac_rate_hosp_yr %>%
+  write_rds("data-processed/ahrq_vbac_rate_hosp_yr.rds")
 ```
 
 
