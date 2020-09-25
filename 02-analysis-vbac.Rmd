@@ -208,7 +208,7 @@ ahrq_vbac_rate_hosp_yr <- ahrq_vbac %>%
   ) %>% 
   mutate(
     PCTOT = NVBAC + YVBAC,
-    VBAC_RATE = ((YVBAC / PCTOT) * 100) %>% round_half_up(1)
+    VBACRATE = ((YVBAC / PCTOT) * 100) %>% round_half_up(1)
   ) %>% 
   filter(PCTOT >= 30 ) %>% 
   arrange(YR, PROVIDER_NAME)
@@ -220,8 +220,8 @@ ahrq_vbac_rate_hosp_yr %>% datatable()
 
 ```{r vbac_hosp_yr_table}
 vbac_hosp_yr_table <- ahrq_vbac_rate_hosp_yr %>%
-  select(YR, THCIC_ID, PROVIDER_NAME, VBAC_RATE) %>% 
-  pivot_wider(names_from = YR, values_from = c(VBAC_RATE)) %>% 
+  select(YR, THCIC_ID, PROVIDER_NAME, VBACRATE) %>% 
+  pivot_wider(names_from = YR, values_from = c(VBACRATE)) %>% 
   arrange(PROVIDER_NAME)
 
 vbac_hosp_yr_table %>% datatable()
@@ -306,7 +306,7 @@ ahrq_vbac_rate_hosp_yr_summary <- ahrq_vbac_rate_hosp_yr %>%
     CATEGORY = "VAGINAL_BIRTH_AFTER_CESAREAN",
     MEASUREMENT = "MEAN_OF_RATE",
     # MEDIAN = median(PCRATE),
-    VALUE = round_half_up(mean(VBAC_RATE),1) #MEAN
+    VALUE = round_half_up(mean(VBACRATE),1) #MEAN
   )
 
 ahrq_vbac_rate_hosp_yr_summary

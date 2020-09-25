@@ -61,6 +61,7 @@ summary_data %>%
 ```{r hospitals_import}
 pcsec <- read_rds("data-processed/ahrq_pcsec_rate_hosp_yr.rds")
 epi <- read_rds("data-processed/lf_epi_rate_hosp_yr.rds")
+vbac <- read_rds("data-processed/ahrq_vbac_rate_hosp_yr.rds")
 providers_full <- read_rds("data-processed/providers_full.rds")
 ```
 
@@ -79,6 +80,11 @@ epi_2019 <- epi %>%
   filter(YR == 2019) %>% 
   ungroup() %>% 
   select(THCIC_ID, EPIRATE)
+
+vbac_2019 <- vbac %>% 
+  filter(YR == 2019) %>% 
+  ungroup() %>% 
+  select(THCIC_ID, VBACRATE)
 ```
 
 ### Assemble table for output
@@ -114,24 +120,27 @@ table_2019
 ### Assemble Texas averages
 
 ```{r}
-chart_texas <- summary_data %>% 
+chart_texas <- summary_data %>%
   filter(
     SUMMARY == "TX",
-    CATEGORY %in% c("EPISIOTOMY", "PRIMARY_CESAREAN")
+    CATEGORY %in% c("EPISIOTOMY", "PRIMARY_CESAREAN", "VAGINAL_BIRTH_AFTER_CESAREAN")
   ) %>% 
   select(-MEASUREMENT) %>% 
   pivot_wider(names_from = CATEGORY, values_from = VALUE) %>% 
   rename(
     EPIRATE = EPISIOTOMY,
     PCRATE = PRIMARY_CESAREAN,
+    VBACRATE = VAGINAL_BIRTH_AFTER_CESAREAN,
     THCIC_ID = SUMMARY
   ) %>% 
   mutate(
-    PROVIDER_NAME = "Texas"
+    PROVIDER_NAME = "Texas",
+    PROVIDER_CITY = "",
+    PROVIDER_ADDRESS = ""
   ) %>% 
   # select to order
   select(
-    YR, THCIC_ID, PROVIDER_NAME, PCRATE, EPIRATE
+    YR, THCIC_ID, PROVIDER_NAME, PROVIDER_CITY, PROVIDER_ADDRESS, PCRATE, EPIRATE, VBACRATE
   ) %>% 
   arrange(YR)
 
@@ -145,29 +154,28 @@ Again, some hospitals won't have rates if they didn't have enough deliveries for
 
 ```{r}
 # build table from data
-chart_rates <- pcsec %>% 
+
+chart_rates <- providers_full %>% 
+  rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED) %>% 
   ungroup() %>% 
-  select(YR, THCIC_ID, PCRATE) %>% 
-  full_join(
-    epi %>%
-    ungroup() %>% 
-    select(YR, THCIC_ID, EPIRATE)
+  left_join(
+    epi %>% ungroup() %>% select(YR, THCIC_ID, EPIRATE)
   ) %>% 
   left_join(
-    providers_full %>%
-      rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED) %>% 
-      select(-PROVIDER_CITY)
-    ) %>% 
-  # reselect cols to order
-  select(YR,THCIC_ID, PROVIDER_NAME, PCRATE, EPIRATE) %>% 
-  arrange(PROVIDER_NAME, YR) %>% 
-  # filter out hospitals with neither measure
+    pcsec %>% ungroup() %>% select(YR, THCIC_ID, PCRATE)
+  ) %>% 
+  left_join(
+    vbac %>% ungroup() %>% select(YR, THCIC_ID, VBACRATE)
+  ) %>% 
   filter(
+    # filters closed/old hospitals
+    !is.na(PROVIDER_CITY),
     !(
       is.na(PCRATE) &
       is.na(EPIRATE)
     )
   )
+
 
 # peek
 chart_rates
@@ -190,14 +198,18 @@ chart_data %>% head(12)
 
 ## Alt bind method for json
 
-This adds the texas values for a given year to each hospitals' yearly data.
+This adds the Texas values for a given year to each hospitals' yearly data.
 
 ```{r}
 chart_data_v2 <- chart_rates %>%
   left_join(
     chart_texas %>%
-      select(YR, PCRATE, EPIRATE) %>% 
-      rename(TXPCRATE = PCRATE, TXEPIRATE = EPIRATE),
+      select(YR, PCRATE, EPIRATE, VBACRATE) %>% 
+      rename(
+        TXPCRATE = PCRATE,
+        TXEPIRATE = EPIRATE,
+        TXVBACRATE = VBACRATE
+      ),
     by = "YR")
 
 chart_data_v2 %>% 
