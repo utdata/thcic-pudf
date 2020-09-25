@@ -1,0 +1,84 @@
+---
+title: "Clean provider names - Leapfrog"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+By **Christian McDonald**, Assistant Professor of Practice\
+School of Journalism, Moody College of Communication\
+University of Texas at Austin
+
+---
+
+Hospital names change over time, causing problems for any analysis that groups or aggregates by the PROVIDER_NAME. This notebooks cleans THCIC_IDs and PROVIDER_NAMEs based on the Leapfrog delivery specification. It requires the input from both 0101-process-lf-epi-loop.Rmd and 0103-process-ahrq-providers.Rmd files.
+
+The bulk of the explanations are in the [AHRQ Providers Processing](0103-process-ahrq-providers.Rmd) file.
+
+## Setup
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+
+# suppresses grouping warning
+options(dplyr.summarise.inform = FALSE)
+```
+
+## Importing the data
+
+We start with all delivery data per Leapfrog standards. The facilities list comes from the providers processing for AHRQ deliveries.
+
+```{r imports}
+### production data
+path_prod <- "data-processed/lf_del_vag.rds"
+
+del <- read_rds(path_prod)
+
+del %>% nrow()
+
+### facilities list
+providers_full <- read_rds("data-processed/providers_full.rds")
+```
+
+## Update PROVIDER_NAMES from full providers list
+
+Here we update the Leapfrog delivery data to use the official name based on the full providers list processed with the AHRQ data. Any matches not in the current facilites list will get the most recent name from the full list and not have a PROVIDER_CITY or PROVIDER_ADDRESS added.
+
+```{r full_providers}
+del_names <- del %>%
+  left_join(providers_full, by = "THCIC_ID") %>% 
+  rename(
+    PROVIDER_NAME_ORIG = PROVIDER_NAME,
+    PROVIDER_NAME = PROVIDER_NAME_CLEANED,
+    )
+
+del_names_cnt <- del_names %>% nrow()
+
+# determine the scope of records updated
+fac_cleaned <- del_names %>% 
+  filter(PROVIDER_NAME != PROVIDER_NAME_ORIG)
+
+fac_cleaned_cnt <- fac_cleaned %>% nrow()
+
+cat(fac_cleaned_cnt, " of ", del_names_cnt, " records were updated with new PROVIDER_NAMEs.", sep = "")
+
+#peek at the list
+fac_cleaned %>% 
+  select(PROVIDER_NAME_ORIG, PROVIDER_NAME, THCIC_ID) %>% 
+  distinct() %>% 
+  arrange(PROVIDER_NAME_ORIG)
+```
+
+## Exports
+
+```{r export}
+# write the cleaned data
+del_names %>% 
+  write_rds("data-processed/lf_del_cleaned.rds")
+
+# klaxon to sound completion
+beepr::beep(4)
+```
+

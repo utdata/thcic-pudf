@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-06-25" />
+<meta name="date" content="2020-09-21" />
 
 <title>Leapfrog Deliveries processing</title>
 
@@ -1634,12 +1634,12 @@ summary {
 
 
 <h1 class="title toc-ignore">Leapfrog Deliveries processing</h1>
-<h4 class="date">2020-06-25</h4>
+<h4 class="date">2020-09-21</h4>
 
 </div>
 
 
-<p>The purpose of this notebook is to process multiple quarters of <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">THCIC in-patient public use data files</a> into a single data file of <strong>Total number of vaginal deliveries during the reporting time period, with Excluded Populations removed.</strong> as defined by Leapfrog’s 2019 Leapfrog Hospital Survey for Episiotomy (page 103). I also apply some data cleaning to remove records that have blank fields or mothers outside typical child-bearing age.</p>
+<p>The purpose of this notebook is to process multiple quarters of <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">THCIC in-patient public use data files</a> into a single data file of <strong>Total number of vaginal deliveries during the reporting time period, with Excluded Populations removed.</strong> as defined by Leapfrog’s <a href="https://www.leapfroggroup.org/sites/default/files/Files/2020HospitalSurvey_20200413_8.1%20%28version%201%29.pdf">2020 Leapfrog Hospital Survey</a> for Episiotomy (page 118). I also apply some data cleaning to remove records that have blank fields or mothers outside typical child-bearing age.</p>
 <p>The output is is then analyzed in other notebooks.</p>
 <p>Of note, there is another notebook <code>01-process-lf-epi-test</code> that uses the same filtering criteria but prints examples at various stages for manual checking.</p>
 <p>Also, there is another notebook <code>00-process-lists</code> where various AHRQ lists of ICD-10 and other codes are defined separately. Those values are written out to the <code>procedures-lists</code> folder as .rds and .csv files and then imported into this notebook and others. See that notebook to inspect the lists.</p>
@@ -1681,7 +1681,8 @@ tsv_files</code></pre>
 ## data-raw/PUDF 3Q2019 tab-delimited/PUDF_base1_3q2019_tab.txt
 ## data-raw/PUDF 4Q2016 tab-delimited/PUDF_base1_4q2016_tab.txt
 ## data-raw/PUDF 4Q2017 tab-delimited/PUDF_base1_4q2017_tab.txt
-## data-raw/PUDF 4Q2018 tab-delimited/PUDF_base1_4q2018_tab.txt</code></pre>
+## data-raw/PUDF 4Q2018 tab-delimited/PUDF_base1_4q2018_tab.txt
+## data-raw/PUDF 4Q2019 tab-delimited/PUDF_base1_4q2019_tab.txt</code></pre>
 </div>
 </div>
 <div id="set-up-lists" class="section level2">
@@ -1700,7 +1701,7 @@ diag_cols</code></pre>
 ## [25] &quot;OTH_DIAG_CODE_23&quot;    &quot;OTH_DIAG_CODE_24&quot;</code></pre>
 <pre class="r"><code>vag_msdrg_list &lt;- read_rds(&quot;procedures-lists/lf_vag_msdrg.rds&quot;) %&gt;% .$vag_msdrg
 vag_msdrg_list</code></pre>
-<pre><code>##  [1] &quot;767&quot; &quot;768&quot; &quot;774&quot; &quot;775&quot; &quot;796&quot; &quot;797&quot; &quot;798&quot; &quot;805&quot; &quot;806&quot; &quot;807&quot;</code></pre>
+<pre><code>## [1] &quot;768&quot; &quot;796&quot; &quot;797&quot; &quot;798&quot; &quot;805&quot; &quot;806&quot; &quot;807&quot;</code></pre>
 <pre class="r"><code>vag_aprdrg_list &lt;- read_rds(&quot;procedures-lists/lf_vag_aprdrg.rds&quot;) %&gt;% .$vag_aprdrg
 vag_aprdrg_list</code></pre>
 <pre><code>## [1] &quot;541&quot; &quot;542&quot; &quot;560&quot;</code></pre>
@@ -1819,7 +1820,7 @@ data %&gt;%
   count(YR)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["YR"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"2015","2":"12"},{"1":"2016","2":"242656"},{"1":"2017","2":"230552"},{"1":"2018","2":"229526"},{"1":"2019","2":"170051"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["YR"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"2015","2":"12"},{"1":"2016","2":"242270"},{"1":"2017","2":"230264"},{"1":"2018","2":"229212"},{"1":"2019","2":"228355"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -1838,7 +1839,7 @@ data %&gt;%
 data %&gt;% write_rds(write_path)
 
 data %&gt;% nrow()</code></pre>
-<pre><code>## [1] 872785</code></pre>
+<pre><code>## [1] 930101</code></pre>
 <pre class="r"><code># A klaxon to indicate the processing is complete
 beepr::beep(4)</code></pre>
 </div>

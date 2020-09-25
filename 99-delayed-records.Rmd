@@ -1,0 +1,197 @@
+---
+title: "A look at delayed records"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+By **Christian McDonald**, Assistant Professor of Practice\
+School of Journalism, Moody College of Communication\
+University of Texas at Austin
+
+---
+
+I want to see what percentage of records in the first quarter of a year are from the previous year. This uses a copy of the ahrq test file.
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(fs)
+library(tidyverse)
+library(janitor)
+```
+
+## Set up import
+
+We search through the `data` folder to build a list files to import into this notebook. The test data was created using the first 10,000 rows from one quarter of four years, 2016-2019.
+
+```{r dirs_test}
+data_dir <- "data-raw"
+tsv_files <- dir_ls(data_dir, recurse = TRUE, regexp = "PUDF_base1_1q2019")
+
+tsv_files
+```
+
+## Import the base1 files
+
+At this time, our analysis utilizes only one (PUDF_base1) of several files in the release for each quarter.
+
+Of note:
+
+- There is a trailing tab on each row, whic brings in an unnecssary column. This is removed with `col_skip()`. The `EMERGENCY_DEPT_FLAG` col was introduced in 2017, so we have to remove two differnet "last columns".
+- We set default type as col_character because some cols will appear as logical. We reset necessary cols as numbers where necessary.
+
+```{r import, echo=T, results='hide', message=F, warning=F}
+# warnings are suppressed, so check problems()
+# add/remove test_ as necessary
+base1 <- tsv_files %>%
+  map_dfr(
+    read_tsv,
+    col_types = cols(
+      .default = col_character(),
+      X168 = col_skip(),
+      X167 = col_skip()
+    )
+  ) %>%
+  mutate_at(
+    vars(contains("_CHARGES")), as.numeric
+  )
+
+# number of rows
+base1 %>% nrow()
+
+# klaxon for import complete
+# beepr::beep(3)
+```
+
+## Filtering for deliveries
+
+### Filtering muliple columns, multiple conditions
+
+The logic here looks through a number of columns for a number of ICD codes.
+
+In ths case, we are looking at all columns with "DIAG" in name for values in the `delocmd_list`, which comes from "DELOCMD*" in our IQI 33 reference. See `01-process-lists` for details.
+
+Then we import the DELOCMD list and filter for it.
+
+```{r deliveries}
+delocmd_list <- read_rds("procedures-lists/ahrq_delocmd.rds") %>% .$delocmd
+
+del <- base1 %>% 
+  filter_at(
+    vars(
+      matches("_DIAG"),
+      -starts_with("POA")
+    ),
+    any_vars(
+      . %in% delocmd_list
+    )
+  )
+
+del %>% nrow()
+```
+
+We peek here at the resulting frame to eyeball codes.
+
+```{r peek_del}
+del %>% 
+  select(
+    matches("_DIAG"),
+    -starts_with("POA")
+  ) %>% head(10)
+
+```
+
+## Exclusions from the deliveries
+
+Some further notebooks need to exclude cases for complications like for abnormal presentation, fetal death, or multiple gestation. Those will be handled in those notebooks as needed.
+
+Here we only filter out missing or bad data.
+
+### Filter out blank cells per Appendix A
+
+"with missing gender (SEX=missing), age (AGE=missing), quarter (DQTR=missing), year (YEAR=missing) or principal diagnosis (DX1=missing)."
+
+In base1, the fields are `SEX_CODE`, `PAT_AGE`, `DISCHARGE` for both quarter and year, and `PRINC_DIAG_CODE`.
+
+```{r clean}
+
+del_cln <- del %>% 
+  filter(
+    SEX_CODE == "F",
+    PAT_AGE != "`",
+    RACE != "`",
+    !is.na(DISCHARGE),
+    !is.na(PRINC_DIAG_CODE)
+  )
+
+del_cln %>% nrow()
+```
+
+### Child-bearing age
+
+Researchers at the Office of Health Affairs-Population Health, The University of Texas System work with the THCIC file daily and they suggest to filter deliveries to women of normal child-bearing age.
+
+We'll look here how those ages break down in the cleaned file:
+
+```{r peek_age}
+del_cln %>% 
+  count(PAT_AGE)
+```
+
+The codes for the ages 15-49 include 05-12. For HIV or drug patients it includes 23 (18-44 yrs). I import those from `procedures-lists`.
+
+Here we will filter for those values.
+
+```{r age}
+age_list <- read_rds("procedures-lists/utoha_age.rds") %>% .$age
+
+del_cln_age <- del_cln %>% 
+  filter(PAT_AGE %in% age_list)
+
+del_cln_age %>% nrow()
+```
+
+Peeking at records outside the child-bearing age list to make sure are none.
+
+```{r age_test}
+# set up not in
+`%ni%` <- Negate(`%in%`)
+
+del_cln_age %>% 
+  filter(PAT_AGE %ni% age_list) %>% 
+  select(PAT_AGE) %>% 
+  count(PAT_AGE)
+```
+
+## Add convenience columns for dates
+
+```{r add_yr}
+del_cln_age_yr <- del_cln_age %>% 
+  mutate(
+    YR = substr(DISCHARGE, 1, 4)
+  )
+```
+
+## Remove other years
+
+Because of a reporting lag, there are years in the original data that we are not using for our analysis. At some point in 2015 there was a switch from ICD-9 to ICD-10 coding, so going eariler would require some conversions. Not impossible, but not in scope at this time to ease complication.
+
+We are using full years from 2016-2018 and a partial year 2019 through the 2nd quarter release. This is subject to change as new data is released.
+
+```{r filter_yr}
+del_cln_age_yr <- del_cln_age_yr %>% 
+  filter(YR %in% c("2015", "2016", "2017", "2018", "2019"))
+```
+
+## How many are from a previous year
+
+```{r}
+del_cln_age_yr %>% 
+  tabyl(YR) %>% 
+  adorn_pct_formatting()
+
+
+```
+
+

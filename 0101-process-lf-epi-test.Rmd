@@ -7,7 +7,7 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
-The purpose of this notebook is to process test data from multiple quarters of [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) into a single data file of **Total number of vaginal deliveries during the reporting time period, with Excluded Populations removed.** as defined by Leapfrog's 2019 Leapfrog Hospital Survey for Episiotomy (page 103). I also apply some data cleaning to remove records that have blank fields or mothers outside typical child-bearing age.
+The purpose of this notebook is to process test data from multiple quarters of [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) into a single data file of **Total number of vaginal deliveries during the reporting time period, with Excluded Populations removed.** as defined by Leapfrog's 2020 Leapfrog Hospital Survey for Episiotomy (page 118). I also apply some data cleaning to remove records that have blank fields or mothers outside typical child-bearing age.
 
 The methods used here are also used in `01-process-lf-epi-loop` to process multiple years of data. This notebook cannot support that amount of data, but was used to check various steps in the filtering process for the main script. Please see the `01-process-lf-epi-loop` for more additional details.
 

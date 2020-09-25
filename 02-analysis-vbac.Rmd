@@ -18,8 +18,7 @@ This is an analysis of the Vaginal Birth After Cesareans, as defined by [IQI 22 
 ### Numerator
 
 Number of vaginal deliveries among cases meeting the inclusion and exclusion rules for the
-denominator. Vaginal deliveries are identified by any-listed ICD-10-PCS procedure code for vaginal
-delivery (VAGDELP* ).
+denominator. Vaginal deliveries are identified by any-listed ICD-10-PCS procedure code for vaginal delivery (VAGDELP* ).
 
 ### Denominator
 
@@ -45,7 +44,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Import of deliveries
 
-I start here with  "All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery (DELOCMD)". This was processed in `01-process-loop`.
+I start here with "All deliveries, identified by any-listed ICD-10-CM diagnosis code for outcome of delivery (DELOCMD)". This was processed in `01-process-loop`.
 
 ```{r imports}
 # set test flag to FALSE to run production data
@@ -55,7 +54,7 @@ test_flag <- F
 path_test <- "data-test/ahrq_del_all_loop_test.rds"
 
 ### production data
-path_prod <- "data-processed/ahrq_del_all.rds"
+path_prod <- "data-processed/ahrq_del_cleaned.rds"
 
 ### import based on flag
 if (test_flag == T) del <- read_rds(path_test) else del <- read_rds(path_prod)
@@ -65,7 +64,7 @@ del %>% nrow()
 
 ## Set up various processing lists
 
-These are lists from the IQI 33 reference used for filtering and such. See 01-process-lists for definitions.
+These are lists from the IQI 22 reference used for filtering and such. See 01-process-lists for definitions.
 
 ```{r lists}
 # diagnostic columns
@@ -82,20 +81,6 @@ prvbacd_list <- read_rds("procedures-lists/ahrq_prvbacd.rds") %>% .$prvbacd
 
 # Vaginal deliveries (VAGDELP)
 vagdelp_list <- read_rds("procedures-lists/ahrq_vagdelp.rds") %>% .$vagdelp
-
-# Updated Hospitals list
-providers_list <- read_rds("procedures-lists/providers_cleaned.rds")
-```
-
-### Update PROVIDER_NAME
-
-Hospitals change names over time, skewing any analysis that groups by PROVIDER_NAME. This process updates the PROVIDER_NAME field to use the most recent name used in the data, based on a sanitized list from another workbook.
-
-```{r providers_list}
-del <- del %>% 
-  left_join(providers_list, by = "THCIC_ID") %>% 
-  select(-PROVIDER_NAME) %>% 
-  rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED)
 ```
 
 ## Filter deliveries to set denominator
@@ -191,6 +176,8 @@ ahrq_vbac %>% nrow()
 
 This completes the processing of the data. `ahrq_vbac` is our working dataframe.
 
+---
+
 ## VBAC analysis
 
 - Do hospitals perform them?
@@ -205,14 +192,12 @@ ahrq_vbac %>%
   adorn_pct_formatting()
 ```
 
-### VBAC by hospital by year as long data
+### VBAC by hospital by year
 
 This data is filtered for hospitals that have 30+ deliveries of patients with previous ceseareans in a given year.
 
-Instead of filtering, I _could_ create a column that indicates if they've had 30+ in a year.
-
-```{r vbac_hosp_yr}
-vbac_hosp_yr <- ahrq_vbac %>% 
+```{r ahrq_vbac_rate_hosp_yr}
+ahrq_vbac_rate_hosp_yr <- ahrq_vbac %>% 
   group_by(YR, THCIC_ID, PROVIDER_NAME) %>% 
   count(VBAC) %>% 
   # pivot to get rate for vbac
@@ -228,14 +213,13 @@ vbac_hosp_yr <- ahrq_vbac %>%
   filter(PCTOT >= 30 ) %>% 
   arrange(YR, PROVIDER_NAME)
   
-vbac_hosp_yr %>% datatable()
-
+ahrq_vbac_rate_hosp_yr %>% datatable()
 ```
 
 ### Rates in a table by year
 
 ```{r vbac_hosp_yr_table}
-vbac_hosp_yr_table <- vbac_hosp_yr %>%
+vbac_hosp_yr_table <- ahrq_vbac_rate_hosp_yr %>%
   select(YR, THCIC_ID, PROVIDER_NAME, VBAC_RATE) %>% 
   pivot_wider(names_from = YR, values_from = c(VBAC_RATE)) %>% 
   arrange(PROVIDER_NAME)
@@ -243,13 +227,110 @@ vbac_hosp_yr_table <- vbac_hosp_yr %>%
 vbac_hosp_yr_table %>% datatable()
 ```
 
-## Laredo by 
+## VBACs by Laredo hospitals
 
+```{r}
+vbac_hosp_yr_table %>% 
+  filter(str_detect(PROVIDER_NAME, "Laredo"))
+```
+## Summaries
+
+### Statewide VBAC percentage across data
+
+```{r ahrq_vbac_rate_tx}
+ahrq_vbac %>% 
+  tabyl(VBAC) %>% 
+  rename(count = n) %>% 
+  adorn_pct_formatting()
+```
+
+```{r ahrq_vbac_rate_tx_summary}
+ahrq_vbac_rate_tx_summary <- ahrq_vbac %>% 
+  group_by(VBAC) %>% 
+  summarize(CNT = n()) %>% 
+  pivot_wider(names_from = VBAC, values_from = CNT) %>% 
+  rename(
+    NVBAC_CNT = "FALSE",
+    VBAC_CNT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = NVBAC_CNT + VBAC_CNT
+  ) %>% 
+  mutate(
+   SUMMARY = "TX",
+   CATEGORY = "VAGINAL_BIRTH_AFTER_CESAREAN",
+   MEASUREMENT = "RATE",
+   VALUE = round_half_up((VBAC_CNT / TOTAL) * 100,1) # RATE
+  ) %>%
+  select(SUMMARY, CATEGORY, MEASUREMENT, VALUE)
+
+ahrq_vbac_rate_tx_summary
+```
+
+### VBAC rate statewide by year
+
+Excludes hospitals with fewer than 30 deliveries a year.
+
+```{r ahrq_vbac_rate_tx_yr_summary}
+ahrq_vbac_rate_tx_yr_summary <- ahrq_vbac %>% 
+  group_by(VBAC, YR) %>% 
+  summarize(CNT = n()) %>% 
+  pivot_wider(names_from = VBAC, values_from = CNT) %>% 
+  rename(
+    NVBAC_CNT = "FALSE",
+    VBAC_CNT = "TRUE"
+  ) %>% 
+  mutate(
+    TOTAL = NVBAC_CNT + VBAC_CNT
+  ) %>% 
+  filter(TOTAL >= 30) %>% 
+  mutate(
+   SUMMARY = "TX",
+   CATEGORY = "VAGINAL_BIRTH_AFTER_CESAREAN",
+   MEASUREMENT = "RATE",
+   VALUE = round_half_up((VBAC_CNT / TOTAL) * 100,1) # RATE
+  ) %>%
+  select(YR, SUMMARY, CATEGORY, MEASUREMENT, VALUE)
+
+ahrq_vbac_rate_tx_yr_summary
+```
+
+### VBAC rate by hospital: Averaged, by year
+
+```{r ahrq_vbac_rate_hosp_yr_summary}
+ahrq_vbac_rate_hosp_yr_summary <- ahrq_vbac_rate_hosp_yr %>%
+  ungroup() %>% 
+  group_by(YR) %>% 
+  summarize(
+    SUMMARY = "HOSPITAL",
+    CATEGORY = "VAGINAL_BIRTH_AFTER_CESAREAN",
+    MEASUREMENT = "MEAN_OF_RATE",
+    # MEDIAN = median(PCRATE),
+    VALUE = round_half_up(mean(VBAC_RATE),1) #MEAN
+  )
+
+ahrq_vbac_rate_hosp_yr_summary
+```
+
+## Exports
+
+Writing out some summary data, including:
+
+- ahrq_vbac_rate_tx_yr_summary
+- ahrq_vbac_rate_hosp_yr_summary
+
+```{r exports}
+if (test_flag == F) ahrq_vbac_rate_tx_yr_summary %>%
+  write_rds("data-processed/ahrq_vbac_rate_tx_yr_summary.rds")
+
+if (test_flag == F) ahrq_vbac_rate_hosp_yr_summary %>%
+  write_rds("data-processed/ahrq_vbac_rate_hosp_yr_summary.rds")
+```
 
 
 ## Closing
 
-```{r}
+```{r end}
 beepr::beep(4)
 ```
 

@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-08-22" />
+<meta name="date" content="2020-09-21" />
 
 <title>Process various data lists</title>
 
@@ -1634,7 +1634,7 @@ summary {
 
 
 <h1 class="title toc-ignore">Process various data lists</h1>
-<h4 class="date">2020-08-22</h4>
+<h4 class="date">2020-09-21</h4>
 
 </div>
 
@@ -1691,7 +1691,7 @@ cols_surg %&gt;%
 <p>These can come from AHRQ IQI 22 and 33. Some are in both. In addition to the links below they available in the <code>resources</code> directory of this repo.</p>
 <ul>
 <li><a href="https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2020/TechSpecs/IQI_22_Vaginal_Birth_After_Cesarean_(VBAC)_Delivery_Rate_Uncomplicated.pdf">IQI 22 Vaginal Birth After Cesarean (VBAC) Delivery Rate, Uncomplicated</a></li>
-<li><a href="https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2020/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf">IQI 33 Primary Cesarean Delivery Rate, Uncomplicated</a> ~~ - <a href="https://qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_21_Cesarean_Delivery_Rate_Uncomplicated.pdf">IQI 21 Cesarean Delivery Rate, Uncomplicated</a> ~~</li>
+<li><a href="https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2020/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf">IQI 33 Primary Cesarean Delivery Rate, Uncomplicated</a></li>
 </ul>
 <div id="all-deliveries-delocmd" class="section level3">
 <h3>All deliveries (DELOCMD)</h3>
@@ -1740,51 +1740,6 @@ delocmd_list %&gt;% nrow()</code></pre>
 
 prcsecd_list %&gt;% nrow()</code></pre>
 <pre><code>## [1] 276</code></pre>
-</div>
-<div id="cesarean-delivery-ms-drg-codes-prcse2g" class="section level3">
-<h3>Cesarean delivery MS-DRG codes: (PRCSE2G)</h3>
-<blockquote>
-<p>These are from the 2019 specification and no longer used.</p>
-</blockquote>
-<p>As defined in 1Q1 33 Primary Cesarean Delivery Rate, Uncomplicated. Also in IQI 21 Cesarean Delivery Rate, Uncomplicated.</p>
-<pre class="r"><code># MS-DRG codes for Cesarean delivery (PRCSE2G*)
-prcse2g_list &lt;- c(
-  &quot;765&quot;,
-  &quot;766&quot;
-) %&gt;%  
-  tibble::enframe(name = NULL) %&gt;% 
-  rename(prcse2g = value)
-
-prcse2g_list %&gt;% 
-  write_rds(&quot;procedures-lists/ahrq_prcse2g.rds&quot;)
-
-prcse2g_list %&gt;% nrow()</code></pre>
-<pre><code>## [1] 2</code></pre>
-</div>
-<div id="cesarean-delivery-updated-2019" class="section level3">
-<h3>Cesarean delivery updated 2019</h3>
-<blockquote>
-<p>These may be replaced with PRCSECP. Need to check</p>
-</blockquote>
-<p>I found zero Cesarean births listed for 2019, so research found this article on <a href="https://www.mhswi.com/newsroom/New-DRG-codes-for-C-sections-and-vaginal-deliveries.html">New DRG codes for C-sections and vaginal deliveries</a> and <a href="http://bok.ahima.org/doc?oid=302634#.XlK88JNKg6g">this post</a>, which indicate changes in billing codes for 2019. Here I extend the existing PRCSE2G list to add these new codes, calling it prcse2g_v2_list</p>
-<pre class="r"><code>prcse2g_v2_list &lt;- c(
-  &quot;765&quot;,
-  &quot;766&quot;,
-  &quot;783&quot;,
-  &quot;784&quot;,
-  &quot;785&quot;,
-  &quot;786&quot;,
-  &quot;787&quot;,
-  &quot;788&quot;
-) %&gt;%  
-  tibble::enframe(name = NULL) %&gt;% 
-  rename(prcse2g = value)
-
-prcse2g_v2_list %&gt;% 
-  write_rds(&quot;procedures-lists/ahrq_prcse2g_v2.rds&quot;)
-
-prcse2g_v2_list %&gt;% nrow()</code></pre>
-<pre><code>## [1] 8</code></pre>
 </div>
 <div id="cesarean-delivery-procedure-codes-prcsecp" class="section level3">
 <h3>Cesarean delivery procedure codes: (PRCSECP)</h3>

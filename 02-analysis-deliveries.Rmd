@@ -7,14 +7,11 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
-> Needs check for 2020 updates
-
-
 By **Christian McDonald**, Assistant Professor of Practice\
 School of Journalism, Moody College of Communication\
 University of Texas at Austin
 
-> If we get 4q2019 then `week_var` will need to be updated.
+----
 
 ## Purpose of this analysis
 
@@ -56,7 +53,10 @@ test_flag <- F
 path_test <- "data-test/ahrq_del_all_loop_test.rds"
 
 ### production data
-path_prod <- "data-processed/ahrq_del_all.rds"
+path_prod <- "data-processed/ahrq_del_cleaned.rds"
+
+### cleaned providers list
+providers_cleaned <- read_rds("data-processed/providers_cleaned.rds")
 
 ### import based on flag
 if (test_flag == T) del <- read_rds(path_test) else del <- read_rds(path_prod)
@@ -69,9 +69,8 @@ del %>% nrow()
 These are lists from various AHRQ and Leapfrog definitions. See 01-process-lists for details.
 
 ```{r lists}
-# Cesarean delivery MS-DRG codes, updated
-prcse2g_v2_list <- read_rds("procedures-lists/ahrq_prcse2g_v2.rds") %>% .$prcse2g
-prcse2g_v2_list
+# ICD-10-PCS procedure codes for Cesarean delivery
+prcsecp_list <- read_rds("procedures-lists/ahrq_prcsecp.rds") %>% .$prcsecp
 
 # Episiotomy codes
 epi_list <- read_rds("procedures-lists/lf_epi.rds") %>% .$epi
@@ -79,40 +78,57 @@ epi_list
 
 # surgical procedure columns
 surg_cols <- read_rds("procedures-lists/cols_surg.rds") %>% .$surg
-
-# Updated Hospitals list
-providers_list <- read_rds("procedures-lists/providers_cleaned.rds")
-```
-
-### Update PROVIDER_NAME
-
-Hospitals change names over time, skewing any analysis that groups by PROVIDER_NAME. This process updates the PROVIDER_NAME field to use the most recent name used in the data, based on a sanitized list from another workbook.
-
-```{r providers_list}
-del <- del %>% 
-  left_join(providers_list, by = "THCIC_ID") %>% 
-  select(-PROVIDER_NAME) %>% 
-  rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED)
 ```
 
 ### Cesarean indicator
 
-Later we want to get rates by doctor for Cesarean deliveries. I create a marker column so we can do that.
+Later we want to get rates for Cesarean deliveries. I create a marker column so we can do that.
 
-[AHRQ Inpatient Quality Indicator](https://www.qualityindicators.ahrq.gov/Modules/IQI_TechSpec_ICD10_v2019.aspx) for [Cesarean Delivery Rate, Uncomplicated (IQI 21)](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2019/TechSpecs/IQI_21_Cesarean_Delivery_Rate_Uncomplicated.pdf) defines a Cesarean delivery as such.
+[AHRQ Inpatient Quality Indicator](https://www.qualityindicators.ahrq.gov/Modules/IQI_TechSpec_ICD10_v2020.aspx) for [IQI 21 Cesarean Delivery Rate, Uncomplicated](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2020/TechSpecs/IQI_21_Cesarean_Delivery_Rate_Uncomplicated.pdf) defines a Cesarean delivery as such.
 
-- I use the MS-DRG codes for Cesarean delivery (PRCSE2G) to define any Cesarean case.
-- I do NOT apply the PRCSECD exclusions here because we want all Cesareans, complicated or not. The exclusions of missing gender, etc. are applied on the original data before importing here.
+Number of Cesarean deliveries among cases meeting the inclusion and exclusion rules for the
+denominator. Cesarean deliveries are identified by any-listed ICD-10-PCS procedure codes for Cesarean delivery (PRCSECP) and without any-listed ICD-10-PCS procedure codes for hysterotomy
+(PRCSE2P).
+
+I don't apply the hysterotomy filter since we want all Cesareans.
+
 
 ```{r csec_col}
-del <- del %>% 
+del_csec <- del %>% 
   mutate(
-    PRCSE2G = if_else(MS_DRG %in% prcse2g_v2_list, T, F)
+    PRCSECP = case_when(
+      PRINC_SURG_PROC_CODE %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_1 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_2 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_3 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_4 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_5 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_6 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_7 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_8 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_9 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_10 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_11 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_12 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_13 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_14 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_15 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_16 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_17 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_18 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_19 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_20 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_21 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_22 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_23 %in% prcsecp_list ~ TRUE,
+      OTH_SURG_PROC_CODE_24 %in% prcsecp_list ~ TRUE,
+      TRUE                     ~  FALSE
+    )
   )
 
 # peek at result
-del %>% 
-  count(PRCSE2G) %>% 
+del_csec %>% 
+  count(PRCSECP) %>% 
   rename(CASES = n)
 ```
 
@@ -122,7 +138,7 @@ I use the [2019 Leapfrog Hospital Survey p103](https://www.leapfroggroup.org/sit
 
 ```{r epi_col}
 # list of codes for episiotomy, which is really one: 0W8NXZZ
-del <- del %>% 
+del_csec_epi <- del_csec %>% 
   mutate(
     EPI = case_when(
       PRINC_SURG_PROC_CODE %in% epi_list ~ TRUE,
@@ -154,7 +170,7 @@ del <- del %>%
     )
   )
 
-del %>% 
+del_csec_epi %>% 
   count(EPI) %>% 
   rename(RECORD = n)
 ```
@@ -172,7 +188,7 @@ I create a variable if doctor is suppressed ...
 suppressed = c("9999999998", "9999999999")
 
 # add value of suppressed doctor to data
-del <- del %>% 
+del_csec_epi_supp <- del_csec_epi %>% 
   mutate(
     PSUPP = if_else(ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed, T, F)
   )
@@ -188,7 +204,7 @@ del <- del %>%
 Use the created `PSPP` field to count overall suppressions to get idea of scope.
 
 ```{r supp_look}
-del %>% 
+del_csec_epi_supp %>% 
   tabyl(PSUPP) %>% 
   rename(count = n) %>% 
   adorn_pct_formatting()
@@ -197,7 +213,7 @@ del %>%
 The ATTENDING_PHYSICIAN is suppressed in 6.5% of deliveries. For some hospitals, like Brownwood Regional Medical Center, all the physician data is suppressed.
 
 ```{r supp_count}
-del %>% 
+del_csec_epi_supp %>% 
   filter(str_detect(PROVIDER_NAME, "Brownwood Regional Medical Center")) %>% 
   tabyl(PSUPP) %>% 
   rename(count = n) %>% 
@@ -209,7 +225,7 @@ del %>%
 Since our hospitals of interest are in Laredo, let's check how many of those are suppressed as well.
 
 ```{r supp_count_laredo}
-del %>% 
+del_csec_epi_supp %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo")) %>% 
   tabyl(PSUPP, PROVIDER_NAME) %>% 
   adorn_percentages("col") %>%
@@ -222,7 +238,7 @@ del %>%
 Later we want to know which hospitals have high doctor suppression rates, which would indicate that our deliveries per doctor calculations could be suspect. If the value for `SUSPECT` is `TRUE`, then the suppression rate is higher than 10% or otherwise suspect.
 
 ```{r supp_rate_hosp}
-supp_rate_hosp <- del %>% 
+supp_rate_hosp <- del_csec_epi_supp %>% 
   group_by(THCIC_ID, PROVIDER_NAME, PSUPP) %>% 
   summarize(
     CNT = n()
@@ -246,7 +262,7 @@ supp_rate_hosp %>% head(10)
 To achieve a count of deliveries per doctor, I remove the records where the ATTENDING_PHYSICIAN was suppressed as this could combine multiple doctors into the same group. This suppression may have more affect on some hospitals than others.
 
 ```{r del_supp}
-del_supp <- del %>% 
+del_supp <- del_csec_epi_supp %>% 
   filter(
     !ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed
   )
@@ -254,17 +270,15 @@ del_supp <- del %>%
 
 ## Total deliveries per hospital per year
 
-> Note 2019 is partial year.
-
-Total deliveries after filtering years with fewer than 10. 
+Total deliveries after filtering years with fewer than 30 deliveries. 
 
 ```{r deliveries_yr}
 
 # group and count
-deliveries_yr <- del %>% 
+deliveries_yr <- del_csec_epi_supp %>% 
   group_by(YR, THCIC_ID, PROVIDER_NAME) %>% 
   summarize(BIRTHS = n()) %>% 
-  filter(BIRTHS > 10)
+  filter(BIRTHS > 30)
 
 # pivot for table
 deliveries_yr %>%
@@ -274,13 +288,14 @@ deliveries_yr %>%
 
 ## 2019 deliveries per doctor, per week
 
-> `week_var` will need update if we get 4q_2019 data.
-
 How many deliveries per doctor were there in 2019? How does that extrapolate to average deliveries per week per doctor? Starts with suppressed doctors removed. I add the column `SUSPECT` to indicate hospitals with high doctor suppression rates.
 
+> While we have all four quarters of 2019, there could be some records missing as hospitals have 60 days past end of quarter to file those records.
+
+
 ```{r del_doc_hosp_2019}
-# weeks in 9 months of data for 2019. Update to 52.143 with 4Q.
-week_var = 39.107
+# Weeks in a year
+week_var = 52.143
 
 del_doc_hosp_2019 <- del_supp %>% 
   filter(YR == 2019) %>% 
@@ -300,30 +315,34 @@ srh <- supp_rate_hosp %>%
   select(THCIC_ID, PROVIDER_NAME, SUSPECT)
 
 del_doc_hosp_2019 <- del_doc_hosp_2019 %>% 
-  left_join(srh, by = c("THCIC_ID", "PROVIDER_NAME"))
+  left_join(srh, by = c("THCIC_ID", "PROVIDER_NAME")) %>% 
+  # filter out hospitals with suspect numbers due to suppression
+  filter(SUSPECT == F) %>%
+  select(-SUSPECT)
 
 del_doc_hosp_2019 %>% datatable()
+
 ```
 
 ## Cesarean rates by hospital
 
 Here we look at all deliveries to see how many mothers have Cesareans. Note this starts with all ATTENDING_PHYSICIANS, including those who's IDs are suppressed. These are also all Cesareans, complicated or not. This is a simple rate of Cesarean births / All births in order to get an idea how many are performed.
 
-Excludes hospitals with fewer than 300 deliveries in our time span.
+Excludes hospitals with fewer than 120 deliveries in our time span.
 
 ```{r csec_rate_hosp}
-csec_rate_hosp <- del %>% 
-  group_by(THCIC_ID, PROVIDER_NAME, PRCSE2G) %>% 
-  count(PRCSE2G) %>% 
+csec_rate_hosp <- del_csec_epi_supp %>% 
+  group_by(THCIC_ID, PROVIDER_NAME, PRCSECP) %>% 
+  count(PRCSECP) %>% 
   rename(CASES = n) %>%
-  pivot_wider(names_from = PRCSE2G, values_from = CASES) %>% 
+  pivot_wider(names_from = PRCSECP, values_from = CASES) %>% 
   rename(NCSEC = "FALSE", CSEC = "TRUE") %>% 
   mutate(
     TOTAL = NCSEC + CSEC,
     RATE = round_half_up((CSEC / TOTAL) * 100, 1)
   ) %>% 
   filter(
-    TOTAL >= 300 
+    TOTAL >= 120 
   ) %>% 
   arrange(RATE %>% desc())
 
@@ -340,21 +359,21 @@ csec_rate_hosp %>%
 
 ### Cesarean rates by hospital by year
 
-This is the same calculation as above, but by year, showing only the rates. Excludes hospitals with fewer than 100 deliveries in a year.
+This is the same calculation as above, but by year, showing only the rates. Excludes hospitals with fewer than 30 deliveries in a given year.
 
 ```{r csec_hosp_rate_yr}
-csec_hosp_rate_yr <- del %>% 
-  group_by(YR, THCIC_ID, PROVIDER_NAME, PRCSE2G) %>% 
-  count(YR, PRCSE2G) %>%
+csec_hosp_rate_yr <- del_csec_epi_supp %>% 
+  group_by(YR, THCIC_ID, PROVIDER_NAME, PRCSECP) %>% 
+  count(YR, PRCSECP) %>%
   rename(CASES = n) %>%
-  pivot_wider(names_from = PRCSE2G, values_from = CASES) %>%
+  pivot_wider(names_from = PRCSECP, values_from = CASES) %>%
   rename(NCSEC = "FALSE", CSEC = "TRUE") %>%
   mutate(
     TOTAL = NCSEC + CSEC,
     CRATE = round_half_up((CSEC / TOTAL) * 100, 1)
   ) %>%
   filter(
-    TOTAL >= 100
+    TOTAL >= 30
   )
 ```
 
@@ -381,10 +400,10 @@ csec_hosp_rate_yr_table %>%
 
 ## Episiotomy rates
 
-Like the simple Cesarean rate above, here we look at all deliveries and note how many involved episiotomies. Note this starts with all ATTENDING_PHYSICIANS, including those who's IDs are suppressed. Excludes hospitals with fewer than 300 deliveries in our time span.
+Like the simple Cesarean rate above, here we look at all deliveries and note how many involved episiotomies. Note this starts with all ATTENDING_PHYSICIANS, including those who's IDs are suppressed. Excludes hospitals with fewer than 120 deliveries in our time span.
 
 ```{r epi_rate_hosp}
-epi_rate_hosp <- del %>% 
+epi_rate_hosp <- del_csec_epi_supp %>% 
   group_by(THCIC_ID, PROVIDER_NAME, EPI) %>% 
   count(EPI) %>% 
   rename(CASES = n) %>% 
@@ -397,7 +416,7 @@ epi_rate_hosp <- del %>%
     TOTAL = NEPI + EPI,
     ERATE = round_half_up((EPI / TOTAL * 100), 1)
   ) %>% 
-  filter(TOTAL >= 300) %>% 
+  filter(TOTAL >= 120) %>% 
   arrange(ERATE %>% desc())
 
 epi_rate_hosp %>% 
@@ -413,8 +432,10 @@ epi_rate_hosp %>%
 
 ## Episiotomy rates by hospital by year
 
+Values exluded where there were fewer than 30 deliveries in a given year.
+
 ```{r epi_rate_hosp_yr}
-epi_rate_hosp_yr <- del %>% 
+epi_rate_hosp_yr <- del_csec_epi_supp %>% 
   group_by(YR, THCIC_ID, PROVIDER_NAME, EPI) %>% 
   count(YR, EPI) %>%
   rename(CASES = n) %>% 
@@ -425,7 +446,7 @@ epi_rate_hosp_yr <- del %>%
     ERATE = round_half_up((EPI / TOTAL) * 100, 1)
   ) %>% 
   filter(
-    TOTAL >= 100 
+    TOTAL >= 30 
   ) %>% 
   select(YR, THCIC_ID, PROVIDER_NAME, ERATE)
   
@@ -448,12 +469,12 @@ epi_rate_hosp_yr %>%
 
 ## Either Episiotomy or Cesarean
 
-This looks to see if a mother had either a cesarean or an episiotomy. All the same things apply: All doctors, all complications, but hospitals with fewer than 300 deliveries in our time period are excluded.
+This looks to see if a mother had either a cesarean or an episiotomy. All the same things apply: All doctors, all complications, but hospitals with fewer than 120 deliveries in our time period are excluded.
 
 ```{r epicsec_rate_hosp}
-epicsec_rate_hosp <- del %>% 
+epicsec_rate_hosp <- del_csec_epi_supp %>% 
   mutate(
-        EPICSEC = if_else((EPI == T | PRCSE2G) == T, T, F)
+        EPICSEC = if_else((EPI == T | PRCSECP) == T, T, F)
   ) %>% 
   count(THCIC_ID, PROVIDER_NAME, EPICSEC) %>% 
   rename(CASES = n) %>% 
@@ -466,7 +487,7 @@ epicsec_rate_hosp <- del %>%
     TOTAL = EPICSEC + NEPICSEC,
     ECRATE = round_half_up((EPICSEC / TOTAL * 100), 1)
   ) %>% 
-  filter(TOTAL >= 300) %>% 
+  filter(TOTAL >= 120) %>% 
   arrange(ECRATE %>% desc())
 
 epicsec_rate_hosp %>% 
@@ -482,13 +503,13 @@ epicsec_rate_hosp %>%
 
 ### Episiotomy or Cesarean rate by hospital by year
 
-This uses all deliveries
+This uses all deliveries. Hospital exluded if fewer than 30 deliveries a year.
 
 ```{r epicsec_rate_hosp_yr}
 # prep data for table
-epicsec_rate_hosp_yr <- del %>% 
+epicsec_rate_hosp_yr <- del_csec_epi_supp %>% 
   mutate(
-    EPICSEC = if_else((EPI == T | PRCSE2G) == T, T, F)
+    EPICSEC = if_else((EPI == T | PRCSECP) == T, T, F)
   ) %>% 
   count(THCIC_ID, YR, PROVIDER_NAME, EPICSEC) %>% 
   rename(CASES = n) %>% 
@@ -501,7 +522,7 @@ epicsec_rate_hosp_yr <- del %>%
     TOTAL = EPICSEC + NEPICSEC,
     ECRATE = round_half_up((EPICSEC / TOTAL * 100), 1)
   ) %>% 
-  filter(TOTAL >= 100)
+  filter(TOTAL >= 30)
 
 epicsec_rate_hosp_yr
 
@@ -527,7 +548,7 @@ epicsec_rate_hosp_yr_table %>%
 One value we don't have yet is the percentage of patients using Medicaid.
 
 ```{r mediciad_2019}
-mediciad_2019 <- del %>% 
+mediciad_2019 <- del_csec_epi_supp %>% 
   # filter for 2019
   filter(
     YR == 2019
@@ -579,56 +600,22 @@ csec_hosp_rate_2019 <- csec_hosp_rate_yr %>%
   select(THCIC_ID, CRATE)
 ```
 
-### Data for Interactive: Hospital blurbs
 
-I'm joining various dataframes together, removing unnecessary columns along the way. Some values were calculated from data where doctors were suppressed, and so may be NA.
-
-```{r blurbs_2019}
-# Import maternal levels
-maternal_levels <- read_csv("resources/maternal-levels.csv") %>% 
-  mutate(
-    THCIC_ID = as.character(THCIC_ID)
-  )
-
-
-blurbs_2019 <- providers_list %>% 
-  rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED) %>% 
-  select(-PROVIDER_CITY) %>% 
-  left_join(
-    mediciad_2019 %>%
-      ungroup() %>% 
-      select(THCIC_ID, MCRATE),
-    by = "THCIC_ID") %>% 
-  # get deliveries per wk
-  left_join(
-    del_doc_hosp_2019 %>%
-      ungroup() %>%
-      # remove DELSPERWK where rate is suspect
-      filter(
-        SUSPECT == F
-      ) %>% 
-      select(THCIC_ID, DELSPERWK),
-      by = "THCIC_ID"
-    ) %>% 
-  left_join(maternal_levels %>% select(-PROVIDER_NAME))
-
-blurbs_2019 %>% head(10)
-```
 
 ## Quality checks
 
 ### Difference when removing infrequent deliveries
 
-In this view I remove doctors with fewer than 20 deliveries in a given year to give a more accurate look at the staff doctors that do the bulk of deliveries.
+In this view I remove doctors with fewer than 10 deliveries in a given year to give a more accurate look at the staff doctors that do the bulk of deliveries.
 
-> The choice of 20 deliveries as a threshold is arbitrary and could be changed if we deem necessary.
+> The choice of 10 deliveries as a threshold is arbitrary and could be changed if we deem necessary.
 
 ```{r del_hosp_doc_freq}
 del_hosp_doc_freq <- del_supp %>% 
   group_by(YR, THCIC_ID, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
   summarize(DELIVERIES = n()) %>% 
   rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  filter(DELIVERIES >= 20) %>% 
+  filter(DELIVERIES >= 10) %>% 
   group_by(THCIC_ID, PROVIDER_NAME) %>% 
   summarize(
     DELIVERIES = sum(DELIVERIES),
@@ -653,7 +640,7 @@ del_supp %>%
   group_by(YR, THCIC_ID, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
   summarize(DELIVERIES = n()) %>% 
   rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  filter(DELIVERIES >= 20) %>% 
+  filter(DELIVERIES >= 10) %>% 
   group_by(YR, THCIC_ID, PROVIDER_NAME) %>% 
   summarize(
     DELIVERIES = sum(DELIVERIES),
@@ -674,7 +661,7 @@ del %>%
   group_by(YR, THCIC_ID, PROVIDER_NAME, ATTENDING_PHYSICIAN_UNIF_ID) %>% 
   summarize(DELIVERIES = n()) %>% 
   rename(PHYSICIAN = ATTENDING_PHYSICIAN_UNIF_ID) %>% 
-  filter(DELIVERIES >= 20) %>% 
+  filter(DELIVERIES >= 10) %>% 
   group_by(YR, THCIC_ID, PROVIDER_NAME) %>% 
   summarize(
     DELIVERIES = sum(DELIVERIES),
@@ -686,6 +673,7 @@ del %>%
   select(YR, THCIC_ID, PROVIDER_NAME, RATE) %>% 
   pivot_wider(names_from = YR, values_from = RATE)
 ```
+
 
 ## Summaries
 
@@ -721,11 +709,11 @@ medi_rate_tx_yr_summary
 Get the rate of cesearean deliveries across the state.
 
 ```{r csec_rate_tx_yr_summary}
-csec_rate_tx_yr_summary <- del %>% 
-  group_by(YR, PRCSE2G) %>% 
-  count(PRCSE2G) %>% 
+csec_rate_tx_yr_summary <- del_csec %>% 
+  group_by(YR, PRCSECP) %>% 
+  count(PRCSECP) %>% 
   rename(CASES = n) %>%
-  pivot_wider(names_from = PRCSE2G, values_from = CASES) %>% 
+  pivot_wider(names_from = PRCSECP, values_from = CASES) %>% 
   rename(NCSEC = "FALSE", CSEC = "TRUE") %>% 
   mutate(
     SUMMARY = "TX",
@@ -744,9 +732,9 @@ csec_rate_tx_yr_summary
 Get the percentage of deliveries where either an episiotomy or cesarean were performed.
 
 ```{r epicsec_rate_tx_yr_summary}
-epicsec_rate_tx_yr_summary <- del %>% 
+epicsec_rate_tx_yr_summary <- del_csec_epi %>% 
   mutate(
-        EPICSEC = if_else((EPI == T | PRCSE2G) == T, T, F)
+        EPICSEC = if_else((EPI == T | PRCSECP) == T, T, F)
   ) %>% 
   group_by(YR, EPICSEC) %>% 
   count(EPICSEC) %>% 
@@ -783,6 +771,37 @@ epicsec_rate_hosp_yr_summary <- epicsec_rate_hosp_yr %>%
   )
 
 epicsec_rate_hosp_yr_summary
+```
+
+## Data for Interactive: Hospital blurbs
+
+Here we start with cleaned hospitals list and combine to get the medicare rate, deliveries per week and maternal levels. Some values were calculated from data where doctors were suppressed, and so may be NA.
+
+```{r blurbs_2019}
+# Import maternal levels
+maternal_levels <- read_csv("resources/maternal-levels.csv") %>% 
+  mutate(
+    THCIC_ID = as.character(THCIC_ID)
+  )
+
+blurbs_2019 <- providers_cleaned %>% 
+  rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED) %>% 
+  select(-PROVIDER_CITY) %>% 
+  left_join(
+    mediciad_2019 %>%
+      ungroup() %>% 
+      select(THCIC_ID, MCRATE),
+    by = "THCIC_ID") %>% 
+  # get deliveries per wk
+  left_join(
+    del_doc_hosp_2019 %>%
+      ungroup() %>%
+      select(THCIC_ID, DELSPERWK),
+      by = "THCIC_ID"
+    ) %>% 
+  left_join(maternal_levels %>% select(-PROVIDER_NAME))
+
+blurbs_2019 %>% head(10)
 ```
 
 ## Writing files and closing out

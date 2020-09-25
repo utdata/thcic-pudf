@@ -22,6 +22,9 @@ library(fs)
 library(tidyverse)
 library(jsonlite)
 library(janitor)
+
+# suppresses grouping warning
+options(dplyr.summarise.inform = FALSE)
 ```
 
 ## Summary imports
@@ -58,7 +61,7 @@ summary_data %>%
 ```{r hospitals_import}
 pcsec <- read_rds("data-processed/ahrq_pcsec_rate_hosp_yr.rds")
 epi <- read_rds("data-processed/lf_epi_rate_hosp_yr.rds")
-providers_list <- read_rds("procedures-lists/providers_cleaned.rds")
+providers_full <- read_rds("data-processed/providers_full.rds")
 ```
 
 ### Hospitals table
@@ -80,12 +83,22 @@ epi_2019 <- epi %>%
 
 ### Assemble table for output
 
+We are starting with the providers_full here, but some of our hospitals are filtered out earlier because they didn't have data (or enough) in 2019, so they might not have a rate.
+
 ```{r hosp_table_assemble}
 # assemble
-table_2019 <- providers_list %>% 
+table_2019 <- providers_full %>% 
   rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED) %>% 
+  filter(!is.na(PROVIDER_CITY)) %>% 
   left_join(pcsec_2019, by = "THCIC_ID") %>% 
-  left_join(epi_2019, by = "THCIC_ID")
+  left_join(epi_2019, by = "THCIC_ID") %>% 
+  # filter out cities without either measure
+  filter(
+    !(
+      is.na(PCRATE) &
+      is.na(EPIRATE)
+    )
+  )
 
 # write
 table_2019 %>% 
@@ -95,23 +108,6 @@ table_2019 %>%
 table_2019
 
 ```
-
-### Troubleshooting table_2019
-
-```{r}
-table_2019 %>% 
-  filter(str_detect(PROVIDER_NAME, "Centennial"))
-```
-```{r}
-table_2019 %>% 
-  distinct(THCIC_ID, PROVIDER_NAME) %>% 
-  ungroup() %>% 
-  count(PROVIDER_NAME) %>% 
-  arrange(n %>% desc())
-```
-
-
-
 
 ## Data export: charts by year
 
@@ -145,6 +141,8 @@ chart_texas
 
 ### Assemble charts by year
 
+Again, some hospitals won't have rates if they didn't have enough deliveries for that year.
+
 ```{r}
 # build table from data
 chart_rates <- pcsec %>% 
@@ -156,17 +154,25 @@ chart_rates <- pcsec %>%
     select(YR, THCIC_ID, EPIRATE)
   ) %>% 
   left_join(
-    providers_list %>%
+    providers_full %>%
       rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED) %>% 
       select(-PROVIDER_CITY)
     ) %>% 
   # reselect cols to order
   select(YR,THCIC_ID, PROVIDER_NAME, PCRATE, EPIRATE) %>% 
-  arrange(PROVIDER_NAME, YR)
+  arrange(PROVIDER_NAME, YR) %>% 
+  # filter out hospitals with neither measure
+  filter(
+    !(
+      is.na(PCRATE) &
+      is.na(EPIRATE)
+    )
+  )
 
 # peek
-chart_rates %>% head(8)
+chart_rates
 ```
+
 ### Bind Texas to rates
 
 And write to JSON.

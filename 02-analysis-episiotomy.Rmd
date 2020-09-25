@@ -20,6 +20,9 @@ library(tidyverse)
 library(janitor)
 library(DT)
 library(tigris)
+
+# suppresses grouping warning
+options(dplyr.summarise.inform = FALSE)
 ```
 
 ```{r imports}
@@ -29,26 +32,12 @@ test_flag <- F
 path_test <- "data-test/lf_del_vag_loop_test.rds"
 
 ### production data
-path_prod <- "data-processed/lf_del_vag.rds"
+path_prod <- "data-processed/lf_del_cleaned.rds"
 
 ### import based on flag
 if (test_flag == T) del_vag_excl <- read_rds(path_test) else del_vag_excl <- read_rds(path_prod)
 
 del_vag_excl %>% nrow()
-```
-
-### Update PROVIDER_NAME
-
-Hospitals change names over time, skewing any analysis that groups by PROVIDER_NAME. This process updates the PROVIDER_NAME field to use the most recent name used in the data, based on a sanitized list from another workbook.
-
-```{r providers_list}
-# Updated Hospitals list
-providers_list <- read_rds("procedures-lists/providers_cleaned.rds")
-
-del_vag_excl <- del_vag_excl %>% 
-  left_join(providers_list, by = "THCIC_ID") %>% 
-  select(-PROVIDER_NAME) %>% 
-  rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED)
 ```
 
 ### Set the episiotomy cases
@@ -102,7 +91,7 @@ This completes the processing of the data.
 
 ## Searchable table: Episiotomy rates by hospital, combined years
 
-Hospitals with fewer than 300 deliveries excluded.
+Hospitals with fewer than 120 deliveries excluded.
 
 ```{r lf_epi_rate_hosp}
 lf_epi_rate_hosp <- lf_epi %>%
@@ -121,7 +110,7 @@ lf_epi_rate_hosp <- lf_epi %>%
   ) %>% 
   select(THCIC_ID, PROVIDER_NAME, TOTAL, EPIF, EPIT, EPIRATE) %>% 
   filter(
-    TOTAL >= 300
+    TOTAL >= 120
     ) %>% 
   arrange(EPIRATE %>% desc())
 
@@ -131,7 +120,7 @@ lf_epi_rate_hosp %>%
 
 ## Episiotomy rates by hospital, by year
 
-A look at the episiotomy rates for hospitals by year. We create the rate using the EPI column we created above, then pivot to do the math. We pivot again to see the years nicely in a table. Excludes hospitals with fewer than 100 deliveries in a given year.
+A look at the episiotomy rates for hospitals by year. We create the rate using the EPI column we created above, then pivot to do the math. We pivot again to see the years nicely in a table. Excludes hospitals with fewer than 30 deliveries in a given year.
 
 ```{r lf_epi_rate_hosp_yr}
 # pivot to crate the rate based on logical EPI column
@@ -152,7 +141,7 @@ lf_epi_rate_hosp_yr <- lf_epi %>%
 
 # select, pivot to see years.
 lf_epi_rate_hosp_yr_table <- lf_epi_rate_hosp_yr %>% 
-  filter(TOTAL >= 100) %>% 
+  filter(TOTAL >= 30) %>% 
   select(YR, THCIC_ID, PROVIDER_NAME, EPIRATE) %>% 
   pivot_wider(names_from = YR, values_from = EPIRATE) %>% 
   arrange(`2019` %>% desc())
@@ -222,7 +211,6 @@ lf_epi_rate_hosp_qr_laredo_plot %>%
   labs(title = "Episiotomy rate by quarter, Laredo hospitals", x = "QUARTER", y = "Episiotomy rate")
 ```
 
-
 ## Patient county
 
 Get FIPS codes lookup for county names.
@@ -272,8 +260,7 @@ lf_epi_rate_county %>%
 
 ### Episiotimies by county, by year
 
-Group by patient county. This table excludes fewer than 10 cases in a county in a given year.
-
+Group by patient county. This table excludes fewer than 30 cases in a county in a given year.
 
 ```{r lf_epi_rate_county_yr}
 # pivot to crate the rate based on logical EPI column
@@ -295,7 +282,7 @@ lf_epi_rate_county_yr <- lf_epi %>%
     TOTAL = EPIF + EPIT,
     EPIRATE = round_half_up((EPIT / TOTAL) * 100,1)) %>% 
     # filter caseload
-    filter(TOTAL >= 10)
+    filter(TOTAL >= 30)
 
 # select, pivot to see years.
 lf_epi_rate_county_yr_table <- lf_epi_rate_county_yr %>% 

@@ -14,9 +14,11 @@ knit: (function(inputFile, encoding) { rmarkdown::render(
 
 > This repo is not yet public though some knitted workbooks are. I'll make public once we are all ready.
 
-This is an analysis of the [Texas Inpatient Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) for a series of birth outcomes.
+This is an analysis for a series of birth outcomes. The data used is the [Texas Hospital Inpatient Discharge Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm), [1q2016 - 4q2019]. Texas Department of State Health Services, Center for Health Statistics, Austin, Texas.
 
-No raw data is made public through this project. The data is typically sold by the Texas Department of State Health Services. Details at the link above.
+No raw data is made public through this project. The data is typically sold by the Texas Department of State Health Services. Details at the link above. This analysis uses files for discharges from 2016 to 2019, though some discharges for the fourth quarter of 2019 may not be included because of allowed reporting delays.
+
+No patients or doctors have been revealed in the data or analysis. Suppressions have been applied for smaller aggregations to protect privacy.
 
 This analysis is by:
 

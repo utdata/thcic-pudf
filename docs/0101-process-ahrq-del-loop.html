@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-08-22" />
+<meta name="date" content="2020-09-21" />
 
 <title>AHRQ all deliveries processing</title>
 
@@ -1634,7 +1634,7 @@ summary {
 
 
 <h1 class="title toc-ignore">AHRQ all deliveries processing</h1>
-<h4 class="date">2020-08-22</h4>
+<h4 class="date">2020-09-21</h4>
 
 </div>
 
@@ -1682,7 +1682,8 @@ tsv_files</code></pre>
 ## data-raw/PUDF 3Q2019 tab-delimited/PUDF_base1_3q2019_tab.txt
 ## data-raw/PUDF 4Q2016 tab-delimited/PUDF_base1_4q2016_tab.txt
 ## data-raw/PUDF 4Q2017 tab-delimited/PUDF_base1_4q2017_tab.txt
-## data-raw/PUDF 4Q2018 tab-delimited/PUDF_base1_4q2018_tab.txt</code></pre>
+## data-raw/PUDF 4Q2018 tab-delimited/PUDF_base1_4q2018_tab.txt
+## data-raw/PUDF 4Q2019 tab-delimited/PUDF_base1_4q2019_tab.txt</code></pre>
 </div>
 </div>
 <div id="function-to-filter-for-deliveries" class="section level2">
@@ -1787,7 +1788,7 @@ data %&gt;%
   count(YR)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["YR"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"2015","2":"4"},{"1":"2016","2":"380329"},{"1":"2017","2":"361097"},{"1":"2018","2":"359004"},{"1":"2019","2":"265867"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["YR"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"2015","2":"4"},{"1":"2016","2":"380329"},{"1":"2017","2":"361097"},{"1":"2018","2":"359004"},{"1":"2019","2":"356983"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -1806,7 +1807,7 @@ data %&gt;%
 data %&gt;% write_rds(write_path)
 
 data %&gt;% nrow()</code></pre>
-<pre><code>## [1] 1366297</code></pre>
+<pre><code>## [1] 1457413</code></pre>
 <pre class="r"><code># A klaxon to indicate the processing is complete
 beepr::beep(4)</code></pre>
 </div>

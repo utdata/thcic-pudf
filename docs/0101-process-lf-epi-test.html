@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-06-25" />
+<meta name="date" content="2020-09-21" />
 
 <title>Leapfrog Deliveries process testing</title>
 
@@ -1634,12 +1634,12 @@ summary {
 
 
 <h1 class="title toc-ignore">Leapfrog Deliveries process testing</h1>
-<h4 class="date">2020-06-25</h4>
+<h4 class="date">2020-09-21</h4>
 
 </div>
 
 
-<p>The purpose of this notebook is to process test data from multiple quarters of <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">THCIC in-patient public use data files</a> into a single data file of <strong>Total number of vaginal deliveries during the reporting time period, with Excluded Populations removed.</strong> as defined by Leapfrog’s 2019 Leapfrog Hospital Survey for Episiotomy (page 103). I also apply some data cleaning to remove records that have blank fields or mothers outside typical child-bearing age.</p>
+<p>The purpose of this notebook is to process test data from multiple quarters of <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">THCIC in-patient public use data files</a> into a single data file of <strong>Total number of vaginal deliveries during the reporting time period, with Excluded Populations removed.</strong> as defined by Leapfrog’s 2020 Leapfrog Hospital Survey for Episiotomy (page 118). I also apply some data cleaning to remove records that have blank fields or mothers outside typical child-bearing age.</p>
 <p>The methods used here are also used in <code>01-process-lf-epi-loop</code> to process multiple years of data. This notebook cannot support that amount of data, but was used to check various steps in the filtering process for the main script. Please see the <code>01-process-lf-epi-loop</code> for more additional details.</p>
 <p>There is another notebook <code>00-process-lists</code> where various lists of ICD-10 and other codes are defined separately. Those values are written out to the <code>procedures-lists</code> folder as .rds and .csv files and then imported into this notebook and others. See that notebook to inspect the lists.</p>
 <pre class="r"><code>library(fs)
@@ -1707,7 +1707,7 @@ diag_cols</code></pre>
 ## [22] &quot;OTH_DIAG_CODE_20&quot;    &quot;OTH_DIAG_CODE_21&quot;    &quot;OTH_DIAG_CODE_22&quot;   
 ## [25] &quot;OTH_DIAG_CODE_23&quot;    &quot;OTH_DIAG_CODE_24&quot;</code></pre>
 <pre class="r"><code>vag_msdrg_list</code></pre>
-<pre><code>##  [1] &quot;767&quot; &quot;768&quot; &quot;774&quot; &quot;775&quot; &quot;796&quot; &quot;797&quot; &quot;798&quot; &quot;805&quot; &quot;806&quot; &quot;807&quot;</code></pre>
+<pre><code>## [1] &quot;768&quot; &quot;796&quot; &quot;797&quot; &quot;798&quot; &quot;805&quot; &quot;806&quot; &quot;807&quot;</code></pre>
 <pre class="r"><code>vag_aprdrg_list</code></pre>
 <pre><code>## [1] &quot;541&quot; &quot;542&quot; &quot;560&quot;</code></pre>
 <pre class="r"><code>vag_excl_list</code></pre>
@@ -1739,7 +1739,7 @@ diag_cols</code></pre>
   ) 
 
 del_vag_excl %&gt;% nrow()</code></pre>
-<pre><code>## [1] 1531</code></pre>
+<pre><code>## [1] 1529</code></pre>
 </div>
 <div id="filter-out-blank-cells" class="section level3">
 <h3>Filter out blank cells</h3>
@@ -1755,7 +1755,7 @@ del_vag_excl %&gt;% nrow()</code></pre>
   )
 
 del_vag_cln %&gt;% nrow()</code></pre>
-<pre><code>## [1] 1526</code></pre>
+<pre><code>## [1] 1524</code></pre>
 </div>
 <div id="child-bearing-age" class="section level3">
 <h3>Child-bearing age</h3>
@@ -1765,7 +1765,7 @@ del_vag_cln %&gt;% nrow()</code></pre>
   filter(PAT_AGE %in% age_list)
 
 del_vag_cln_age %&gt;% nrow()</code></pre>
-<pre><code>## [1] 1521</code></pre>
+<pre><code>## [1] 1520</code></pre>
 </div>
 </div>
 <div id="add-convenience-columns-for-dates" class="section level2">
@@ -1785,7 +1785,7 @@ del_vag_cln_age %&gt;% nrow()</code></pre>
 <div id="write-file" class="section level2">
 <h2>Write file</h2>
 <pre class="r"><code>del_vag_cln_age_yr %&gt;% nrow()</code></pre>
-<pre><code>## [1] 1521</code></pre>
+<pre><code>## [1] 1520</code></pre>
 <pre class="r"><code>del_vag_cln_age_yr %&gt;% write_rds(&quot;data-test/lf_del_vag_single_test.rds&quot;)
 
 beepr::beep(4)</code></pre>

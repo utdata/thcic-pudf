@@ -7,7 +7,7 @@ output:
 knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
 ---
 
-The purpose of this notebook is to process multiple quarters of [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) into a single data file of **Total number of vaginal deliveries during the reporting time period, with Excluded Populations removed.** as defined by Leapfrog's 2019 Leapfrog Hospital Survey for Episiotomy (page 103). I also apply some data cleaning to remove records that have blank fields or mothers outside typical child-bearing age.
+The purpose of this notebook is to process multiple quarters of [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) into a single data file of **Total number of vaginal deliveries during the reporting time period, with Excluded Populations removed.** as defined by Leapfrog's [2020 Leapfrog Hospital Survey](https://www.leapfroggroup.org/sites/default/files/Files/2020HospitalSurvey_20200413_8.1%20%28version%201%29.pdf) for Episiotomy (page 118). I also apply some data cleaning to remove records that have blank fields or mothers outside typical child-bearing age.
 
 The output is is then analyzed in other notebooks.
 

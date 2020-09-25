@@ -1,0 +1,265 @@
+---
+title: "Clean provider names - AHRQ"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+By **Christian McDonald**, Assistant Professor of Practice\
+School of Journalism, Moody College of Communication\
+University of Texas at Austin
+
+---
+
+Hospital names change over time, causing problems for any analysis that groups or aggregates by the PROVIDER_NAME.
+
+This notebook provides a list of THCIC_IDs with first their official name from the Current Facility Contact Information found at [Outpatient Data Reporting Requirements](https://www.dshs.texas.gov/thcic/OutpatientFacilities/OutpatientReportingRequirements.shtm). If the case's THCIC_ID is not listed in the facilities list, then the facilities' most recent name is used.
+
+# Problems in the data
+
+- There are some facilities that share the same PROVIDER_NAME, but are actually different facilities in different cities. There are facilities named "Memorial Hospital" in three different cities. They have different THCIC_ICs and work fine as long as the ID is always considered. However, it is important that they don't get caught up in other cleaning processes.
+- Some facilities seem to change IDs. They are listed with both THCIC_IDs in an older facilities list (20200204 THCIC Facility List.xlsx), with no address. According to the Data Compliance office at the Center for Health Statistics: "The change in the THCIC ID is due to a change in the State License Number. When there is a change in State License Number, this is an indicator of a “change in ownership” to THCIC in most cases. New ownerships usually do not want the data they report to THCIC to be mixed together with the former ownership data, so a new THCIC ID is issued." We will drop the older records and only use data with the most recent THCIC_ID.
+- Some facilities change names and THCIC_IDs with new ownership. We will drop these for the same reasons. 
+- Some facilities have closed. The THCIC_ID has no match in the current facilities list, though some are listed in the older list with no locations information. "Bay Area Regional Medical Center" is an example. We'll need to remove these records as they are not germane to the study or interactive. 
+
+This notebook updates records to use their most recent names/ID combinations and creates "full" and "current" provider lists for later notebooks.
+
+## Setup
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+library(janitor)
+library(readxl)
+```
+
+## Importing the data
+
+- We start with all delivery data per AHRQ standards since it is our largest collected dataset.
+- The facilities list is the most current one published by the Center for Health Statistics on Sept. 10, 2020, around the time they released our most current data, 4q2019.
+
+```{r imports}
+### production data
+path_prod <- "data-processed/ahrq_del_all.rds"
+
+del <- read_rds(path_prod)
+
+del %>% nrow()
+
+### facilities list
+facilities_list <- read_excel("resources/FacilityList_20200910.xlsx") %>% clean_names()
+```
+
+## Process for creating updated full provider list
+
+Since PROVIDER_NAMES change over time, we want to use the most recent facilites list to get the most current name of providers in our data. If the record's ID is not on the current list, then we use the most recent PROVIDER_NAME for that THCIC_ID.
+
+The process we are using is this:
+
+- get distinct id, name, quarter from the delivery data
+  - arrange by id, quarter so we can find the most recent version
+  - group and slice the most recent name, creating a new col with the recent name
+- join with facilities_list to get the official name
+  - In some cases the id is not in the facilities list. In those cases, use case_when to use the "recent" name
+
+The concept of group and slice from the tail by row_number came from [this stack overflow article](https://stackoverflow.com/a/53994503/2909130).
+
+```{r providers_full}
+providers_full <- del %>% 
+  distinct(THCIC_ID, PROVIDER_NAME, DISCHARGE) %>% 
+  arrange(THCIC_ID, DISCHARGE) %>% 
+  select(THCIC_ID, PROVIDER_NAME) %>% 
+  group_by(THCIC_ID) %>% 
+  slice(tail(row_number(), 1)) %>% 
+  rename(PROVIDER_NAME_RECENT = PROVIDER_NAME) %>% 
+  left_join(facilities_list, by = c("THCIC_ID" = "thcic_id")) %>% 
+  select(THCIC_ID, PROVIDER_NAME_RECENT, facility, city, address) %>% 
+  # Create new provider name and fill from facilities list
+  mutate(
+    PROVIDER_NAME_CLEANED = case_when(
+       is.na(facility) ~ PROVIDER_NAME_RECENT,
+       TRUE ~ facility
+    )
+  ) %>% 
+  rename(
+    PROVIDER_CITY = city,
+    PROVIDER_ADDRESS = address
+  ) %>% 
+  select(THCIC_ID, PROVIDER_NAME_CLEANED, PROVIDER_CITY, PROVIDER_ADDRESS) %>%
+  arrange(PROVIDER_NAME_CLEANED)
+
+providers_full %>% nrow()
+providers_full %>% head()
+```
+
+Check for duplicate ids in cleaned list.
+
+```{r test_id}
+providers_full %>% 
+  count(THCIC_ID) %>% 
+  filter(n > 1)
+```
+Check for duplicate names in cleaned list.
+
+```{r test_name}
+providers_full %>% 
+  count(PROVIDER_NAME_CLEANED) %>% 
+  filter(n > 1)
+```
+### Troubleshooting providers list
+
+There are a number of cases where there is a `THCIC_ID` used in our data does not have a match in the most recent facilities list. You can see these by searching the cleaned providers for records with no `PROVIDER_CITY`.
+
+```{r no_match_list}
+providers_full %>% 
+  filter(is.na(PROVIDER_CITY))
+```
+x
+The reasons are explained above in Problems with the data.
+
+## Update PROVIDER_NAMES from full providers list
+
+Here we update the AHRQ deliveries data to use the best name from our "full" providers list. Any records that were not in the current facilities list will use their most recent name and not have a PROVIDER_CITY or PROVIDER_ADDRESS added.
+
+```{r update_names}
+del_names <- del %>% # or assign back to the same dataframe
+  left_join(providers_full, by = "THCIC_ID") %>% 
+  rename(
+    PROVIDER_NAME_ORIG = PROVIDER_NAME,
+    PROVIDER_NAME = PROVIDER_NAME_CLEANED,
+    )
+
+del_names_cnt <- del_names %>% nrow()
+
+# scope of records updated
+fac_cleaned <- del_names %>% 
+  filter(PROVIDER_NAME != PROVIDER_NAME_ORIG)
+
+fac_cleaned_cnt <- fac_cleaned %>% nrow()
+fac_cleaned_pct <- round_half_up((fac_cleaned_cnt / del_names_cnt) * 100,1)
+
+
+cat(
+  fac_cleaned_cnt, " of ", del_names_cnt,
+  " records were updated with new PROVIDER_NAMEs, or ",
+  fac_cleaned_pct, "%", sep = ""
+)
+
+#peek
+fac_cleaned %>% 
+  select(PROVIDER_NAME_ORIG, PROVIDER_NAME, THCIC_ID) %>% 
+  distinct() %>% 
+  arrange(PROVIDER_NAME_ORIG)
+```
+
+## Scope of records with no PROVIDER_CITY
+
+When we build data for our charts we will end up dropping records that are not in our current facilities list. Here we get an idea of the scope of that.
+
+### List facilities with no PROVIDER_CITY
+
+This is across all years of data.
+
+```{r scope_providers}
+
+del_names %>% 
+  filter(is.na(PROVIDER_CITY)) %>% 
+  select(THCIC_ID, PROVIDER_NAME) %>% 
+  distinct() %>% 
+  arrange(PROVIDER_NAME)
+```
+
+### 2019 records that will be affected
+
+```{r scope_2019}
+# get 2019 records
+del_names_2019 <- del_names %>% 
+  filter(YR == "2019")
+# get numb rows
+del_names_2019_rows <- del_names_2019 %>% nrow()
+
+# Find the number of rows with missing cities
+prov_city_null <- del_names_2019 %>% 
+  filter(is.na(PROVIDER_CITY))
+
+prov_city_null_rows <- prov_city_null %>% nrow()
+
+# Get percentage of data with missing cities
+perc <- (prov_city_null_rows / (del_names %>% nrow()) * 100) %>% round_half_up(2)
+
+# percent of records
+cat("There are ", prov_city_null_rows, " of ", del_names_2019_rows, " records with missing cities, or ", perc, "%", sep ='')
+
+# providers dropped
+del_names_2019 %>% 
+  count(PROVIDER_NAME, PROVIDER_CITY) %>% 
+  filter(is.na(PROVIDER_CITY))
+
+```
+
+### Hospital names with more than one ID
+
+#### Oakbend Medical Center
+
+Oakbend Medical Center has two THCIC_IDs in the data because they have two locations (1705 Jackson Street
+and 22003 Southwest Freeway, both in Richmond). It is listed as such in the most current facilities directory.
+
+```{r list_oakbend}
+del_names %>% 
+  distinct(THCIC_ID, PROVIDER_NAME, PROVIDER_CITY, PROVIDER_ADDRESS) %>% 
+  filter(str_detect(PROVIDER_NAME, "Oakbend"))
+```
+#### Memorial Hospital
+
+Memorial Hospital is a popular name, being in three cities.
+
+```{r list_memorial}
+del_names %>% 
+  distinct(THCIC_ID, PROVIDER_NAME, PROVIDER_CITY, PROVIDER_ADDRESS) %>% 
+  filter(PROVIDER_NAME == "Memorial Hospital")
+
+```
+
+## Build a current facilities list
+
+Here we build a nice, clean list of current facilities to use later for charts.
+
+```{r facilities_current}
+providers_current <- facilities_list %>% 
+  select(thcic_id, facility, address, city, county, zip) %>% 
+  rename(
+    THCIC_ID = thcic_id,
+    PROVIDER_NAME = facility,
+    PROVIDER_ADDRESS = address,
+    PROVIDER_CITY = city,
+    PROVIDER_COUNTY = county,
+    PROVIDER_ZIP = zip
+  )
+
+# peek
+providers_current %>% head()
+```
+
+## Exports and writes
+
+Two exports needed.
+- The cleaned "full" providers list
+- A "current" providers list
+- The cleaned deliveries data
+
+```{r export}
+# write the file
+providers_full %>%
+  write_rds("data-processed/providers_full.rds")
+
+providers_current %>%
+  write_rds("data-processed/providers_current.rds")
+
+del_names %>% 
+  write_rds("data-processed/ahrq_del_cleaned.rds")
+
+# klaxon to sound completion
+beepr::beep(4)
+```
+
