@@ -1,5 +1,5 @@
 ---
-title: "Doctor deliveries per hospital (AHRQ specs), 2016-3q2019"
+title: "Doctor deliveries per hospital (AHRQ specs), 2016-2019"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -56,7 +56,7 @@ path_test <- "data-test/ahrq_del_all_loop_test.rds"
 path_prod <- "data-processed/ahrq_del_cleaned.rds"
 
 ### cleaned providers list
-providers_cleaned <- read_rds("data-processed/providers_cleaned.rds")
+providers_full <- read_rds("data-processed/providers_full.rds")
 
 ### import based on flag
 if (test_flag == T) del <- read_rds(path_test) else del <- read_rds(path_prod)
@@ -503,7 +503,7 @@ epicsec_rate_hosp %>%
 
 ### Episiotomy or Cesarean rate by hospital by year
 
-This uses all deliveries. Hospital exluded if fewer than 30 deliveries a year.
+This uses all deliveries. Hospital excluded if fewer than 30 deliveries a year.
 
 ```{r epicsec_rate_hosp_yr}
 # prep data for table
@@ -523,8 +523,6 @@ epicsec_rate_hosp_yr <- del_csec_epi_supp %>%
     ECRATE = round_half_up((EPICSEC / TOTAL * 100), 1)
   ) %>% 
   filter(TOTAL >= 30)
-
-epicsec_rate_hosp_yr
 
 # pivot data for table
 epicsec_rate_hosp_yr_table <- epicsec_rate_hosp_yr %>% 
@@ -784,7 +782,7 @@ maternal_levels <- read_csv("resources/maternal-levels.csv") %>%
     THCIC_ID = as.character(THCIC_ID)
   )
 
-blurbs_2019 <- providers_cleaned %>% 
+blurbs_2019 <- providers_full %>% 
   rename(PROVIDER_NAME = PROVIDER_NAME_CLEANED) %>% 
   select(-PROVIDER_CITY) %>% 
   left_join(
