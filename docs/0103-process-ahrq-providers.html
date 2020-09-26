@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-09-24" />
+<meta name="date" content="2020-09-25" />
 
 <title>Clean provider names - AHRQ</title>
 
@@ -1634,13 +1634,13 @@ summary {
 
 
 <h1 class="title toc-ignore">Clean provider names - AHRQ</h1>
-<h4 class="date">2020-09-24</h4>
+<h4 class="date">2020-09-25</h4>
 
 </div>
 
 
 <p>By <strong>Christian McDonald</strong>, Assistant Professor of Practice<br />
-School of Journalism, Moody College of Communication<br />
+School of Journalism and Media, Moody College of Communication<br />
 University of Texas at Austin</p>
 <hr />
 <p>Hospital names change over time, causing problems for any analysis that groups or aggregates by the PROVIDER_NAME.</p>
@@ -1895,8 +1895,14 @@ providers_current %&gt;% head()</code></pre>
 providers_full %&gt;%
   write_rds(&quot;data-processed/providers_full.rds&quot;)
 
+providers_full %&gt;%
+  write_csv(&quot;exports/providers_full.csv&quot;)
+
 providers_current %&gt;%
   write_rds(&quot;data-processed/providers_current.rds&quot;)
+
+providers_current %&gt;%
+  write_csv(&quot;exports/providers_current.csv&quot;)
 
 del_names %&gt;% 
   write_rds(&quot;data-processed/ahrq_del_cleaned.rds&quot;)

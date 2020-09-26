@@ -8,7 +8,7 @@ knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = e
 ---
 
 By **Christian McDonald**, Assistant Professor of Practice\
-School of Journalism, Moody College of Communication\
+School of Journalism and Media, Moody College of Communication\
 University of Texas at Austin
 
 This is an analysis of the Vaginal Birth After Cesareans, as defined by [IQI 22 Vaginal Birth After Cesarean (VBAC) Delivery Rate, Uncomplicated](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2020/TechSpecs/IQI_22_Vaginal_Birth_After_Cesarean_(VBAC)_Delivery_Rate_Uncomplicated.pdf) in 2020.
@@ -182,15 +182,6 @@ This completes the processing of the data. `ahrq_vbac` is our working dataframe.
 
 - Do hospitals perform them?
 - How many performed in 2019?
-
-### Across data
-
-```{r}
-ahrq_vbac %>% 
-  tabyl(VBAC) %>% 
-  rename(count = n) %>% 
-  adorn_pct_formatting()
-```
 
 ### VBAC by hospital by year
 

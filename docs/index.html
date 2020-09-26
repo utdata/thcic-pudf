@@ -1638,15 +1638,12 @@ summary {
 
 <div id="birth-outcomes-for-texas" class="section level1">
 <h1>Birth outcomes for Texas</h1>
-<blockquote>
-<p>This repo is not yet public though some knitted workbooks are. I’ll make public once we are all ready.</p>
-</blockquote>
 <p>This is an analysis for a series of birth outcomes. The data used is the <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">Texas Hospital Inpatient Discharge Public Use Data File</a>, [1q2016 - 4q2019]. Texas Department of State Health Services, Center for Health Statistics, Austin, Texas.</p>
-<p>No raw data is made public through this project. The data is typically sold by the Texas Department of State Health Services. Details at the link above. This analysis uses files for discharges from 2016 to 2019, though some discharges for the fourth quarter of 2019 may not be included because of allowed reporting delays.</p>
+<p>No raw data is made public through this project. The data is typically sold by the Center for Health Statistics. Details at the link above. This analysis uses files for discharges from 2016 to 2019, though a typically very small number of discharges for the fourth quarter of 2019 may not be included because of allowed reporting delays.</p>
 <p>No patients or doctors have been revealed in the data or analysis. Suppressions have been applied for smaller aggregations to protect privacy.</p>
 <p>This analysis is by:</p>
-<p><strong>CHRISTIAN MCDONALD</strong>, Assistant Professor of Practice<br />
-School of Journalism, Moody College ofCommunication<br />
+<p><a href="https://journalism.utexas.edu/faculty/christian-mcdonald"><strong>CHRISTIAN MCDONALD</strong></a>, Assistant Professor of Practice<br />
+School of Journalism and Media, Moody College ofCommunication<br />
 The University of Texas at Austin</p>
 <div id="methodology" class="section level2">
 <h2>Methodology</h2>
@@ -1659,7 +1656,7 @@ The University of Texas at Austin</p>
 <div id="primary-cesareans-study" class="section level3">
 <h3>Primary Cesareans study</h3>
 <ul>
-<li><a href="https://utdata.github.io/thcic-pudf/02-analysis-pcsec.html">02-analysis-pcsec</a> is an analysis of Primary Cesarean rates vs all uncomplicated births statewide and for Laredo hospitals.</li>
+<li><a href="https://utdata.github.io/thcic-pudf/02-analysis-pcsec.html">02-analysis-pcsec</a> is an analysis of Primary Cesarean rates vs all uncomplicated births.</li>
 </ul>
 </div>
 <div id="vaginal-births-after-cesarean-study" class="section level3">
@@ -1671,7 +1668,7 @@ The University of Texas at Austin</p>
 <div id="episiotomy-study" class="section level3">
 <h3>Episiotomy study</h3>
 <ul>
-<li><a href="https://utdata.github.io/thcic-pudf/02-analysis-episiotomy.html">02-analysis-episiotomy</a> is an analysis of episiotomy procedures statewide and for Laredo hospitals.</li>
+<li><a href="https://utdata.github.io/thcic-pudf/02-analysis-episiotomy.html">02-analysis-episiotomy</a> is an analysis of episiotomy procedures.</li>
 </ul>
 </div>
 <div id="deliveries-study" class="section level3">
@@ -1728,20 +1725,21 @@ The University of Texas at Austin</p>
 <h3>From 03-analysis-summaries</h3>
 <ul>
 <li>table_2019.csv: Data: Hospital, location, episiotomy and primary cesarean rates for 2019 (or more the most up-to-date data available)</li>
-<li>chart_date.json: Data: Year, ID, Hospital, episiotomy and primary cesarean rates.</li>
+<li>chart_date.json: Data: Year, ID, Hospital, episiotomy and primary cesarean rates. There is a v2 version as well.</li>
 <li>summary_data: Summary data for the major categories.</li>
 </ul>
 </div>
 <div id="from-0102-process-providers" class="section level3">
 <h3>From 0102-process-providers</h3>
 <ul>
-<li>providers_export: Names and addresses of hospitals in the analysis.</li>
+<li>providers_full: Names and addresses of all the hospitals in the analysis.</li>
+<li>providers_current: The most recent list of facilites, per the Center for Health Statistics.</li>
 </ul>
 </div>
 </div>
 <div id="notes" class="section level2">
 <h2>Notes</h2>
-<p>There was a data correction sent out 2020-08-14 to replace some fields for some records in the <code>PUDF_base1_3Q2019_tab.txt</code> data file. The replacement file is in data-raw, but not yet applied because we are not using the fields noted, <code>TOTAL_CHARGES</code> and <code>TOTAL_CHARGES_ACCOMM</code>. If that changes, I’ll need to update them.</p>
+<p>There was a data correction sent out 2020-08-14 to replace some fields for some records in the <code>PUDF_base1_3Q2019_tab.txt</code> data file. The replacement file was not applied because we are not using the fields noted, <code>TOTAL_CHARGES</code> and <code>TOTAL_CHARGES_ACCOMM</code>.</p>
 </div>
 <div id="music-to-get-you-through-it" class="section level2">
 <h2>Music to get you through it</h2>

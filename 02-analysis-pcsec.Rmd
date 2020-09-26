@@ -8,7 +8,7 @@ knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = e
 ---
 
 By **Christian McDonald**, Assistant Professor of Practice\
-School of Journalism, Moody College of Communication\
+School of Journalism and Media, Moody College of Communication\
 University of Texas at Austin
 
 This is an analysis of the Primary Cesarean Delivery Rate, Uncomplicated, as defined by [IQI 33 Primary Cesarean Delivery Rate, Uncomplicated](https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2020/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf) in 2020:

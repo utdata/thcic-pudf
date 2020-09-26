@@ -1,5 +1,5 @@
 ---
-title: "Leapfrog Episiotomy rates, 2016-3q2019"
+title: "Leapfrog Episiotomy rates, 2016-2019"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -8,7 +8,7 @@ knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = e
 ---
 
 By **Christian McDonald**, Assistant Professor of Practice\
-School of Journalism, Moody College of Communication\
+School of Journalism and Media, Moody College of Communication\
 University of Texas at Austin
 
 This analysis looks at episiotomy rates using the [Texas Health Care Information Collection's Texas Inpatient Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm). The definition to calculate the rates comes from the [2020 Leapfrog Hospital Survey p118](https://www.leapfroggroup.org/sites/default/files/Files/2020HospitalSurvey_20200413_8.1%20%28version%201%29.pdf). I start with data filtered from the THCIC data using the Leapfrog specs. That process is explained in "01-process-lf-epi-loop".

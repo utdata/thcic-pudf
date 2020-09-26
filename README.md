@@ -12,18 +12,16 @@ knit: (function(inputFile, encoding) { rmarkdown::render(
 
 # Birth outcomes for Texas
 
-> This repo is not yet public though some knitted workbooks are. I'll make public once we are all ready.
-
 This is an analysis for a series of birth outcomes. The data used is the [Texas Hospital Inpatient Discharge Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm), [1q2016 - 4q2019]. Texas Department of State Health Services, Center for Health Statistics, Austin, Texas.
 
-No raw data is made public through this project. The data is typically sold by the Texas Department of State Health Services. Details at the link above. This analysis uses files for discharges from 2016 to 2019, though some discharges for the fourth quarter of 2019 may not be included because of allowed reporting delays.
+No raw data is made public through this project. The data is typically sold by the Center for Health Statistics. Details at the link above. This analysis uses files for discharges from 2016 to 2019, though a typically very small number of discharges for the fourth quarter of 2019 may not be included because of allowed reporting delays.
 
 No patients or doctors have been revealed in the data or analysis. Suppressions have been applied for smaller aggregations to protect privacy.
 
 This analysis is by:
 
-**CHRISTIAN MCDONALD**, Assistant Professor of Practice\
-School of Journalism, Moody College ofCommunication\
+[**CHRISTIAN MCDONALD**](https://journalism.utexas.edu/faculty/christian-mcdonald), Assistant Professor of Practice\
+School of Journalism and Media, Moody College ofCommunication\
 The University of Texas at Austin
 
 ## Methodology
@@ -34,7 +32,7 @@ The University of Texas at Austin
 
 ### Primary Cesareans study
 
-- [02-analysis-pcsec](https://utdata.github.io/thcic-pudf/02-analysis-pcsec.html) is an analysis of Primary Cesarean rates vs all uncomplicated births statewide and for Laredo hospitals.
+- [02-analysis-pcsec](https://utdata.github.io/thcic-pudf/02-analysis-pcsec.html) is an analysis of Primary Cesarean rates vs all uncomplicated births.
 
 ### Vaginal Births after Cesarean study
 
@@ -42,7 +40,7 @@ The University of Texas at Austin
 
 ### Episiotomy study
 
-- [02-analysis-episiotomy](https://utdata.github.io/thcic-pudf/02-analysis-episiotomy.html) is an analysis of episiotomy procedures statewide and for Laredo hospitals.
+- [02-analysis-episiotomy](https://utdata.github.io/thcic-pudf/02-analysis-episiotomy.html) is an analysis of episiotomy procedures.
 
 ### Deliveries study
 
@@ -85,16 +83,17 @@ A series of aggregated data that may prove useful. In the `exports/` folder:
 ### From 03-analysis-summaries
 
 - table_2019.csv: Data: Hospital, location, episiotomy and primary cesarean rates for 2019 (or more the most up-to-date data available)
-- chart_date.json: Data: Year, ID, Hospital, episiotomy and primary cesarean rates.
+- chart_date.json: Data: Year, ID, Hospital, episiotomy and primary cesarean rates. There is a v2 version as well.
 - summary_data: Summary data for the major categories.
 
 ### From 0102-process-providers
 
-- providers_export: Names and addresses of hospitals in the analysis.
+- providers_full: Names and addresses of all the hospitals in the analysis.
+- providers_current: The most recent list of facilites, per the Center for Health Statistics.
 
 ## Notes
 
-There was a data correction sent out 2020-08-14 to replace some fields for some records in the `PUDF_base1_3Q2019_tab.txt` data file. The replacement file is in data-raw, but not yet applied because we are not using the fields noted, `TOTAL_CHARGES` and `TOTAL_CHARGES_ACCOMM`. If that changes, I'll need to update them.
+There was a data correction sent out 2020-08-14 to replace some fields for some records in the `PUDF_base1_3Q2019_tab.txt` data file. The replacement file was not applied because we are not using the fields noted, `TOTAL_CHARGES` and `TOTAL_CHARGES_ACCOMM`.
 
 ## Music to get you through it
 

@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-09-21" />
+<meta name="date" content="2020-09-25" />
 
 <title>AHRQ all deliveries processing</title>
 
@@ -1634,13 +1634,17 @@ summary {
 
 
 <h1 class="title toc-ignore">AHRQ all deliveries processing</h1>
-<h4 class="date">2020-09-21</h4>
+<h4 class="date">2020-09-25</h4>
 
 </div>
 
 
+<p>By <strong>Christian McDonald</strong>, Assistant Professor of Practice<br />
+School of Journalism and Media, Moody College of Communication<br />
+University of Texas at Austin</p>
+<hr />
 <p>The purpose of this notebook is to process multiple quarters of <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">THCIC in-patient public use data files</a> into a single data file of all births. This requires importing and applying several filtering options.</p>
-<p>We are using AHRQ’s <a href="https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2020/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf">IQI 33 Primary Cesarean Delivery Rate, Uncomplicated</a> method to define a birth, but do not apply further filtering for complicaitons. We do apply some data filtering/cleaning for missing data as outlined in IQI 33.</p>
+<p>We are using AHRQ’s <a href="https://www.qualityindicators.ahrq.gov/Downloads/Modules/IQI/V2020/TechSpecs/IQI_33_Primary_Cesarean_Delivery_Rate_Uncomplicated.pdf">IQI 33 Primary Cesarean Delivery Rate, Uncomplicated</a> method to define a birth, but do not apply further filtering for complications. We do apply some data filtering/cleaning for missing data as outlined in IQI 33.</p>
 <p>The output is all <code>data-processed/ahrq_del_all.rds</code>, which we can then analyzed in future files.</p>
 <p>Of note, there is another notebook <code>01-process-test</code> that uses the same filtering criteria but prints examples at various stages for manual checking.</p>
 <p>Also, there is another notebook <code>00-process-lists</code> where various AHRQ lists of ICD-10 and other codes are defined separately. Those values are written out to the <code>procedures-lists</code> folder as .rds and .csv files and then imported into this notebook and others. See that notebook to inspect the lists. It must be run before this notebook as outputs are used here.</p>
@@ -1801,7 +1805,7 @@ data %&gt;%
 </div>
 <div id="write-file" class="section level2">
 <h2>Write file</h2>
-<p>We write a single file of the uncomplicated deliveries.</p>
+<p>We write a single file of all the deliveries.</p>
 <pre class="r"><code>if(test_flag == T) write_path &lt;- &quot;data-test/ahrq_del_all_loop_test.rds&quot; else write_path &lt;- &quot;data-processed/ahrq_del_all.rds&quot;
 
 data %&gt;% write_rds(write_path)

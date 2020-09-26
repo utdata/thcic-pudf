@@ -8,8 +8,10 @@ knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = e
 ---
 
 By **Christian McDonald**, Assistant Professor of Practice\
-School of Journalism, Moody College of Communication\
+School of Journalism and Media, Moody College of Communication\
 University of Texas at Austin
+
+---
 
 The purpose of this notebook is to process test data from multiple quarters of [THCIC in-patient public use data files](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm) into a single data file of deliveries without complications. This requires importing and applying several filtering options.
 

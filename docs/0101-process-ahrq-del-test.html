@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-09-21" />
+<meta name="date" content="2020-09-25" />
 
 <title>AHRQ Deliveries process testing</title>
 
@@ -1634,14 +1634,15 @@ summary {
 
 
 <h1 class="title toc-ignore">AHRQ Deliveries process testing</h1>
-<h4 class="date">2020-09-21</h4>
+<h4 class="date">2020-09-25</h4>
 
 </div>
 
 
 <p>By <strong>Christian McDonald</strong>, Assistant Professor of Practice<br />
-School of Journalism, Moody College of Communication<br />
+School of Journalism and Media, Moody College of Communication<br />
 University of Texas at Austin</p>
+<hr />
 <p>The purpose of this notebook is to process test data from multiple quarters of <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">THCIC in-patient public use data files</a> into a single data file of deliveries without complications. This requires importing and applying several filtering options.</p>
 <p>The methods in this notebook are used in <code>01-process-ahrq-del-loop</code> to process multiple years of data. This notebook cannot support that amount of data, but was used to check various steps in the filtering process for the main script. Please see the <code>01-process-ahrq-del-loop</code> for more additional details.</p>
 <p>There is another notebook <code>00-process-lists</code> where various AHRQ lists of ICD-10 and other codes are defined separately. Those values are written out to the <code>procedures-lists</code> folder as .rds and .csv files and then imported into this notebook and others. See that notebook to inspect the lists.</p>

@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-09-21" />
+<meta name="date" content="2020-09-25" />
 
 <title>Leapfrog Deliveries processing</title>
 
@@ -1634,11 +1634,15 @@ summary {
 
 
 <h1 class="title toc-ignore">Leapfrog Deliveries processing</h1>
-<h4 class="date">2020-09-21</h4>
+<h4 class="date">2020-09-25</h4>
 
 </div>
 
 
+<p>By <strong>Christian McDonald</strong>, Assistant Professor of Practice<br />
+School of Journalism and Media, Moody College of Communication<br />
+University of Texas at Austin</p>
+<hr />
 <p>The purpose of this notebook is to process multiple quarters of <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">THCIC in-patient public use data files</a> into a single data file of <strong>Total number of vaginal deliveries during the reporting time period, with Excluded Populations removed.</strong> as defined by Leapfrog’s <a href="https://www.leapfroggroup.org/sites/default/files/Files/2020HospitalSurvey_20200413_8.1%20%28version%201%29.pdf">2020 Leapfrog Hospital Survey</a> for Episiotomy (page 118). I also apply some data cleaning to remove records that have blank fields or mothers outside typical child-bearing age.</p>
 <p>The output is is then analyzed in other notebooks.</p>
 <p>Of note, there is another notebook <code>01-process-lf-epi-test</code> that uses the same filtering criteria but prints examples at various stages for manual checking.</p>
