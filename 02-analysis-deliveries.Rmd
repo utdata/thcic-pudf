@@ -188,7 +188,7 @@ I create a variable if doctor is suppressed ...
 suppressed = c("9999999998", "9999999999")
 
 # add value of suppressed doctor to data
-del_csec_epi_supp <- del_csec_epi %>% 
+del_csec_epi_suppflag <- del_csec_epi %>% 
   mutate(
     PSUPP = if_else(ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed, T, F)
   )
@@ -204,7 +204,7 @@ del_csec_epi_supp <- del_csec_epi %>%
 Use the created `PSPP` field to count overall suppressions to get idea of scope.
 
 ```{r supp_look}
-del_csec_epi_supp %>% 
+del_csec_epi_suppflag %>% 
   tabyl(PSUPP) %>% 
   rename(count = n) %>% 
   adorn_pct_formatting()
@@ -213,7 +213,7 @@ del_csec_epi_supp %>%
 The ATTENDING_PHYSICIAN is suppressed in 6.5% of deliveries. For some hospitals, like Brownwood Regional Medical Center, all the physician data is suppressed.
 
 ```{r supp_count}
-del_csec_epi_supp %>% 
+del_csec_epi_suppflag %>% 
   filter(str_detect(PROVIDER_NAME, "Brownwood Regional Medical Center")) %>% 
   tabyl(PSUPP) %>% 
   rename(count = n) %>% 
@@ -225,7 +225,7 @@ del_csec_epi_supp %>%
 Since our hospitals of interest are in Laredo, let's check how many of those are suppressed as well.
 
 ```{r supp_count_laredo}
-del_csec_epi_supp %>% 
+del_csec_epi_suppflag %>% 
   filter(str_detect(PROVIDER_NAME, "Laredo")) %>% 
   tabyl(PSUPP, PROVIDER_NAME) %>% 
   adorn_percentages("col") %>%
@@ -238,7 +238,7 @@ del_csec_epi_supp %>%
 Later we want to know which hospitals have high doctor suppression rates, which would indicate that our deliveries per doctor calculations could be suspect. If the value for `SUSPECT` is `TRUE`, then the suppression rate is higher than 10% or otherwise suspect.
 
 ```{r supp_rate_hosp}
-supp_rate_hosp <- del_csec_epi_supp %>% 
+supp_rate_hosp <- del_csec_epi_suppflag %>% 
   group_by(THCIC_ID, PROVIDER_NAME, PSUPP) %>% 
   summarize(
     CNT = n()
@@ -262,33 +262,16 @@ supp_rate_hosp %>% head(10)
 To achieve a count of deliveries per doctor, I remove the records where the ATTENDING_PHYSICIAN was suppressed as this could combine multiple doctors into the same group. This suppression may have more affect on some hospitals than others.
 
 ```{r del_supp}
-del_supp <- del_csec_epi_supp %>% 
+del_supp <- del_csec_epi_suppflag %>% 
   filter(
     !ATTENDING_PHYSICIAN_UNIF_ID %in% suppressed
   )
 ```
 
-## Total deliveries per hospital per year
-
-Total deliveries after filtering years with fewer than 30 deliveries. 
-
-```{r deliveries_yr}
-
-# group and count
-deliveries_yr <- del_csec_epi_supp %>% 
-  group_by(YR, THCIC_ID, PROVIDER_NAME) %>% 
-  summarize(BIRTHS = n()) %>% 
-  filter(BIRTHS > 30)
-
-# pivot for table
-deliveries_yr %>%
-  pivot_wider(names_from = YR, values_from = BIRTHS) %>%
-  datatable()
-```
 
 ## 2019 deliveries per doctor, per week
 
-How many deliveries per doctor were there in 2019? How does that extrapolate to average deliveries per week per doctor? Starts with suppressed doctors removed. I add the column `SUSPECT` to indicate hospitals with high doctor suppression rates.
+How many deliveries per doctor were there in 2019? How does that extrapolate to average deliveries per week per doctor? Starts with suppressed doctors removed.
 
 > While we have all four quarters of 2019, there could be some records missing as hospitals have 60 days past end of quarter to file those records.
 
@@ -324,6 +307,48 @@ del_doc_hosp_2019 %>% datatable()
 
 ```
 
+## Total deliveries per hospital per year
+
+Total deliveries after filtering years with fewer than 30 deliveries. This does NOT filter out suppressed doctors since we are looking for a total delivery count.
+
+```{r deliveries_yr}
+
+# group and count
+deliveries_yr <- del_csec_epi_suppflag %>% 
+  group_by(YR, THCIC_ID, PROVIDER_NAME) %>% 
+  summarize(BIRTHS = n()) %>% 
+  filter(BIRTHS > 30)
+
+# pivot for table
+deliveries_yr %>%
+  pivot_wider(names_from = YR, values_from = BIRTHS) %>%
+  datatable()
+```
+
+### Count of hospitals in study
+
+We get a distinct count of the hospitals studied to include in the story.
+
+```{r hosp_cnt}
+deliveries_yr %>% 
+  ungroup() %>% 
+  select(-YR) %>% 
+  distinct(THCIC_ID, PROVIDER_NAME) %>% 
+  nrow()
+```
+
+### Count of hospitals in study, 2019
+
+We do the same for just 2019.
+
+```{r hosp_cnt_2019}
+deliveries_yr %>% 
+  ungroup() %>% 
+  filter(YR == "2019") %>% 
+  distinct(THCIC_ID, PROVIDER_NAME) %>% 
+  nrow()
+```
+
 ## Cesarean rates by hospital
 
 Here we look at all deliveries to see how many mothers have Cesareans. Note this starts with all ATTENDING_PHYSICIANS, including those who's IDs are suppressed. These are also all Cesareans, complicated or not. This is a simple rate of Cesarean births / All births in order to get an idea how many are performed.
@@ -331,7 +356,7 @@ Here we look at all deliveries to see how many mothers have Cesareans. Note this
 Excludes hospitals with fewer than 120 deliveries in our time span.
 
 ```{r csec_rate_hosp}
-csec_rate_hosp <- del_csec_epi_supp %>% 
+csec_rate_hosp <- del_csec_epi_suppflag %>% 
   group_by(THCIC_ID, PROVIDER_NAME, PRCSECP) %>% 
   count(PRCSECP) %>% 
   rename(CASES = n) %>%
@@ -362,7 +387,7 @@ csec_rate_hosp %>%
 This is the same calculation as above, but by year, showing only the rates. Excludes hospitals with fewer than 30 deliveries in a given year.
 
 ```{r csec_hosp_rate_yr}
-csec_hosp_rate_yr <- del_csec_epi_supp %>% 
+csec_hosp_rate_yr <- del_csec_epi_suppflag %>% 
   group_by(YR, THCIC_ID, PROVIDER_NAME, PRCSECP) %>% 
   count(YR, PRCSECP) %>%
   rename(CASES = n) %>%
@@ -403,7 +428,7 @@ csec_hosp_rate_yr_table %>%
 Like the simple Cesarean rate above, here we look at all deliveries and note how many involved episiotomies. Note this starts with all ATTENDING_PHYSICIANS, including those who's IDs are suppressed. Excludes hospitals with fewer than 120 deliveries in our time span.
 
 ```{r epi_rate_hosp}
-epi_rate_hosp <- del_csec_epi_supp %>% 
+epi_rate_hosp <- del_csec_epi_suppflag %>% 
   group_by(THCIC_ID, PROVIDER_NAME, EPI) %>% 
   count(EPI) %>% 
   rename(CASES = n) %>% 
@@ -435,7 +460,7 @@ epi_rate_hosp %>%
 Values exluded where there were fewer than 30 deliveries in a given year.
 
 ```{r epi_rate_hosp_yr}
-epi_rate_hosp_yr <- del_csec_epi_supp %>% 
+epi_rate_hosp_yr <- del_csec_epi_suppflag %>% 
   group_by(YR, THCIC_ID, PROVIDER_NAME, EPI) %>% 
   count(YR, EPI) %>%
   rename(CASES = n) %>% 
@@ -472,7 +497,7 @@ epi_rate_hosp_yr %>%
 This looks to see if a mother had either a cesarean or an episiotomy. All the same things apply: All doctors, all complications, but hospitals with fewer than 120 deliveries in our time period are excluded.
 
 ```{r epicsec_rate_hosp}
-epicsec_rate_hosp <- del_csec_epi_supp %>% 
+epicsec_rate_hosp <- del_csec_epi_suppflag %>% 
   mutate(
         EPICSEC = if_else((EPI == T | PRCSECP) == T, T, F)
   ) %>% 
@@ -507,7 +532,7 @@ This uses all deliveries. Hospital excluded if fewer than 30 deliveries a year.
 
 ```{r epicsec_rate_hosp_yr}
 # prep data for table
-epicsec_rate_hosp_yr <- del_csec_epi_supp %>% 
+epicsec_rate_hosp_yr <- del_csec_epi_suppflag %>% 
   mutate(
     EPICSEC = if_else((EPI == T | PRCSECP) == T, T, F)
   ) %>% 
@@ -546,7 +571,7 @@ epicsec_rate_hosp_yr_table %>%
 One value we don't have yet is the percentage of patients using Medicaid.
 
 ```{r mediciad_2019}
-mediciad_2019 <- del_csec_epi_supp %>% 
+mediciad_2019 <- del_csec_epi_suppflag %>% 
   # filter for 2019
   filter(
     YR == 2019
@@ -604,7 +629,7 @@ csec_hosp_rate_2019 <- csec_hosp_rate_yr %>%
 
 ### Difference when removing infrequent deliveries
 
-In this view I remove doctors with fewer than 10 deliveries in a given year to give a more accurate look at the staff doctors that do the bulk of deliveries.
+In this view I remove doctors with fewer than 10 deliveries in a given year to give a more accurate look at the staff doctors that do the bulk of deliveries. Suppressed doctor records are removed.
 
 > The choice of 10 deliveries as a threshold is arbitrary and could be changed if we deem necessary.
 
