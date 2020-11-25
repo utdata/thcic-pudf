@@ -800,9 +800,13 @@ epicsec_rate_hosp_yr_summary
 
 Here we start with cleaned hospitals list and combine to get the medicare rate, deliveries per week and maternal levels. Some values were calculated from data where doctors were suppressed, and so may be NA.
 
+The maternal levels were manually collected into a spreadsheet (and updated Nov. 24, 2020) and then used here.
+
 ```{r blurbs_2019}
 # Import maternal levels
-maternal_levels <- read_csv("resources/maternal-levels.csv") %>% 
+
+maternal_url <- "https://docs.google.com/spreadsheets/d/1efUxctHiY4cCgrqqHvBVx7jZobbx5Dgmpbf_YCd7tcE/gviz/tq?tqx=out:csv"
+maternal_levels <- read_csv(maternal_url) %>% 
   mutate(
     THCIC_ID = as.character(THCIC_ID)
   )
