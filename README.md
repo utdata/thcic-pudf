@@ -21,7 +21,7 @@ No patients or doctors have been revealed in the data or analysis. Suppressions 
 This analysis is by:
 
 [**CHRISTIAN MCDONALD**](https://journalism.utexas.edu/faculty/christian-mcdonald), Assistant Professor of Practice\
-School of Journalism and Media, Moody College ofCommunication\
+School of Journalism and Media, Moody College of Communication\
 The University of Texas at Austin
 
 ## Methodology
