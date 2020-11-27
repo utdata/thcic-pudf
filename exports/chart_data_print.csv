@@ -1,0 +1,888 @@
+YR,THCIC_ID,PROVIDER_NAME,PROVIDER_CITY,PROVIDER_ADDRESS,PCRATE,EPIRATE,VBACRATE
+2016,TX,Texas,,,18.3,9.6,7.5
+2017,TX,Texas,,,18.2,8.1,7.8
+2018,TX,Texas,,,18,7.3,8.1
+2019,TX,Texas,,,17.8,6.5,8.8
+2016,091001,Abilene Regional Medical Center,Abilene,6250 Highway 83-84,17.6,14.3,4.7
+2017,091001,Abilene Regional Medical Center,Abilene,6250 Highway 83-84,18.9,15.2,3.4
+2018,091001,Abilene Regional Medical Center,Abilene,6250 Highway 83-84,19.4,15.9,7.3
+2019,091001,Abilene Regional Medical Center,Abilene,6250 Highway 83-84,16.3,8.9,5
+2016,397001,Adventhealth Central Texas,Killeen,2201 South Clear Creek Road,11.4,2.6,17.6
+2017,397001,Adventhealth Central Texas,Killeen,2201 South Clear Creek Road,11.3,2.6,20.9
+2018,397001,Adventhealth Central Texas,Killeen,2201 South Clear Creek Road,11.2,2.3,21.4
+2019,397001,Adventhealth Central Texas,Killeen,2201 South Clear Creek Road,10.2,1.5,19.1
+2016,040000,Ascension Providence,Waco,6901 Medical Parkway,14.2,6.3,6.3
+2017,040000,Ascension Providence,Waco,6901 Medical Parkway,13.9,6,7.9
+2018,040000,Ascension Providence,Waco,6901 Medical Parkway,12.7,5.7,10
+2019,040000,Ascension Providence,Waco,6901 Medical Parkway,15.2,6.9,10.5
+2016,921000,Ascension Seton Hays,Kyle,6001 Kyle Parkway,10.2,4,17.3
+2017,921000,Ascension Seton Hays,Kyle,6001 Kyle Parkway,10.9,2.4,21.8
+2018,921000,Ascension Seton Hays,Kyle,6001 Kyle Parkway,11.2,2.7,27.3
+2019,921000,Ascension Seton Hays,Kyle,6001 Kyle Parkway,7.7,2.8,19.9
+2016,497000,Ascension Seton Medical Center,Austin,1201 West 38th Street,18.4,3,17.8
+2017,497000,Ascension Seton Medical Center,Austin,1201 West 38th Street,18.6,2.6,16.4
+2018,497000,Ascension Seton Medical Center,Austin,1201 West 38th Street,16.7,2.2,19.8
+2019,497000,Ascension Seton Medical Center,Austin,1201 West 38th Street,15.8,2.2,22.7
+2016,797600,Ascension Seton Northwest,Austin,11113 Research Boulevard,20.7,8.8,13
+2017,797600,Ascension Seton Northwest,Austin,11113 Research Boulevard,20.8,8.9,12.7
+2018,797600,Ascension Seton Northwest,Austin,11113 Research Boulevard,17.6,11,13.3
+2019,797600,Ascension Seton Northwest,Austin,11113 Research Boulevard,16.6,10.7,17.1
+2016,797500,Ascension Seton Southwest,Austin,7900 FM 1826,15,2.1,27.3
+2017,797500,Ascension Seton Southwest,Austin,7900 FM 1826,17.5,5.6,NA
+2016,861700,Ascension Seton Williamson,Round Rock,201 Seton Parkway,16.2,1.3,14.1
+2017,861700,Ascension Seton Williamson,Round Rock,201 Seton Parkway,21.1,2.3,13.9
+2018,861700,Ascension Seton Williamson,Round Rock,201 Seton Parkway,19.7,3.5,4.8
+2019,861700,Ascension Seton Williamson,Round Rock,201 Seton Parkway,18.9,2.4,20
+2016,389000,Baptist Hospitals of Southeast Texas,Beaumont,3080 College Street,25.4,10.5,0.6
+2017,389000,Baptist Hospitals of Southeast Texas,Beaumont,3080 College Street,23.8,9.7,NA
+2018,389000,Baptist Hospitals of Southeast Texas,Beaumont,3080 College Street,23.5,6.7,0.6
+2019,389000,Baptist Hospitals of Southeast Texas,Beaumont,3080 College Street,23.5,7.6,NA
+2016,114001,Baptist Medical Center,San Antonio,111 Dallas Street,15.3,10,1.8
+2017,114001,Baptist Medical Center,San Antonio,111 Dallas Street,12.5,7.2,3
+2018,114001,Baptist Medical Center,San Antonio,111 Dallas Street,17.6,7.7,2.6
+2019,114001,Baptist Medical Center,San Antonio,111 Dallas Street,14.5,6.5,2.2
+2016,001000,Baptist St Anthonys Hospital,Amarillo,1600 Wallace Blvd,15,13.3,10.9
+2017,001000,Baptist St Anthonys Hospital,Amarillo,1600 Wallace Blvd,13.5,8.7,13.5
+2018,001000,Baptist St Anthonys Hospital,Amarillo,1600 Wallace Blvd,13.9,10,11.8
+2019,001000,Baptist St Anthonys Hospital,Amarillo,1600 Wallace Blvd,14.4,8.7,19.1
+2016,363000,Baylor Scott & White All Saints Medical Center-Fort Worth,Fort Worth,1400 Eighth Avenue,18.6,4.9,5.4
+2017,363000,Baylor Scott & White All Saints Medical Center-Fort Worth,Fort Worth,1400 Eighth Avenue,16.1,4.8,5.7
+2018,363000,Baylor Scott & White All Saints Medical Center-Fort Worth,Fort Worth,1400 Eighth Avenue,16,3.3,6.9
+2019,363000,Baylor Scott & White All Saints Medical Center-Fort Worth,Fort Worth,1400 Eighth Avenue,15.5,2,10.3
+2016,206100,Baylor Scott & White Hospital College Station,College Station,700 Scott & White Drive,17.2,14.5,6.1
+2017,206100,Baylor Scott & White Hospital College Station,College Station,700 Scott & White Drive,18,11.1,6.6
+2018,206100,Baylor Scott & White Hospital College Station,College Station,700 Scott & White Drive,17.6,9.6,7.1
+2019,206100,Baylor Scott & White Hospital College Station,College Station,700 Scott & White Drive,17.9,7.9,7.5
+2016,066000,Baylor Scott & White Hospital-Brenham,Brenham,700 Medical Parkway,13.9,8.5,9.4
+2017,066000,Baylor Scott & White Hospital-Brenham,Brenham,700 Medical Parkway,15.7,8.4,2
+2018,066000,Baylor Scott & White Hospital-Brenham,Brenham,700 Medical Parkway,19.3,8.8,NA
+2019,066000,Baylor Scott & White Hospital-Brenham,Brenham,700 Medical Parkway,16.1,10.1,4.5
+2018,975285,Baylor Scott & White Medical Center Centennial,Frisco,12505 Lebanon Road,18.5,3.4,26.2
+2019,975285,Baylor Scott & White Medical Center Centennial,Frisco,12505 Lebanon Road,15.7,2.7,20.6
+2016,506001,Baylor Scott & White Medical Center Hillcrest,Waco,100 Hillcrest Medical Center Blvd,13.7,13.3,20.4
+2017,506001,Baylor Scott & White Medical Center Hillcrest,Waco,100 Hillcrest Medical Center Blvd,12.7,11.4,12.3
+2018,506001,Baylor Scott & White Medical Center Hillcrest,Waco,100 Hillcrest Medical Center Blvd,13.6,10.9,14.4
+2019,506001,Baylor Scott & White Medical Center Hillcrest,Waco,100 Hillcrest Medical Center Blvd,13.6,8.3,15.3
+2018,975286,Baylor Scott & White Medical Center Lake Pointe,Rowlette,6800 Scenic Drive,19.5,7.7,11.6
+2019,975286,Baylor Scott & White Medical Center Lake Pointe,Rowlette,6800 Scenic Drive,18.3,8.8,9.1
+2016,975165,Baylor Scott & White Medical Center Lakeway,Lakeway,100 Medical Parkway,33.3,2.6,NA
+2017,975165,Baylor Scott & White Medical Center Lakeway,Lakeway,100 Medical Parkway,19.4,2,NA
+2018,975165,Baylor Scott & White Medical Center Lakeway,Lakeway,100 Medical Parkway,23.2,7.6,16.1
+2019,975165,Baylor Scott & White Medical Center Lakeway,Lakeway,100 Medical Parkway,18.8,2.5,12.5
+2016,974940,Baylor Scott & White Medical Center Marble Falls,Marble Falls,810 W Highway 71,11.7,1.6,NA
+2017,974940,Baylor Scott & White Medical Center Marble Falls,Marble Falls,810 W Highway 71,8.6,3,NA
+2018,974940,Baylor Scott & White Medical Center Marble Falls,Marble Falls,810 W Highway 71,15.6,6.9,NA
+2019,974940,Baylor Scott & White Medical Center Marble Falls,Marble Falls,810 W Highway 71,15.8,6.1,2.2
+2016,971900,Baylor Scott & White Medical Center McKinney,McKinney,5252 West University Drive,19,3.2,8.8
+2017,971900,Baylor Scott & White Medical Center McKinney,McKinney,5252 West University Drive,19.1,4,6.4
+2018,971900,Baylor Scott & White Medical Center McKinney,McKinney,5252 West University Drive,18.2,3.4,10.7
+2019,971900,Baylor Scott & White Medical Center McKinney,McKinney,5252 West University Drive,18.3,2.4,10
+2016,852600,Baylor Scott & White Medical Center Round Rock,Round Rock,300 University Blvd,16.4,5.8,13.3
+2017,852600,Baylor Scott & White Medical Center Round Rock,Round Rock,300 University Blvd,16.3,3.2,12.8
+2018,852600,Baylor Scott & White Medical Center Round Rock,Round Rock,300 University Blvd,16.4,1.3,14.6
+2019,852600,Baylor Scott & White Medical Center Round Rock,Round Rock,300 University Blvd,18.2,0.5,10.8
+2016,919000,Baylor Scott & White Medical Center Sunnyvale,Sunnyvale,231 South Collins Road,17.3,34,5.9
+2016,537000,Baylor Scott & White Medical Center Temple,Temple,2401 South 31st Street,16.6,1.3,21.5
+2017,537000,Baylor Scott & White Medical Center Temple,Temple,2401 South 31st Street,14.9,0.9,24
+2018,537000,Baylor Scott & White Medical Center Temple,Temple,2401 South 31st Street,14.1,1.2,21.4
+2019,537000,Baylor Scott & White Medical Center Temple,Temple,2401 South 31st Street,14.9,0.9,24.2
+2016,285000,Baylor Scott & White Medical Center Waxahachie,Waxahachie,2400 N I-35 E,12.4,1.4,6.9
+2017,285000,Baylor Scott & White Medical Center Waxahachie,Waxahachie,2400 N I-35 E,14.2,1.9,9.2
+2018,285000,Baylor Scott & White Medical Center Waxahachie,Waxahachie,2400 N I-35 E,16,1.3,3.8
+2019,285000,Baylor Scott & White Medical Center Waxahachie,Waxahachie,2400 N I-35 E,16.6,3.2,7
+2016,787400,Baylor Scott & White Medical Center-Frisco,Frisco,5601 Warren Parkway,13.5,18.2,3.4
+2017,787400,Baylor Scott & White Medical Center-Frisco,Frisco,5601 Warren Parkway,14.6,18,3.7
+2018,787400,Baylor Scott & White Medical Center-Frisco,Frisco,5601 Warren Parkway,19.5,12.2,0.9
+2019,787400,Baylor Scott & White Medical Center-Frisco,Frisco,5601 Warren Parkway,18.4,6.7,5.3
+2016,513000,Baylor Scott & White Medical Center-Grapevine,Grapevine,1650 West College Street,20.9,13.5,8.3
+2017,513000,Baylor Scott & White Medical Center-Grapevine,Grapevine,1650 West College Street,19.6,12.4,8.2
+2018,513000,Baylor Scott & White Medical Center-Grapevine,Grapevine,1650 West College Street,20,13.2,10.8
+2019,513000,Baylor Scott & White Medical Center-Grapevine,Grapevine,1650 West College Street,21.2,12.9,8.8
+2016,300000,Baylor Scott & White Medical Center-Irving,Irving,1901 North Macarthur Boulevard,20.3,2.9,3.7
+2017,300000,Baylor Scott & White Medical Center-Irving,Irving,1901 North Macarthur Boulevard,17.6,2.1,4.9
+2018,300000,Baylor Scott & White Medical Center-Irving,Irving,1901 North Macarthur Boulevard,18.1,3.1,4.9
+2019,300000,Baylor Scott & White Medical Center-Irving,Irving,1901 North Macarthur Boulevard,16.3,2.6,4.1
+2016,331000,Baylor University Medical Center,Dallas,3500 Gaston Avenue,17,3,15.6
+2017,331000,Baylor University Medical Center,Dallas,3500 Gaston Avenue,17.4,2.5,20.9
+2018,331000,Baylor University Medical Center,Dallas,3500 Gaston Avenue,16.9,2.5,18.7
+2019,331000,Baylor University Medical Center,Dallas,3500 Gaston Avenue,14.3,1.6,22.3
+2016,711900,Big Bend Regional Medical Center,Alpine,2600 Highway 118 North,13.5,2.9,9.7
+2017,711900,Big Bend Regional Medical Center,Alpine,2600 Highway 118 North,16.8,8.1,NA
+2018,711900,Big Bend Regional Medical Center,Alpine,2600 Highway 118 North,20,5.6,NA
+2019,711900,Big Bend Regional Medical Center,Alpine,2600 Highway 118 North,20.2,2.1,NA
+2016,078000,Brownfield Regional Medical Center,Brownfield,705 East Felt Street,3.8,1.1,NA
+2017,078000,Brownfield Regional Medical Center,Brownfield,705 East Felt Street,6.5,2,NA
+2018,078000,Brownfield Regional Medical Center,Brownfield,705 East Felt Street,6,1.9,NA
+2019,078000,Brownfield Regional Medical Center,Brownfield,705 East Felt Street,15,NA,NA
+2016,058000,Brownwood Regional Medical Center,Brownwood,1501 Burnet Drive,17.4,11.1,NA
+2017,058000,Brownwood Regional Medical Center,Brownwood,1501 Burnet Drive,18.2,13.4,NA
+2018,058000,Brownwood Regional Medical Center,Brownwood,1501 Burnet Drive,17.9,7.4,3.4
+2019,058000,Brownwood Regional Medical Center,Brownwood,1501 Burnet Drive,18.9,7.9,5.6
+2016,549001,Bush Renner,Richardson,2831 East President Bush Highway,25.6,7.4,14.8
+2017,549001,Bush Renner,Richardson,2831 East President Bush Highway,25.6,6.2,20.7
+2018,549001,Bush Renner,Richardson,2831 East President Bush Highway,24.8,7.8,18.3
+2019,549001,Bush Renner,Richardson,2831 East President Bush Highway,24.3,6.2,20.8
+2016,858300,Cedar Park Regional Medical Center,Cedar Park,1401 Medical Parkway,17.3,4.3,8.1
+2017,858300,Cedar Park Regional Medical Center,Cedar Park,1401 Medical Parkway,17.5,1.9,12.3
+2018,858300,Cedar Park Regional Medical Center,Cedar Park,1401 Medical Parkway,17.4,1.4,11.9
+2019,858300,Cedar Park Regional Medical Center,Cedar Park,1401 Medical Parkway,17.4,1.7,8.3
+2016,466000,CHI St Lukes Health - Memorial Livingston,Livingston,1717 Highway 59 Bypass,21.5,9.2,NA
+2017,466000,CHI St Lukes Health - Memorial Livingston,Livingston,1717 Highway 59 Bypass,27.4,11.2,NA
+2018,466000,CHI St Lukes Health - Memorial Livingston,Livingston,1717 Highway 59 Bypass,25.5,10.8,1.9
+2019,466000,CHI St Lukes Health - Memorial Livingston,Livingston,1717 Highway 59 Bypass,23.7,1.3,1.3
+2016,436000,CHI St Lukes Health Brazosport,Lake Jackson,100 Medical Drive,18.1,11,3.8
+2017,436000,CHI St Lukes Health Brazosport,Lake Jackson,100 Medical Drive,17.5,13.8,12.1
+2018,436000,CHI St Lukes Health Brazosport,Lake Jackson,100 Medical Drive,13.2,17.5,11.1
+2019,436000,CHI St Lukes Health Brazosport,Lake Jackson,100 Medical Drive,15.4,21.5,4.3
+2016,129000,CHI St Lukes Health Memorial Lufkin,Lufkin,1201 West Frank Street,20.8,8.2,NA
+2017,129000,CHI St Lukes Health Memorial Lufkin,Lufkin,1201 West Frank Street,18.9,9.7,NA
+2018,129000,CHI St Lukes Health Memorial Lufkin,Lufkin,1201 West Frank Street,21.7,9.1,NA
+2019,129000,CHI St Lukes Health Memorial Lufkin,Lufkin,1201 West Frank Street,14.8,9.9,NA
+2016,634000,Childrens Hospital of San Antonio,San Antonio,333 NORTH SANTA ROSA STREET,17.8,13.6,4.5
+2017,634000,Childrens Hospital of San Antonio,San Antonio,333 NORTH SANTA ROSA STREET,17.1,5.7,8.7
+2018,634000,Childrens Hospital of San Antonio,San Antonio,333 NORTH SANTA ROSA STREET,17,4.5,15.2
+2019,634000,Childrens Hospital of San Antonio,San Antonio,333 NORTH SANTA ROSA STREET,17.4,4.1,20.7
+2016,026000,Childress Regional Medical Center,Childress,Highway 83 North,27.5,10.2,NA
+2017,026000,Childress Regional Medical Center,Childress,Highway 83 North,22,20.6,4.1
+2018,026000,Childress Regional Medical Center,Childress,Highway 83 North,17.8,25.2,2.5
+2019,026000,Childress Regional Medical Center,Childress,Highway 83 North,16.4,21.3,NA
+2016,029000,CHRISTUS Good Shepherd Medical Center-Longview,Longview,700 East Marshall Avenue,14.9,2.5,7.3
+2017,029000,CHRISTUS Good Shepherd Medical Center-Longview,Longview,700 East Marshall Avenue,18.7,1.7,9.1
+2018,029000,CHRISTUS Good Shepherd Medical Center-Longview,Longview,700 East Marshall Avenue,14.3,1.4,8.8
+2019,029000,CHRISTUS Good Shepherd Medical Center-Longview,Longview,700 East Marshall Avenue,16.4,2.8,13.8
+2016,020000,CHRISTUS Good Shepherd Medical Center-Marshall,Marshall,811 South Washington,7.9,1.4,10
+2017,020000,CHRISTUS Good Shepherd Medical Center-Marshall,Marshall,811 South Washington,11.2,0.3,8.1
+2018,020000,CHRISTUS Good Shepherd Medical Center-Marshall,Marshall,811 South Washington,6.1,NA,NA
+2016,975159,Christus Mother Frances Hospital Sulphur Springs,Sulphur Springs,115 Airport Road,25.9,22.6,1.6
+2017,975159,Christus Mother Frances Hospital Sulphur Springs,Sulphur Springs,115 Airport Road,24.3,21.7,3.8
+2018,975159,Christus Mother Frances Hospital Sulphur Springs,Sulphur Springs,115 Airport Road,16,27.6,2
+2019,975159,Christus Mother Frances Hospital Sulphur Springs,Sulphur Springs,115 Airport Road,16.4,14.9,4.7
+2016,286000,Christus Mother Frances Hospital Tyler,Tyler,800 East Dawson,15.9,3.7,10.9
+2017,286000,Christus Mother Frances Hospital Tyler,Tyler,800 East Dawson,14.5,3,9.2
+2018,286000,Christus Mother Frances Hospital Tyler,Tyler,800 East Dawson,14.5,3.2,8.7
+2019,286000,Christus Mother Frances Hospital Tyler,Tyler,800 East Dawson,13.4,2.6,11.7
+2016,863300,CHRISTUS Santa Rosa Hospital New Braunfels,New Braunfels,600 North Union Ave,11.2,5.6,14.3
+2017,863300,CHRISTUS Santa Rosa Hospital New Braunfels,New Braunfels,600 North Union Ave,10.6,6.7,23
+2018,863300,CHRISTUS Santa Rosa Hospital New Braunfels,New Braunfels,600 North Union Ave,11.7,5.8,18.4
+2019,863300,CHRISTUS Santa Rosa Hospital New Braunfels,New Braunfels,600 North Union Ave,13.8,5.6,17.1
+2016,339002,CHRISTUS Santa Rosa Hospital-Westover Hills,San Antonio,11212 State Highway 151,15.9,5,14.9
+2017,339002,CHRISTUS Santa Rosa Hospital-Westover Hills,San Antonio,11212 State Highway 151,14.1,7.4,10.2
+2018,339002,CHRISTUS Santa Rosa Hospital-Westover Hills,San Antonio,11212 State Highway 151,13.1,6.2,4.4
+2019,339002,CHRISTUS Santa Rosa Hospital-Westover Hills,San Antonio,11212 State Highway 151,13.8,3.1,3.4
+2016,038001,CHRISTUS Southeast Texas - Jasper Memorial,Jasper,1275 Marvin Hancock Drive,23.3,NA,NA
+2017,038001,CHRISTUS Southeast Texas - Jasper Memorial,Jasper,1275 Marvin Hancock Drive,26.2,0.9,NA
+2018,038001,CHRISTUS Southeast Texas - Jasper Memorial,Jasper,1275 Marvin Hancock Drive,20.3,0.9,2.9
+2016,444001,CHRISTUS Southeast Texas - St Elizabeth,Beaumont,2830 Calder Avenue,28.7,18.8,0.5
+2017,444001,CHRISTUS Southeast Texas - St Elizabeth,Beaumont,2830 Calder Avenue,29.9,16.1,0.4
+2018,444001,CHRISTUS Southeast Texas - St Elizabeth,Beaumont,2830 Calder Avenue,28.8,14.6,0.4
+2019,444001,CHRISTUS Southeast Texas - St Elizabeth,Beaumont,2830 Calder Avenue,30.3,14.7,0.4
+2016,689401,CHRISTUS Spohn Hospital Alice,Alice,2500 East Main Street,10.1,1.1,26
+2017,689401,CHRISTUS Spohn Hospital Alice,Alice,2500 East Main Street,5.7,5.4,19.4
+2018,689401,CHRISTUS Spohn Hospital Alice,Alice,2500 East Main Street,8.7,2,NA
+2019,689401,CHRISTUS Spohn Hospital Alice,Alice,2500 East Main Street,2,3.9,NA
+2016,398002,CHRISTUS Spohn Hospital Corpus Christi-South,Corpus Christi,5950 Saratoga Boulevard,18.1,22.7,4.2
+2017,398002,CHRISTUS Spohn Hospital Corpus Christi-South,Corpus Christi,5950 Saratoga Boulevard,18.1,23,4.3
+2018,398002,CHRISTUS Spohn Hospital Corpus Christi-South,Corpus Christi,5950 Saratoga Boulevard,16.8,20.2,5.5
+2019,398002,CHRISTUS Spohn Hospital Corpus Christi-South,Corpus Christi,5950 Saratoga Boulevard,17,18.5,5.7
+2016,429001,CHRISTUS Spohn Hospital-Beeville,Beeville,1500 East Houston Highway,14.1,10.1,11.7
+2017,429001,CHRISTUS Spohn Hospital-Beeville,Beeville,1500 East Houston Highway,16.8,3.8,1.9
+2018,429001,CHRISTUS Spohn Hospital-Beeville,Beeville,1500 East Houston Highway,22.9,1.8,NA
+2019,429001,CHRISTUS Spohn Hospital-Beeville,Beeville,1500 East Houston Highway,24.7,12.2,2.6
+2016,216001,CHRISTUS Spohn Hospital-Kleberg,Kingsville,1311 East General Cavazos Boulevard,14.5,19,6.3
+2017,216001,CHRISTUS Spohn Hospital-Kleberg,Kingsville,1311 East General Cavazos Boulevard,14,7.6,NA
+2018,216001,CHRISTUS Spohn Hospital-Kleberg,Kingsville,1311 East General Cavazos Boulevard,13.6,11.8,NA
+2019,216001,CHRISTUS Spohn Hospital-Kleberg,Kingsville,1311 East General Cavazos Boulevard,15.8,15.2,3.6
+2016,788001,CHRISTUS St Michael Health System,Texarkana,2600 St Michael Drive,20.1,6.4,3.3
+2017,788001,CHRISTUS St Michael Health System,Texarkana,2600 St Michael Drive,20.9,4.7,4.9
+2018,788001,CHRISTUS St Michael Health System,Texarkana,2600 St Michael Drive,23.1,4.2,4
+2019,788001,CHRISTUS St Michael Health System,Texarkana,2600 St Michael Drive,18.7,5.7,4.5
+2016,064000,Citizens Medical Center,Victoria,2701 Hospital Drive,26.8,7.1,1.2
+2017,064000,Citizens Medical Center,Victoria,2701 Hospital Drive,22.9,10.1,NA
+2018,064000,Citizens Medical Center,Victoria,2701 Hospital Drive,22.9,7.5,1.9
+2019,064000,Citizens Medical Center,Victoria,2701 Hospital Drive,24.4,10.6,3.5
+2018,975268,City Hospital at White Rock,Dallas,9440 Poppy Drive,15.2,4.3,6
+2019,975268,City Hospital at White Rock,Dallas,9440 Poppy Drive,13.2,5,7.7
+2016,439000,Cogdell Memorial Hospital,Snyder,1700 Cogdell Boulevard,13.1,9.6,NA
+2017,439000,Cogdell Memorial Hospital,Snyder,1700 Cogdell Boulevard,10.4,8.7,NA
+2018,439000,Cogdell Memorial Hospital,Snyder,1700 Cogdell Boulevard,17.5,4.4,6.1
+2019,439000,Cogdell Memorial Hospital,Snyder,1700 Cogdell Boulevard,12.8,1,NA
+2016,049000,Coleman County Medical Center,Coleman,310 South Pecos Street,NA,14.3,NA
+2019,049000,Coleman County Medical Center,Coleman,310 South Pecos Street,NA,7.1,NA
+2016,014000,Columbus Community Hospital,Columbus,110 Shult Drive,18,0.6,2
+2017,014000,Columbus Community Hospital,Columbus,110 Shult Drive,18.7,1.1,6.5
+2018,014000,Columbus Community Hospital,Columbus,110 Shult Drive,21.4,2,3.4
+2019,014000,Columbus Community Hospital,Columbus,110 Shult Drive,17.6,1.9,8.6
+2016,262000,Coon Memorial Hospital & Home,Dalhart,1411 Denver Avenue,9.4,1.1,NA
+2017,262000,Coon Memorial Hospital & Home,Dalhart,1411 Denver Avenue,9.6,10.1,NA
+2018,262000,Coon Memorial Hospital & Home,Dalhart,1411 Denver Avenue,7.5,10.3,NA
+2019,262000,Coon Memorial Hospital & Home,Dalhart,1411 Denver Avenue,13.1,3.9,NA
+2016,703000,Corpus Christi Medical Center-Bay Area,Corpus Christi,7101 South Padre Island Drive,19.1,12.6,5.6
+2017,703000,Corpus Christi Medical Center-Bay Area,Corpus Christi,7101 South Padre Island Drive,17.7,9.7,5.8
+2018,703000,Corpus Christi Medical Center-Bay Area,Corpus Christi,7101 South Padre Island Drive,18.6,10.6,7.3
+2019,703000,Corpus Christi Medical Center-Bay Area,Corpus Christi,7101 South Padre Island Drive,16.6,11,6
+2016,703002,Corpus Christi Medical Center-Doctors Regional,Corpus Christi,3315 South Alameda,NA,20,NA
+2017,686000,Covenant Childrens Hospital,Lubbock,4015 22nd Place,17.7,21.7,7.6
+2018,686000,Covenant Childrens Hospital,Lubbock,4015 22nd Place,13.2,17.7,10.6
+2019,686000,Covenant Childrens Hospital,Lubbock,4015 22nd Place,12.2,12.4,6.3
+2016,307000,Covenant Hospital-Levelland,Levelland,1900 College Avenue,7.1,15.3,2.9
+2017,307000,Covenant Hospital-Levelland,Levelland,1900 College Avenue,12.7,11.6,NA
+2018,307000,Covenant Hospital-Levelland,Levelland,1900 College Avenue,19.3,9.8,4.7
+2019,307000,Covenant Hospital-Levelland,Levelland,1900 College Avenue,11.2,8.5,NA
+2016,146000,Covenant Hospital-Plainview,Plainview,2601 Dimmit Road,20.4,10.1,2.2
+2017,146000,Covenant Hospital-Plainview,Plainview,2601 Dimmit Road,16.9,6.5,4.8
+2018,146000,Covenant Hospital-Plainview,Plainview,2601 Dimmit Road,15.6,8.3,4.9
+2019,146000,Covenant Hospital-Plainview,Plainview,2601 Dimmit Road,17.2,10.4,10
+2017,465000,Covenant Medical Center,Lubbock,3615 19th Street,NA,33.3,NA
+2016,074000,Cuero Regional Hospital,Cuero,2550 North Esplanade,26.5,4.1,NA
+2017,074000,Cuero Regional Hospital,Cuero,2550 North Esplanade,23.5,15.4,NA
+2018,074000,Cuero Regional Hospital,Cuero,2550 North Esplanade,34.5,10.3,NA
+2019,074000,Cuero Regional Hospital,Cuero,2550 North Esplanade,22.2,5.8,NA
+2016,449000,Dallas Medical Center,Dallas,Seven Medical Parkway,12.6,22.8,2.9
+2017,449000,Dallas Medical Center,Dallas,Seven Medical Parkway,13.7,17.7,8.2
+2016,315003,Dallas Regional Medical Center,Mesquite,1011 North Galloway Ave,16.8,34.8,2.5
+2017,315003,Dallas Regional Medical Center,Mesquite,1011 North Galloway Ave,15.1,28.7,5.4
+2018,315003,Dallas Regional Medical Center,Mesquite,1011 North Galloway Ave,16.9,20.2,4.1
+2019,315003,Dallas Regional Medical Center,Mesquite,1011 North Galloway Ave,17.2,23.4,4.7
+2016,319000,Del Sol Medical Center,El Paso,10301 Gateway West,20.8,14.9,3.1
+2017,319000,Del Sol Medical Center,El Paso,10301 Gateway West,22.8,14.3,3.4
+2018,319000,Del Sol Medical Center,El Paso,10301 Gateway West,23.9,8.2,4.8
+2019,319000,Del Sol Medical Center,El Paso,10301 Gateway West,22.3,8.7,1.1
+2016,453000,DeTar Hospital-Navarro,Victoria,506 East San Antonio Street,18,14.7,NA
+2016,453001,DeTar Hospital-North,Victoria,101 Medical Drive,21.4,19.5,1.3
+2017,453001,DeTar Hospital-North,Victoria,101 Medical Drive,27.2,19.4,0.4
+2018,453001,DeTar Hospital-North,Victoria,101 Medical Drive,23.3,19.8,1.5
+2019,453001,DeTar Hospital-North,Victoria,101 Medical Drive,21,11.5,0.4
+2018,156000,Dimmit Regional Hospital,Carrizo Springs,704 Hospital Drive,18.6,NA,3.1
+2019,156000,Dimmit Regional Hospital,Carrizo Springs,704 Hospital Drive,17.6,NA,NA
+2016,301000,Doctors Hospital-Laredo,Laredo,10700 McPherson Road,30.1,18.6,0.3
+2017,301000,Doctors Hospital-Laredo,Laredo,10700 McPherson Road,34,18.9,0.2
+2018,301000,Doctors Hospital-Laredo,Laredo,10700 McPherson Road,29.4,26.2,NA
+2019,301000,Doctors Hospital-Laredo,Laredo,10700 McPherson Road,31.1,31.3,1.4
+2016,714500,Ennis Regional Medical Center,Ennis,2201 WEST LAMPASAS STREET,10,2.7,NA
+2017,046000,Faith Community Hospital,Jacksboro,215 Chisholm Trail,NA,11.1,NA
+2018,046000,Faith Community Hospital,Jacksboro,215 Chisholm Trail,NA,9.1,NA
+2019,046000,Faith Community Hospital,Jacksboro,215 Chisholm Trail,13.6,20.8,NA
+2016,547001,Fort Duncan Regional Medical Center,Eagle Pass,3333 North Foster Maldonado,28.6,9.9,1.7
+2017,547001,Fort Duncan Regional Medical Center,Eagle Pass,3333 North Foster Maldonado,26.5,6.6,0.4
+2018,547001,Fort Duncan Regional Medical Center,Eagle Pass,3333 North Foster Maldonado,20,7.3,0.4
+2019,547001,Fort Duncan Regional Medical Center,Eagle Pass,3333 North Foster Maldonado,18,11.1,2.5
+2017,441000,Frio Regional Hospital,Pearsall,200 S IH-35,21.1,9.8,NA
+2018,441000,Frio Regional Hospital,Pearsall,200 S IH-35,28.6,19.4,NA
+2019,441000,Frio Regional Hospital,Pearsall,200 S IH-35,16.1,17.9,NA
+2016,654000,Golden Plains Community Hospital,Borger,100 Medical Drive,16.5,11.8,13.6
+2017,654000,Golden Plains Community Hospital,Borger,100 Medical Drive,15.6,8.9,13.3
+2018,654000,Golden Plains Community Hospital,Borger,100 Medical Drive,25.1,12.2,8.1
+2019,654000,Golden Plains Community Hospital,Borger,100 Medical Drive,22.3,23.1,5.1
+2016,070000,Goodall - Witcher Hospital,Clifton,101 South Avenue T,20.8,NA,NA
+2017,070000,Goodall - Witcher Hospital,Clifton,101 South Avenue T,12.5,NA,NA
+2018,070000,Goodall - Witcher Hospital,Clifton,101 South Avenue T,NA,8.7,NA
+2019,070000,Goodall - Witcher Hospital,Clifton,101 South Avenue T,12.8,NA,NA
+2016,155000,Guadalupe Regional Medical Center,Seguin,1215 East Court Street,12,3.1,NA
+2017,155000,Guadalupe Regional Medical Center,Seguin,1215 East Court Street,12.6,5,1.6
+2018,155000,Guadalupe Regional Medical Center,Seguin,1215 East Court Street,8.1,2.5,0.7
+2019,155000,Guadalupe Regional Medical Center,Seguin,1215 East Court Street,9.8,2.7,2.3
+2016,294000,Hamilton Hospital,Olney,901 West Hamilton Street,16.1,3.8,NA
+2017,294000,Hamilton Hospital,Olney,901 West Hamilton Street,10,NA,NA
+2018,294000,Hamilton Hospital,Olney,901 West Hamilton Street,14.7,NA,NA
+2016,788002,Harlingen Medical Center,Harlingen,5501 South Expressway 77,15.8,15,5.7
+2017,788002,Harlingen Medical Center,Harlingen,5501 South Expressway 77,14.5,17.3,4.9
+2018,788002,Harlingen Medical Center,Harlingen,5501 South Expressway 77,15.9,17.3,7.4
+2019,788002,Harlingen Medical Center,Harlingen,5501 South Expressway 77,17.2,19.2,4.2
+2016,459000,Harris Health System Ben Taub Hospital,Houston,1504 Taub Loop,14.9,3.5,32.7
+2017,459000,Harris Health System Ben Taub Hospital,Houston,1504 Taub Loop,13.4,2.1,31.4
+2018,459000,Harris Health System Ben Taub Hospital,Houston,1504 Taub Loop,13.9,2.3,26.2
+2019,459000,Harris Health System Ben Taub Hospital,Houston,1504 Taub Loop,14.6,2.3,25.1
+2016,384000,Harris Health System Lyndon B Johnson Hospital,Houston,5656 Kelley Street,9.6,1.1,23.9
+2017,384000,Harris Health System Lyndon B Johnson Hospital,Houston,5656 Kelley Street,13.8,1.6,22.7
+2018,384000,Harris Health System Lyndon B Johnson Hospital,Houston,5656 Kelley Street,12.1,0.9,14.2
+2019,384000,Harris Health System Lyndon B Johnson Hospital,Houston,5656 Kelley Street,10.6,0.5,18.8
+2016,212000,HCA Houston Healthcare Clear Lake,Webster,500 Medical Center Boulevard,20.6,9.2,1.7
+2017,212000,HCA Houston Healthcare Clear Lake,Webster,500 Medical Center Boulevard,19.5,7.5,3.8
+2018,212000,HCA Houston Healthcare Clear Lake,Webster,500 Medical Center Boulevard,18.1,6.1,4
+2019,212000,HCA Houston Healthcare Clear Lake,Webster,500 Medical Center Boulevard,22.7,7.9,4.9
+2016,508001,HCA Houston Healthcare Conroe,Conroe,504 Medical Center Boulevard,16.3,2.4,4.7
+2017,508001,HCA Houston Healthcare Conroe,Conroe,504 Medical Center Boulevard,15.8,3.4,7.1
+2018,508001,HCA Houston Healthcare Conroe,Conroe,504 Medical Center Boulevard,18.7,3.3,6.2
+2019,508001,HCA Houston Healthcare Conroe,Conroe,504 Medical Center Boulevard,16.9,4.9,6.1
+2016,675000,HCA Houston Healthcare Kingwood,Kingwood,22999 US Highway 59,16.9,6.7,5.9
+2017,675000,HCA Houston Healthcare Kingwood,Kingwood,22999 US Highway 59,16.3,4.3,6.6
+2018,675000,HCA Houston Healthcare Kingwood,Kingwood,22999 US Highway 59,15.7,5.3,7
+2019,675000,HCA Houston Healthcare Kingwood,Kingwood,22999 US Highway 59,14.4,4.4,6.7
+2016,793000,HCA Houston Healthcare Mainland,Texas City,6801 Emmett F Lowry Expressway,33.9,6.7,1.9
+2016,229000,HCA Houston Healthcare Northwest,Houston,710 Cypress Creek Parkway,14.3,16.7,3
+2017,229000,HCA Houston Healthcare Northwest,Houston,710 Cypress Creek Parkway,14.2,17.5,2
+2018,229000,HCA Houston Healthcare Northwest,Houston,710 Cypress Creek Parkway,14.2,17.6,2.1
+2019,229000,HCA Houston Healthcare Northwest,Houston,710 Cypress Creek Parkway,14.2,12.9,1.7
+2016,974390,HCA Houston Healthcare Pearland,Pearland,11100 Shadow Creek Parkway,22.5,6.7,NA
+2017,974390,HCA Houston Healthcare Pearland,Pearland,11100 Shadow Creek Parkway,19,5.5,NA
+2016,349001,HCA Houston Healthcare Southeast,Pasadena,4000 Spencer Highway,18.1,11.7,4
+2017,349001,HCA Houston Healthcare Southeast,Pasadena,4000 Spencer Highway,19,10.9,3.8
+2018,349001,HCA Houston Healthcare Southeast,Pasadena,4000 Spencer Highway,19.7,10.3,7
+2019,349001,HCA Houston Healthcare Southeast,Pasadena,4000 Spencer Highway,17.4,10.8,3.7
+2016,076000,HCA Houston Healthcare Tomball,Tomball,605 Holderrieth Blvd,12.7,5.1,1.5
+2017,076000,HCA Houston Healthcare Tomball,Tomball,605 Holderrieth Blvd,15,5.9,2.1
+2018,076000,HCA Houston Healthcare Tomball,Tomball,605 Holderrieth Blvd,11.4,5.5,4.8
+2019,076000,HCA Houston Healthcare Tomball,Tomball,605 Holderrieth Blvd,15.5,7.3,8.8
+2016,337001,HCA Houston Healthcare West,Houston,12141 Richmond Avenue,20,16.3,1.6
+2017,337001,HCA Houston Healthcare West,Houston,12141 Richmond Avenue,19.3,12.4,1.4
+2018,337001,HCA Houston Healthcare West,Houston,12141 Richmond Avenue,19.8,13.5,1.9
+2019,337001,HCA Houston Healthcare West,Houston,12141 Richmond Avenue,21.2,13.2,2.4
+2016,500000,Hendrick Medical Center,Abilene,1900 Pine,15.5,4.8,3.6
+2017,500000,Hendrick Medical Center,Abilene,1900 Pine,15,3,2.7
+2018,500000,Hendrick Medical Center,Abilene,1900 Pine,17.1,4.4,5.2
+2019,500000,Hendrick Medical Center,Abilene,1900 Pine,14.7,4.8,7.7
+2017,420000,Hereford Regional Medical Center,Hereford,540 W 15th Street,15.7,14.9,NA
+2018,420000,Hereford Regional Medical Center,Hereford,540 W 15th Street,17.3,11.8,6.7
+2019,420000,Hereford Regional Medical Center,Hereford,540 W 15th Street,14.6,16.4,NA
+2016,219000,Hill Country Memorial Hospital,Fredericksburg,1020 State Highway 16 South,13.5,1.6,3.9
+2017,219000,Hill Country Memorial Hospital,Fredericksburg,1020 State Highway 16 South,15.9,1,NA
+2018,219000,Hill Country Memorial Hospital,Fredericksburg,1020 State Highway 16 South,17,NA,9.9
+2019,219000,Hill Country Memorial Hospital,Fredericksburg,1020 State Highway 16 South,15,2.3,7.8
+2016,383000,Hill Regional Hospital,Hillsboro,101 CIRCLE DRIVE,24.1,8.9,7.5
+2017,383000,Hill Regional Hospital,Hillsboro,101 CIRCLE DRIVE,17.2,16.5,5.6
+2018,383000,Hill Regional Hospital,Hillsboro,101 CIRCLE DRIVE,21.3,4.3,NA
+2019,383000,Hill Regional Hospital,Hillsboro,101 CIRCLE DRIVE,16.4,6.8,NA
+2016,405000,Houston Methodist Baytown Hospital,Baytown,4401 Garth Road,22.2,12.7,12.3
+2017,405000,Houston Methodist Baytown Hospital,Baytown,4401 Garth Road,22.4,13.5,8.8
+2018,405000,Houston Methodist Baytown Hospital,Baytown,4401 Garth Road,21.4,11.4,7
+2019,405000,Houston Methodist Baytown Hospital,Baytown,4401 Garth Road,19.6,14.7,4.2
+2016,124000,Houston Methodist Hospital,Houston,6565 Fannin,20.1,8.7,9.4
+2017,124000,Houston Methodist Hospital,Houston,6565 Fannin,21.4,8.5,6.6
+2018,124000,Houston Methodist Hospital,Houston,6565 Fannin,22.6,8.4,12.6
+2019,124000,Houston Methodist Hospital,Houston,6565 Fannin,21.8,6.6,9.7
+2016,973640,Houston Methodist St John Hospital,Nassau Bay,18300 St John Drive,17.7,34.7,1.8
+2017,973640,Houston Methodist St John Hospital,Nassau Bay,18300 St John Drive,18.1,16.4,3.9
+2018,973640,Houston Methodist St John Hospital,Nassau Bay,18300 St John Drive,21.5,18.9,4.2
+2019,973640,Houston Methodist St John Hospital,Nassau Bay,18300 St John Drive,22.5,14.7,4.4
+2016,823000,Houston Methodist Sugar Land Hospital,Sugar Land,16655 Southwest Freeway,23.3,14.6,0.5
+2017,823000,Houston Methodist Sugar Land Hospital,Sugar Land,16655 Southwest Freeway,21.9,12.8,0.4
+2018,823000,Houston Methodist Sugar Land Hospital,Sugar Land,16655 Southwest Freeway,21,8,NA
+2019,823000,Houston Methodist Sugar Land Hospital,Sugar Land,16655 Southwest Freeway,23.6,5.9,1.9
+2017,975208,Houston Methodist The Woodlands Hospital,The Woodlands,17201 I-45 South,20.5,6.3,3.8
+2018,975208,Houston Methodist The Woodlands Hospital,The Woodlands,17201 I-45 South,22.5,6.3,4.1
+2019,975208,Houston Methodist The Woodlands Hospital,The Woodlands,17201 I-45 South,22.2,4.4,4.7
+2016,800010,Houston Methodist West Hospital,Houston,18500 Katy Freeway,21,14.4,2.9
+2017,800010,Houston Methodist West Hospital,Houston,18500 Katy Freeway,18.3,5.1,4
+2018,800010,Houston Methodist West Hospital,Houston,18500 Katy Freeway,19.9,5.3,3.6
+2019,800010,Houston Methodist West Hospital,Houston,18500 Katy Freeway,20.1,4.5,4.3
+2016,724700,Houston Methodist Willowbrook Hospital,Houston,18220 Tomball Parkway,19.4,9.8,7.8
+2017,724700,Houston Methodist Willowbrook Hospital,Houston,18220 Tomball Parkway,19.7,6.1,12.3
+2018,724700,Houston Methodist Willowbrook Hospital,Houston,18220 Tomball Parkway,17.9,3.6,9.2
+2019,724700,Houston Methodist Willowbrook Hospital,Houston,18220 Tomball Parkway,21.3,4,8.7
+2016,085000,Hunt Regional Medical Center Greenville,Greenville,4215 Joe Ramsey Boulevard,13.1,16.2,15.7
+2017,085000,Hunt Regional Medical Center Greenville,Greenville,4215 Joe Ramsey Boulevard,16.8,14.1,9.7
+2018,085000,Hunt Regional Medical Center Greenville,Greenville,4215 Joe Ramsey Boulevard,15.7,18.5,10.6
+2019,085000,Hunt Regional Medical Center Greenville,Greenville,4215 Joe Ramsey Boulevard,16.7,12.8,8.6
+2016,061000,Huntsville Memorial Hospital,Huntsville,110 MEMORIAL HOSPITAL DRIVE,17.6,5.6,1.8
+2017,061000,Huntsville Memorial Hospital,Huntsville,110 MEMORIAL HOSPITAL DRIVE,19.1,7.5,3.6
+2018,061000,Huntsville Memorial Hospital,Huntsville,110 MEMORIAL HOSPITAL DRIVE,13.6,6.9,NA
+2019,061000,Huntsville Memorial Hospital,Huntsville,110 MEMORIAL HOSPITAL DRIVE,15.7,6.6,NA
+2016,409000,John Peter Smith Hospital,Fort Worth,1500 South Main Street,11.5,1.9,20.2
+2017,409000,John Peter Smith Hospital,Fort Worth,1500 South Main Street,12.6,1.7,18.7
+2018,409000,John Peter Smith Hospital,Fort Worth,1500 South Main Street,13.5,2,19.7
+2019,409000,John Peter Smith Hospital,Fort Worth,1500 South Main Street,16.7,1.8,20.4
+2016,480000,Knapp Medical Center,Weslaco,1401 East Eighth Street,9.9,14.2,3.8
+2017,480000,Knapp Medical Center,Weslaco,1401 East Eighth Street,6.8,11.4,7.3
+2018,480000,Knapp Medical Center,Weslaco,1401 East Eighth Street,7.2,7.5,10
+2019,480000,Knapp Medical Center,Weslaco,1401 East Eighth Street,7.8,9.8,9.7
+2016,424000,Lake Granbury Medical Center,Granbury,1310 Paluxy Road,10,9.8,1.4
+2017,424000,Lake Granbury Medical Center,Granbury,1310 Paluxy Road,11.5,8.2,1.3
+2018,424000,Lake Granbury Medical Center,Granbury,1310 Paluxy Road,12.8,0.3,1.8
+2019,424000,Lake Granbury Medical Center,Granbury,1310 Paluxy Road,15.7,6,2.5
+2016,217000,Lamb Healthcare Center,Littlefield,1500 South Sunset,12.8,NA,NA
+2017,217000,Lamb Healthcare Center,Littlefield,1500 South Sunset,6.5,NA,NA
+2018,217000,Lamb Healthcare Center,Littlefield,1500 South Sunset,9.7,NA,NA
+2019,217000,Lamb Healthcare Center,Littlefield,1500 South Sunset,14.5,NA,NA
+2016,207001,Laredo Medical Center,Laredo,1700 East Saunders Street,25.5,16.7,4
+2017,207001,Laredo Medical Center,Laredo,1700 East Saunders Street,23,17.7,6.6
+2018,207001,Laredo Medical Center,Laredo,1700 East Saunders Street,24.6,18.3,5.9
+2019,207001,Laredo Medical Center,Laredo,1700 East Saunders Street,23.9,18.9,9.2
+2016,180000,Las Palmas Medical Center,El Paso,1801 North Oregon Street,20.9,10.7,1.4
+2017,180000,Las Palmas Medical Center,El Paso,1801 North Oregon Street,22.4,10.2,1.7
+2018,180000,Las Palmas Medical Center,El Paso,1801 North Oregon Street,19.7,9.6,2.4
+2019,180000,Las Palmas Medical Center,El Paso,1801 North Oregon Street,17.3,7.8,3.4
+2016,525000,Longview Regional Medical Center,Longview,2901 North Fourth Street,14.8,11.8,1.9
+2017,525000,Longview Regional Medical Center,Longview,2901 North Fourth Street,18.6,6.8,2.6
+2018,525000,Longview Regional Medical Center,Longview,2901 North Fourth Street,15.1,5.7,3.8
+2019,525000,Longview Regional Medical Center,Longview,2901 North Fourth Street,15.8,3.6,6.5
+2016,006000,Matagorda Regional Medical Center,Bay City,104 7th Street,9.3,22.3,1.1
+2017,006000,Matagorda Regional Medical Center,Bay City,104 7th Street,15.5,31.1,8.3
+2018,006000,Matagorda Regional Medical Center,Bay City,104 7th Street,13.8,30.3,9.7
+2019,006000,Matagorda Regional Medical Center,Bay City,104 7th Street,17,21.1,7.7
+2016,341000,Medical Arts Hospital,Lamesa,2200 North Bryan Ave,12.5,5.9,NA
+2017,341000,Medical Arts Hospital,Lamesa,2200 North Bryan Ave,22.2,1.7,NA
+2016,181000,Medical Center Hospital,Odessa,500 West 4th Street,11.9,11.5,17.7
+2017,181000,Medical Center Hospital,Odessa,500 West 4th Street,14.7,12.8,9.3
+2018,181000,Medical Center Hospital,Odessa,500 West 4th Street,16.7,10.6,10
+2019,181000,Medical Center Hospital,Odessa,500 West 4th Street,19.2,7.9,15.5
+2016,464002,Medical Center-Southeast Texas,Port Arthur,2555 Jimmy Johnson Blvd,16.8,11.3,1.3
+2017,464002,Medical Center-Southeast Texas,Port Arthur,2555 Jimmy Johnson Blvd,19.8,7.1,0.4
+2018,464002,Medical Center-Southeast Texas,Port Arthur,2555 Jimmy Johnson Blvd,22.4,5.6,1.3
+2019,464002,Medical Center-Southeast Texas,Port Arthur,2555 Jimmy Johnson Blvd,27.2,9.9,1
+2016,974490,Medical City Alliance,Fort Worth,3101 North Tarrant Parkway,18.6,9.5,5.3
+2017,974490,Medical City Alliance,Fort Worth,3101 North Tarrant Parkway,17.6,8.6,3.9
+2018,974490,Medical City Alliance,Fort Worth,3101 North Tarrant Parkway,20.6,7.8,2.1
+2019,974490,Medical City Alliance,Fort Worth,3101 North Tarrant Parkway,19,9.6,7.6
+2016,502000,Medical City Arlington,Arlington,3301 Matlock Road,20,7.6,3.8
+2017,502000,Medical City Arlington,Arlington,3301 Matlock Road,19.5,6.5,3.1
+2018,502000,Medical City Arlington,Arlington,3301 Matlock Road,19,4.2,3.2
+2019,502000,Medical City Arlington,Arlington,3301 Matlock Road,18.4,4.9,3.5
+2016,340000,Medical City Dallas Hospital,Dallas,7777 Forest Lane,26.3,14.7,3.4
+2017,340000,Medical City Dallas Hospital,Dallas,7777 Forest Lane,26.8,15,3.4
+2018,340000,Medical City Dallas Hospital,Dallas,7777 Forest Lane,25.2,9.9,5.1
+2019,340000,Medical City Dallas Hospital,Dallas,7777 Forest Lane,23.2,11.3,6.8
+2018,975139,Medical City Frisco,Frisco,5500 Frisco Square Blvd,15.8,2.9,NA
+2019,975139,Medical City Frisco,Frisco,5500 Frisco Square Blvd,15,2.8,19.8
+2016,814000,Medical City Las Colinas,Irving,6800 North MacArthur Boulevard,25.8,7,1.5
+2017,814000,Medical City Las Colinas,Irving,6800 North MacArthur Boulevard,26.6,5.3,0.6
+2018,814000,Medical City Las Colinas,Irving,6800 North MacArthur Boulevard,24.8,4.1,1.3
+2019,814000,Medical City Las Colinas,Irving,6800 North MacArthur Boulevard,23.1,2.5,1.8
+2016,394000,Medical City Lewisville,Lewisville,500 West Main Street,17.8,8.1,1.4
+2017,394000,Medical City Lewisville,Lewisville,500 West Main Street,15.6,8.6,4.6
+2018,394000,Medical City Lewisville,Lewisville,500 West Main Street,20.3,7.5,5.6
+2019,394000,Medical City Lewisville,Lewisville,500 West Main Street,17.8,8.7,7
+2016,214000,Medical City Plano,Plano,3901 West 15th Street,25.4,16.5,7.4
+2017,214000,Medical City Plano,Plano,3901 West 15th Street,23.8,10.1,6.2
+2018,214000,Medical City Plano,Plano,3901 West 15th Street,23.4,8.6,6.4
+2019,214000,Medical City Plano,Plano,3901 West 15th Street,24,6.4,7.1
+2017,975241,Medical City Weatherford,Weatherford,713 E Anderson St,12.4,10.5,NA
+2018,975241,Medical City Weatherford,Weatherford,713 E Anderson St,9.4,8.5,13
+2019,975241,Medical City Weatherford,Weatherford,713 E Anderson St,8.3,7.8,11.1
+2016,246000,Medical City-McKinney,McKinney,4500 Medical Center Drive,23,4.8,2
+2017,246000,Medical City-McKinney,McKinney,4500 Medical Center Drive,22.9,3.8,2.4
+2018,246000,Medical City-McKinney,McKinney,4500 Medical Center Drive,19.8,5.5,2.6
+2019,246000,Medical City-McKinney,McKinney,4500 Medical Center Drive,17.5,3.8,5.9
+2016,427000,Medina Regional Hospital,Hondo,3100 Avenue E,12.2,17.8,NA
+2017,427000,Medina Regional Hospital,Hondo,3100 Avenue E,28.3,15.4,NA
+2018,427000,Medina Regional Hospital,Hondo,3100 Avenue E,24.7,12.3,NA
+2019,427000,Medina Regional Hospital,Hondo,3100 Avenue E,15.4,8,NA
+2016,347000,Memorial Hermann - Texas Medical Center,Houston,6411 Fannin,24,6.7,8.7
+2017,347000,Memorial Hermann - Texas Medical Center,Houston,6411 Fannin,22.4,5.2,7
+2018,347000,Memorial Hermann - Texas Medical Center,Houston,6411 Fannin,24.8,4.1,8.2
+2019,347000,Memorial Hermann - Texas Medical Center,Houston,6411 Fannin,24.5,4.1,10
+2017,975201,Memorial Hermann Cypress Hospital,Cypress,27800 Northwest Freeway,16.4,5.1,8
+2018,975201,Memorial Hermann Cypress Hospital,Cypress,27800 Northwest Freeway,18.4,4.8,7
+2019,975201,Memorial Hermann Cypress Hospital,Cypress,27800 Northwest Freeway,16.8,3.7,8.9
+2016,172000,Memorial Hermann Greater Heights Hospital,Houston,1635 North Loop West,15.8,6.2,2.5
+2017,172000,Memorial Hermann Greater Heights Hospital,Houston,1635 North Loop West,15.8,2.1,4.3
+2018,172000,Memorial Hermann Greater Heights Hospital,Houston,1635 North Loop West,14.5,1.4,5.4
+2019,172000,Memorial Hermann Greater Heights Hospital,Houston,1635 North Loop West,15.3,1.2,10
+2016,534001,Memorial Hermann Katy Hospital,Katy,23900 Katy Freeway,15.9,11.5,6.4
+2017,534001,Memorial Hermann Katy Hospital,Katy,23900 Katy Freeway,16,6.9,5.7
+2018,534001,Memorial Hermann Katy Hospital,Katy,23900 Katy Freeway,15.7,6.5,4.3
+2019,534001,Memorial Hermann Katy Hospital,Katy,23900 Katy Freeway,16.7,5.1,6.6
+2016,302000,Memorial Hermann Memorial City Medical Center,Houston,921 Gessner Road,18.6,6.5,8.4
+2017,302000,Memorial Hermann Memorial City Medical Center,Houston,921 Gessner Road,19.4,4.5,8.3
+2018,302000,Memorial Hermann Memorial City Medical Center,Houston,921 Gessner Road,18.6,5,10.5
+2019,302000,Memorial Hermann Memorial City Medical Center,Houston,921 Gessner Road,19.2,4.4,10.2
+2016,847100,Memorial Hermann Northeast,Humble,18951 Memorial North,18.6,6.8,6.4
+2017,847100,Memorial Hermann Northeast,Humble,18951 Memorial North,20.2,3.1,5.4
+2018,847100,Memorial Hermann Northeast,Humble,18951 Memorial North,21.7,4,3.5
+2019,847100,Memorial Hermann Northeast,Humble,18951 Memorial North,19.5,5.5,5.3
+2016,975138,Memorial Hermann Pearland Hospital,Pearland,16100 South Freeway,11.3,3,NA
+2017,975138,Memorial Hermann Pearland Hospital,Pearland,16100 South Freeway,15.1,7.7,5.9
+2018,975138,Memorial Hermann Pearland Hospital,Pearland,16100 South Freeway,12.1,4.9,10.9
+2019,975138,Memorial Hermann Pearland Hospital,Pearland,16100 South Freeway,14.7,0.8,6.3
+2016,119000,Memorial Hermann Southeast Hospital,Houston,11800 Astoria Boulevard,21.1,11.8,3.2
+2017,119000,Memorial Hermann Southeast Hospital,Houston,11800 Astoria Boulevard,23.3,5.7,4.4
+2018,119000,Memorial Hermann Southeast Hospital,Houston,11800 Astoria Boulevard,19.5,4.5,7.9
+2019,119000,Memorial Hermann Southeast Hospital,Houston,11800 Astoria Boulevard,17.8,5.1,7.9
+2016,407000,Memorial Hermann Southwest Hospital,Houston,7600 Beechnut,14.4,8.6,3.4
+2017,407000,Memorial Hermann Southwest Hospital,Houston,7600 Beechnut,16,4.9,2.7
+2018,407000,Memorial Hermann Southwest Hospital,Houston,7600 Beechnut,13.8,3.3,4.4
+2019,407000,Memorial Hermann Southwest Hospital,Houston,7600 Beechnut,13.7,2.8,11.9
+2016,609001,Memorial Hermann Sugar Land,Sugar Land,17500 WEST GRAND PARKWAY SOUTH,17.8,7.8,0.7
+2017,609001,Memorial Hermann Sugar Land,Sugar Land,17500 WEST GRAND PARKWAY SOUTH,16.5,6.8,1.1
+2018,609001,Memorial Hermann Sugar Land,Sugar Land,17500 WEST GRAND PARKWAY SOUTH,16.5,4.7,0.9
+2019,609001,Memorial Hermann Sugar Land,Sugar Land,17500 WEST GRAND PARKWAY SOUTH,19.6,4.7,1.9
+2016,615000,Memorial Hermann The Woodlands Medical Center,The Woodlands,9250 Pinecroft Drive,20.9,14.8,2.1
+2017,615000,Memorial Hermann The Woodlands Medical Center,The Woodlands,9250 Pinecroft Drive,22.2,10.8,2.4
+2018,615000,Memorial Hermann The Woodlands Medical Center,The Woodlands,9250 Pinecroft Drive,21.9,8.7,3.3
+2019,615000,Memorial Hermann The Woodlands Medical Center,The Woodlands,9250 Pinecroft Drive,22.1,7.9,3.4
+2016,103000,Memorial Hospital,Gonzales,1110 N SARAH DEWITT DRIVE,16.7,7.8,11.4
+2017,103000,Memorial Hospital,Gonzales,1110 N SARAH DEWITT DRIVE,15.7,15.7,NA
+2018,103000,Memorial Hospital,Gonzales,1110 N SARAH DEWITT DRIVE,15.6,11.8,NA
+2019,103000,Memorial Hospital,Gonzales,1110 N SARAH DEWITT DRIVE,12.6,8.8,NA
+2016,113000,Memorial Hospital,Seminole,209 NW 8th Street,22,8.5,1
+2017,113000,Memorial Hospital,Seminole,209 NW 8th Street,18.4,12.8,NA
+2018,113000,Memorial Hospital,Seminole,209 NW 8th Street,21.1,7.3,NA
+2019,113000,Memorial Hospital,Seminole,209 NW 8th Street,21,6.7,NA
+2016,199000,Memorial Hospital,Dumas,224 East Second Street,15,14.5,7.8
+2017,199000,Memorial Hospital,Dumas,224 East Second Street,15,11.9,7.3
+2018,199000,Memorial Hospital,Dumas,224 East Second Street,20.4,16.3,5
+2019,199000,Memorial Hospital,Dumas,224 East Second Street,16,17.4,2
+2016,487000,Memorial Medical Center,Port Lavaca,815 North Virginia Street,20.8,5.4,NA
+2017,487000,Memorial Medical Center,Port Lavaca,815 North Virginia Street,10,2.3,NA
+2018,487000,Memorial Medical Center,Port Lavaca,815 North Virginia Street,16.9,9.3,NA
+2019,487000,Memorial Medical Center,Port Lavaca,815 North Virginia Street,12.9,NA,NA
+2016,142000,Methodist Charlton Medical Center,Dallas,3500 Wheatland Road,13.6,5.6,7.3
+2017,142000,Methodist Charlton Medical Center,Dallas,3500 Wheatland Road,12.8,6.6,7.4
+2018,142000,Methodist Charlton Medical Center,Dallas,3500 Wheatland Road,16.7,5.7,9
+2019,142000,Methodist Charlton Medical Center,Dallas,3500 Wheatland Road,16.5,5.6,8.3
+2016,255000,Methodist Dallas Medical Center,Dallas,1441 North Beckley Avenue,10.1,3,12.7
+2017,255000,Methodist Dallas Medical Center,Dallas,1441 North Beckley Avenue,12.1,2,23
+2018,255000,Methodist Dallas Medical Center,Dallas,1441 North Beckley Avenue,13.5,2.4,21
+2019,255000,Methodist Dallas Medical Center,Dallas,1441 North Beckley Avenue,12.4,2.4,20.9
+2016,154000,Methodist Hospital,San Antonio,7700 Floyd Curl Drive,21.7,10.9,2.1
+2017,154000,Methodist Hospital,San Antonio,7700 Floyd Curl Drive,19.7,8,1.4
+2018,154000,Methodist Hospital,San Antonio,7700 Floyd Curl Drive,21,9.5,2.8
+2019,154000,Methodist Hospital,San Antonio,7700 Floyd Curl Drive,18.3,10.1,2
+2017,975221,Methodist Hospital South,Jourdanton,1905 Highway 97 East,7.7,1.1,NA
+2018,975221,Methodist Hospital South,Jourdanton,1905 Highway 97 East,8.7,1.8,8.8
+2019,975221,Methodist Hospital South,Jourdanton,1905 Highway 97 East,5.7,4.1,8.8
+2016,842800,Methodist Mansfield Medical Center,Mansfield,2700 Broad Street,18.1,6.4,6.9
+2017,842800,Methodist Mansfield Medical Center,Mansfield,2700 Broad Street,17.3,4.4,7.1
+2018,842800,Methodist Mansfield Medical Center,Mansfield,2700 Broad Street,15.8,5.1,7.1
+2019,842800,Methodist Mansfield Medical Center,Mansfield,2700 Broad Street,17,3.6,9.9
+2016,874100,Methodist Stone Oak Hospital,San Antonio,1139 East Sonterra Blvd,24.4,8.2,0.9
+2017,874100,Methodist Stone Oak Hospital,San Antonio,1139 East Sonterra Blvd,24.2,4.5,1
+2018,874100,Methodist Stone Oak Hospital,San Antonio,1139 East Sonterra Blvd,22.7,5.5,1.6
+2019,874100,Methodist Stone Oak Hospital,San Antonio,1139 East Sonterra Blvd,22.2,6.4,NA
+2016,283000,Metropolitan Methodist Hospital,San Antonio,1310 McCullough Avenue,20.5,10.6,1.1
+2017,283000,Metropolitan Methodist Hospital,San Antonio,1310 McCullough Avenue,23.2,8.2,0.3
+2018,283000,Metropolitan Methodist Hospital,San Antonio,1310 McCullough Avenue,19.6,8.5,2.3
+2019,283000,Metropolitan Methodist Hospital,San Antonio,1310 McCullough Avenue,20.6,9.2,1.9
+2016,452000,Midland Memorial Hospital,Midland,400 Rosalind Redfern Grover Parkway,16.5,10.8,10.1
+2017,452000,Midland Memorial Hospital,Midland,400 Rosalind Redfern Grover Parkway,18.2,8.7,13.7
+2018,452000,Midland Memorial Hospital,Midland,400 Rosalind Redfern Grover Parkway,14.3,6.2,11.3
+2019,452000,Midland Memorial Hospital,Midland,400 Rosalind Redfern Grover Parkway,15.4,4.6,11.6
+2016,370000,Mission Regional Medical Center,Mission,900 South Bryan Road,23.2,26,2.3
+2017,370000,Mission Regional Medical Center,Mission,900 South Bryan Road,20.5,33,2
+2018,370000,Mission Regional Medical Center,Mission,900 South Bryan Road,19.6,23,0.9
+2019,370000,Mission Regional Medical Center,Mission,900 South Bryan Road,20.5,19.3,1.5
+2016,392000,Nacogdoches Medical Center,Nacogdoches,4920 N. E. Stallings Drive,21.4,9.5,1.1
+2017,392000,Nacogdoches Medical Center,Nacogdoches,4920 N. E. Stallings Drive,21.6,3.5,4.3
+2018,392000,Nacogdoches Medical Center,Nacogdoches,4920 N. E. Stallings Drive,19.6,1.1,2
+2019,392000,Nacogdoches Medical Center,Nacogdoches,4920 N. E. Stallings Drive,18.7,1.6,1
+2016,141000,Navarro Regional Hospital,Corsicana,3201 West Highway 22,17.9,0.9,5.4
+2017,141000,Navarro Regional Hospital,Corsicana,3201 West Highway 22,18.8,3.8,2.2
+2018,141000,Navarro Regional Hospital,Corsicana,3201 West Highway 22,18.9,1.6,4.7
+2019,141000,Navarro Regional Hospital,Corsicana,3201 West Highway 22,22.7,0.9,1
+2016,829900,North Austin Medical Center,Austin,12221 Mopac Expressway North,19.9,3.4,7
+2017,829900,North Austin Medical Center,Austin,12221 Mopac Expressway North,20.7,2.5,7.6
+2018,829900,North Austin Medical Center,Austin,12221 Mopac Expressway North,19.9,3.7,6.4
+2019,829900,North Austin Medical Center,Austin,12221 Mopac Expressway North,20.8,2.3,8.2
+2016,677001,North Central Baptist Hospital,San Antonio,520 Madison Oak,21.3,5.2,8.3
+2017,677001,North Central Baptist Hospital,San Antonio,520 Madison Oak,22.4,4.9,8
+2018,677001,North Central Baptist Hospital,San Antonio,520 Madison Oak,20.7,3.8,10.1
+2019,677001,North Central Baptist Hospital,San Antonio,520 Madison Oak,22.1,4,10.3
+2016,298000,North Texas Medical Center,Gainesville,1900 Hospital Boulevard,12.2,8.2,3.8
+2017,298000,North Texas Medical Center,Gainesville,1900 Hospital Boulevard,13.2,9.7,1.9
+2018,298000,North Texas Medical Center,Gainesville,1900 Hospital Boulevard,10.1,12.2,4
+2019,298000,North Texas Medical Center,Gainesville,1900 Hospital Boulevard,9.6,NA,NA
+2016,134001,Northeast Baptist Hospital,San Antonio,8811 Village Drive,14.8,0.8,2
+2017,134001,Northeast Baptist Hospital,San Antonio,8811 Village Drive,14.1,0.7,1.6
+2018,134001,Northeast Baptist Hospital,San Antonio,8811 Village Drive,12.9,1.5,1.8
+2019,134001,Northeast Baptist Hospital,San Antonio,8811 Village Drive,16.5,0.7,1.2
+2016,318000,Northwest Texas Hospital,Amarillo,1501 Coulter Road,12.5,6,20.3
+2017,318000,Northwest Texas Hospital,Amarillo,1501 Coulter Road,12,4.5,21.2
+2018,318000,Northwest Texas Hospital,Amarillo,1501 Coulter Road,11.6,6.5,19.1
+2019,318000,Northwest Texas Hospital,Amarillo,1501 Coulter Road,12.1,5.6,20.1
+2017,230000,Oakbend Medical Center,Richmond,1705 Jackson Street,22.3,8.2,NA
+2018,230000,Oakbend Medical Center,Richmond,1705 Jackson Street,NA,33.3,NA
+2016,230001,Oakbend Medical Center,Richmond,22003 Southwest Freeway,19.4,13.1,NA
+2017,230001,Oakbend Medical Center,Richmond,22003 Southwest Freeway,20.9,11.3,0.3
+2018,230001,Oakbend Medical Center,Richmond,22003 Southwest Freeway,18.8,8.3,NA
+2019,230001,Oakbend Medical Center,Richmond,22003 Southwest Freeway,15.4,6,0.9
+2016,098000,Ochiltree General Hospital,Perryton,3101 Garrett Drive,22.1,6.3,3
+2017,098000,Ochiltree General Hospital,Perryton,3101 Garrett Drive,13,7.6,NA
+2018,098000,Ochiltree General Hospital,Perryton,3101 Garrett Drive,14.3,5.4,3.1
+2019,098000,Ochiltree General Hospital,Perryton,3101 Garrett Drive,17.5,2.4,NA
+2016,425000,Odessa Regional Medical Center,Odessa,520 East Sixth Street,16.3,25.5,4.3
+2017,425000,Odessa Regional Medical Center,Odessa,520 East Sixth Street,17.2,24.2,4.9
+2018,425000,Odessa Regional Medical Center,Odessa,520 East Sixth Street,16.3,21.5,4.8
+2019,425000,Odessa Regional Medical Center,Odessa,520 East Sixth Street,19.1,15.1,5.3
+2016,629001,Palestine Regional Medical Center,Palestine,2900 South Loop 256,19.5,11.6,NA
+2017,629001,Palestine Regional Medical Center,Palestine,2900 South Loop 256,21.5,12.7,NA
+2018,629001,Palestine Regional Medical Center,Palestine,2900 South Loop 256,24.1,10.7,NA
+2019,629001,Palestine Regional Medical Center,Palestine,2900 South Loop 256,24.1,16.5,NA
+2016,034000,Palo Pinto General Hospital,Mineral Wells,400 Southwest 25th Avenue,14.1,22.2,21.2
+2017,034000,Palo Pinto General Hospital,Mineral Wells,400 Southwest 25th Avenue,12,13.9,11.1
+2018,034000,Palo Pinto General Hospital,Mineral Wells,400 Southwest 25th Avenue,14.5,12.4,14.9
+2019,034000,Palo Pinto General Hospital,Mineral Wells,400 Southwest 25th Avenue,11.1,11.8,23.1
+2016,832900,Pampa Regional Medical Center,Pampa,One Medical Plaza,11,0.6,NA
+2017,832900,Pampa Regional Medical Center,Pampa,One Medical Plaza,10.5,4.6,NA
+2018,832900,Pampa Regional Medical Center,Pampa,One Medical Plaza,12.2,2.5,NA
+2019,832900,Pampa Regional Medical Center,Pampa,One Medical Plaza,7.6,5.2,NA
+2018,095003,Paris Regional Medical Center North Campus,Paris,865 DeShong Drive,20.8,5.1,5.4
+2019,095003,Paris Regional Medical Center North Campus,Paris,865 DeShong Drive,19.9,2.5,5.6
+2016,474000,Parkland Memorial Hospital,Dallas,5201 Harry Hines Boulevard,14.3,1.9,8.9
+2017,474000,Parkland Memorial Hospital,Dallas,5201 Harry Hines Boulevard,15,2.1,9
+2018,474000,Parkland Memorial Hospital,Dallas,5201 Harry Hines Boulevard,14.5,1.5,9.6
+2019,474000,Parkland Memorial Hospital,Dallas,5201 Harry Hines Boulevard,12.3,1.2,9.7
+2016,356000,Pecos County Memorial Hospital,Fort Stockton,387 West I-10,17.6,3.5,NA
+2017,356000,Pecos County Memorial Hospital,Fort Stockton,387 West I-10,16.3,2.6,NA
+2018,356000,Pecos County Memorial Hospital,Fort Stockton,387 West I-10,5.8,NA,NA
+2019,356000,Pecos County Memorial Hospital,Fort Stockton,387 West I-10,12.1,2.1,NA
+2016,187000,Permian Regional Medical Center,Andrews,720 Hospital Drive,12.3,NA,NA
+2017,187000,Permian Regional Medical Center,Andrews,720 Hospital Drive,13.7,NA,NA
+2018,187000,Permian Regional Medical Center,Andrews,720 Hospital Drive,8.8,1.8,NA
+2019,187000,Permian Regional Medical Center,Andrews,720 Hospital Drive,11,2.9,1.7
+2016,406000,Peterson Regional Medical Center,Kerrville,551 Hill Country Drive,7.6,3.1,16.4
+2017,406000,Peterson Regional Medical Center,Kerrville,551 Hill Country Drive,13.2,3.2,13.4
+2018,406000,Peterson Regional Medical Center,Kerrville,551 Hill Country Drive,9,0.7,1.5
+2019,406000,Peterson Regional Medical Center,Kerrville,551 Hill Country Drive,10.1,2,3.1
+2016,367000,Reeves County Hospital,Pecos,2323 Texas Street,20.4,19.6,NA
+2017,367000,Reeves County Hospital,Pecos,2323 Texas Street,13.6,16.7,NA
+2018,367000,Reeves County Hospital,Pecos,2323 Texas Street,13.5,10.1,NA
+2019,367000,Reeves County Hospital,Pecos,2323 Texas Street,21,19.2,3.2
+2016,973850,Resolute Health,New Braunfels,555 Creekside Crossing,16.8,5.6,1
+2017,973850,Resolute Health,New Braunfels,555 Creekside Crossing,18.3,4.9,NA
+2018,973850,Resolute Health,New Braunfels,555 Creekside Crossing,19.3,5.4,NA
+2019,973850,Resolute Health,New Braunfels,555 Creekside Crossing,18.5,3,NA
+2016,560000,Rice Medical Center,Eagle Lake,600 South Austin Road,NA,13.6,NA
+2016,601000,Rio Grande Regional Hospital,McAllen,101 East Ridge Road,19.3,11.7,2.5
+2017,601000,Rio Grande Regional Hospital,McAllen,101 East Ridge Road,18.9,8.7,2.9
+2018,601000,Rio Grande Regional Hospital,McAllen,101 East Ridge Road,18.4,9.3,4.3
+2019,601000,Rio Grande Regional Hospital,McAllen,101 East Ridge Road,17.2,9.4,3
+2016,471000,Rolling Plains Memorial Hospital,Sweetwater,200 East Arizona Ave,14.2,4.5,6.1
+2017,471000,Rolling Plains Memorial Hospital,Sweetwater,200 East Arizona Ave,13.4,NA,NA
+2018,471000,Rolling Plains Memorial Hospital,Sweetwater,200 East Arizona Ave,6,1.3,8.8
+2019,471000,Rolling Plains Memorial Hospital,Sweetwater,200 East Arizona Ave,9.9,NA,14.3
+2016,608000,Round Rock Medical Center,Round Rock,2400 Round Rock Avenue,17.1,9,5.9
+2017,608000,Round Rock Medical Center,Round Rock,2400 Round Rock Avenue,16.5,4.6,8.1
+2018,608000,Round Rock Medical Center,Round Rock,2400 Round Rock Avenue,18.4,4.7,9.1
+2019,608000,Round Rock Medical Center,Round Rock,2400 Round Rock Avenue,16.6,3.9,9.2
+2016,056000,San Angelo Community Medical Center,San Angelo,3501 Knickerbocker Road,15.1,8.3,6.1
+2017,056000,San Angelo Community Medical Center,San Angelo,3501 Knickerbocker Road,15.8,8.5,8.2
+2018,056000,San Angelo Community Medical Center,San Angelo,3501 Knickerbocker Road,14.9,10.6,7
+2019,056000,San Angelo Community Medical Center,San Angelo,3501 Knickerbocker Road,15.9,8.2,9.6
+2019,975372,Scenic Mountain Medical Center,Big Spring,1601 West Eleventh Place,14.8,1.1,NA
+2016,971000,Seton Medical Center Harker Heights,Harker Heights,850 West Central Texas Expressway,12.3,2.8,1.6
+2017,971000,Seton Medical Center Harker Heights,Harker Heights,850 West Central Texas Expressway,12.8,3.1,2.4
+2018,971000,Seton Medical Center Harker Heights,Harker Heights,850 West Central Texas Expressway,9.5,2.4,0.8
+2019,971000,Seton Medical Center Harker Heights,Harker Heights,850 West Central Texas Expressway,10.9,1.5,2.4
+2016,168000,Shannon West Texas Memorial Hospital,San Angelo,120 East Harris Avenue,18.8,7.8,9.3
+2017,168000,Shannon West Texas Memorial Hospital,San Angelo,120 East Harris Avenue,14.7,7.7,13.3
+2018,168000,Shannon West Texas Memorial Hospital,San Angelo,120 East Harris Avenue,21.3,3.2,12.6
+2019,168000,Shannon West Texas Memorial Hospital,San Angelo,120 East Harris Avenue,18.6,4,13.4
+2016,140002,South Texas Health System Edinburg,Edinburg,1102 West Trenton Road,16.7,2.9,10.7
+2017,140002,South Texas Health System Edinburg,Edinburg,1102 West Trenton Road,13.9,6,4.7
+2018,140002,South Texas Health System Edinburg,Edinburg,1102 West Trenton Road,10.3,5.3,12.4
+2019,140002,South Texas Health System Edinburg,Edinburg,1102 West Trenton Road,10.1,2.1,15.2
+2016,802001,South Texas Health System McAllen,McAllen,301 West Expressway 83,22,15.1,2.4
+2017,802001,South Texas Health System McAllen,McAllen,301 West Expressway 83,24.8,19.1,2.1
+2018,802001,South Texas Health System McAllen,McAllen,301 West Expressway 83,19.2,14.4,3.6
+2019,802001,South Texas Health System McAllen,McAllen,301 West Expressway 83,21.8,9.5,6.2
+2016,228001,Southwest General Hospital,San Antonio,7400 Barlite Boulevard,18.5,6.1,7.3
+2017,228001,Southwest General Hospital,San Antonio,7400 Barlite Boulevard,20.3,3.6,5.7
+2018,228001,Southwest General Hospital,San Antonio,7400 Barlite Boulevard,20.5,4.5,10.2
+2019,228001,Southwest General Hospital,San Antonio,7400 Barlite Boulevard,17.5,3,12
+2016,835700,St Davids Georgetown Hospital,Georgetown,2000 Scenic Drive,14.6,1.2,7.2
+2017,835700,St Davids Georgetown Hospital,Georgetown,2000 Scenic Drive,13.7,1.3,3.5
+2018,835700,St Davids Georgetown Hospital,Georgetown,2000 Scenic Drive,13.1,0.6,4.3
+2019,835700,St Davids Georgetown Hospital,Georgetown,2000 Scenic Drive,14.4,0.5,5.8
+2016,035000,St Davids Hospital,Austin,919 East 32nd Street,17.7,1.7,6.2
+2017,035000,St Davids Hospital,Austin,919 East 32nd Street,16.9,1.2,6.5
+2018,035000,St Davids Hospital,Austin,919 East 32nd Street,15.1,1.4,7.8
+2019,035000,St Davids Hospital,Austin,919 East 32nd Street,16.2,1.4,11.8
+2016,602000,St Davids South Austin Hospital,Austin,901 West Ben White Boulevard,24,5.7,3.2
+2017,602000,St Davids South Austin Hospital,Austin,901 West Ben White Boulevard,21.2,4.6,5.2
+2018,602000,St Davids South Austin Hospital,Austin,901 West Ben White Boulevard,20.8,6.4,6
+2019,602000,St Davids South Austin Hospital,Austin,901 West Ben White Boulevard,18.6,4.3,10.6
+2016,838600,St Joseph Medical Center,Houston,1401 St Joseph Parkway,12.7,12.7,10.1
+2017,838600,St Joseph Medical Center,Houston,1401 St Joseph Parkway,14,10.2,9.2
+2018,838600,St Joseph Medical Center,Houston,1401 St Joseph Parkway,16.1,8.7,9.8
+2019,838600,St Joseph Medical Center,Houston,1401 St Joseph Parkway,13.4,8.5,11.4
+2016,002001,St Joseph Regional Health Center,Bryan,2801 Franciscan Drive,13.4,9.6,17.3
+2017,002001,St Joseph Regional Health Center,Bryan,2801 Franciscan Drive,14.4,5.4,14
+2018,002001,St Joseph Regional Health Center,Bryan,2801 Franciscan Drive,15.2,4.4,18.9
+2019,002001,St Joseph Regional Health Center,Bryan,2801 Franciscan Drive,14.1,4.8,10.8
+2016,503001,St Lukes Baptist Hospital,San Antonio,7930 Floyd Curl Drive,16.6,3.6,12.4
+2017,503001,St Lukes Baptist Hospital,San Antonio,7930 Floyd Curl Drive,18.4,3.2,14.4
+2018,503001,St Lukes Baptist Hospital,San Antonio,7930 Floyd Curl Drive,17.4,4.8,13.8
+2019,503001,St Lukes Baptist Hospital,San Antonio,7930 Floyd Curl Drive,18.3,2.9,16
+2016,740000,St Lukes Hospital at the Vintage,Houston,20171 Chasewood Park Drive,13.8,7.2,12.4
+2017,740000,St Lukes Hospital at the Vintage,Houston,20171 Chasewood Park Drive,16.4,7.7,14.8
+2018,740000,St Lukes Hospital at the Vintage,Houston,20171 Chasewood Park Drive,17.9,1.6,6.7
+2019,740000,St Lukes Hospital at the Vintage,Houston,20171 Chasewood Park Drive,21.4,8.7,2.1
+2016,869700,St Lukes Sugar Land Hospital,Sugar Land,1317 Lake Point Parkway,18,5.9,19.2
+2017,869700,St Lukes Sugar Land Hospital,Sugar Land,1317 Lake Point Parkway,16.1,8.5,20
+2018,869700,St Lukes Sugar Land Hospital,Sugar Land,1317 Lake Point Parkway,17.9,5.6,23.7
+2019,869700,St Lukes Sugar Land Hospital,Sugar Land,1317 Lake Point Parkway,18.4,5.4,19.9
+2016,793100,St Lukes The Woodlands Hospital,The Woodlands,17200 St Lukes Way,20.4,5.9,6.1
+2017,793100,St Lukes The Woodlands Hospital,The Woodlands,17200 St Lukes Way,18.7,5,5.5
+2018,793100,St Lukes The Woodlands Hospital,The Woodlands,17200 St Lukes Way,19.2,7.1,7.3
+2019,793100,St Lukes The Woodlands Hospital,The Woodlands,17200 St Lukes Way,19.4,3.7,2.7
+2016,823400,St Marks Medical Center,La Grange,One St Mark's Place,14.4,NA,NA
+2017,823400,St Marks Medical Center,La Grange,One St Mark's Place,14.6,1.1,NA
+2016,393000,Starr County Memorial Hospital,Rio Grande City,128 North FM 3167,21.2,NA,1.8
+2017,393000,Starr County Memorial Hospital,Rio Grande City,128 North FM 3167,18.9,NA,4.7
+2018,393000,Starr County Memorial Hospital,Rio Grande City,128 North FM 3167,16.9,NA,3
+2019,393000,Starr County Memorial Hospital,Rio Grande City,128 North FM 3167,17,NA,6.1
+2016,117100,Texas Childrens Hospital-Pavilion for Women,Houston,6651 Main Street,21.4,5,16.5
+2017,117100,Texas Childrens Hospital-Pavilion for Women,Houston,6651 Main Street,18,3.4,16.2
+2018,117100,Texas Childrens Hospital-Pavilion for Women,Houston,6651 Main Street,20.9,3.6,16.3
+2019,117100,Texas Childrens Hospital-Pavilion for Women,Houston,6651 Main Street,20.4,4.1,13.6
+2016,422000,Texas Health Arlington Memorial Hospital,Arlington,800 West Randol Mill Road,16,22,10.7
+2017,422000,Texas Health Arlington Memorial Hospital,Arlington,800 West Randol Mill Road,15.2,15.6,4.5
+2018,422000,Texas Health Arlington Memorial Hospital,Arlington,800 West Randol Mill Road,14.1,14.7,8.5
+2019,422000,Texas Health Arlington Memorial Hospital,Arlington,800 West Randol Mill Road,14.5,17.7,11
+2016,182000,Texas Health Harris Methodist HEB,Bedford,1600 Hospital Parkway,20.4,18.7,5.8
+2017,182000,Texas Health Harris Methodist HEB,Bedford,1600 Hospital Parkway,18.2,19,5.5
+2018,182000,Texas Health Harris Methodist HEB,Bedford,1600 Hospital Parkway,21.4,16.3,5.7
+2019,182000,Texas Health Harris Methodist HEB,Bedford,1600 Hospital Parkway,23.3,13.1,5.7
+2016,972900,Texas Health Harris Methodist Hospital Alliance,Fort Worth,10864 Texas Health Trail,18.4,12.7,7.3
+2017,972900,Texas Health Harris Methodist Hospital Alliance,Fort Worth,10864 Texas Health Trail,18.5,12.5,8.5
+2018,972900,Texas Health Harris Methodist Hospital Alliance,Fort Worth,10864 Texas Health Trail,21.2,11.9,9.1
+2019,972900,Texas Health Harris Methodist Hospital Alliance,Fort Worth,10864 Texas Health Trail,21.8,10.4,7.3
+2016,323000,Texas Health Harris Methodist Hospital Cleburne,Cleburne,201 Walls Drive,14.8,0.7,10.1
+2017,323000,Texas Health Harris Methodist Hospital Cleburne,Cleburne,201 Walls Drive,11.6,1.8,25
+2018,323000,Texas Health Harris Methodist Hospital Cleburne,Cleburne,201 Walls Drive,12.5,2.1,26.6
+2019,323000,Texas Health Harris Methodist Hospital Cleburne,Cleburne,201 Walls Drive,13.3,1,18.9
+2016,235000,Texas Health Harris Methodist Hospital-Fort Worth,Fort Worth,1301 Pennsylvania Avenue,18.3,6.7,26.2
+2017,235000,Texas Health Harris Methodist Hospital-Fort Worth,Fort Worth,1301 Pennsylvania Avenue,17.8,5.8,24.3
+2018,235000,Texas Health Harris Methodist Hospital-Fort Worth,Fort Worth,1301 Pennsylvania Avenue,15.8,4.9,26.7
+2019,235000,Texas Health Harris Methodist Hospital-Fort Worth,Fort Worth,1301 Pennsylvania Avenue,16.2,2.9,31
+2016,627000,Texas Health Harris Methodist Hospital-Southwest Fort Worth,Fort Worth,6100 Harris Parkway,19.5,13.6,14
+2017,627000,Texas Health Harris Methodist Hospital-Southwest Fort Worth,Fort Worth,6100 Harris Parkway,18.9,11.7,12.8
+2018,627000,Texas Health Harris Methodist Hospital-Southwest Fort Worth,Fort Worth,6100 Harris Parkway,17.3,10.4,12.8
+2019,627000,Texas Health Harris Methodist Hospital-Southwest Fort Worth,Fort Worth,6100 Harris Parkway,19.8,8.1,14.2
+2016,256000,Texas Health Harris Methodist Hospital-Stephenville,Stephenville,411 North Belknap,9.7,6.9,5.5
+2017,256000,Texas Health Harris Methodist Hospital-Stephenville,Stephenville,411 North Belknap,8.9,1.6,2.4
+2018,256000,Texas Health Harris Methodist Hospital-Stephenville,Stephenville,411 North Belknap,10.9,3,7.5
+2019,256000,Texas Health Harris Methodist Hospital-Stephenville,Stephenville,411 North Belknap,7.1,2.7,NA
+2016,859900,Texas Health Hospital Rockwall,Rockwall,3150 Horizon Road,26.1,8.2,NA
+2017,859900,Texas Health Hospital Rockwall,Rockwall,3150 Horizon Road,19.5,8.2,NA
+2018,859900,Texas Health Hospital Rockwall,Rockwall,3150 Horizon Road,19,7.1,0.8
+2019,859900,Texas Health Hospital Rockwall,Rockwall,3150 Horizon Road,22.1,5.1,0.9
+2016,047000,Texas Health Huguley Hospital,Fort Worth,11801 South Freeway,13.1,6.6,10.8
+2017,047000,Texas Health Huguley Hospital,Fort Worth,11801 South Freeway,12.5,5.4,7.7
+2018,047000,Texas Health Huguley Hospital,Fort Worth,11801 South Freeway,15.2,6.8,13.4
+2019,047000,Texas Health Huguley Hospital,Fort Worth,11801 South Freeway,15.2,3.4,7
+2016,724200,Texas Health Presbyterian Hospital Allen,Allen,1105 Central Expressway North Suite 140,17.4,7.8,4.8
+2017,724200,Texas Health Presbyterian Hospital Allen,Allen,1105 Central Expressway North Suite 140,16.8,8.2,6.7
+2018,724200,Texas Health Presbyterian Hospital Allen,Allen,1105 Central Expressway North Suite 140,15.4,6.2,13
+2019,724200,Texas Health Presbyterian Hospital Allen,Allen,1105 Central Expressway North Suite 140,16.8,0.8,NA
+2016,431000,Texas Health Presbyterian Hospital Dallas,Dallas,8200 Walnut Hill Lane,21,9.7,4.7
+2017,431000,Texas Health Presbyterian Hospital Dallas,Dallas,8200 Walnut Hill Lane,20.4,7.4,5.4
+2018,431000,Texas Health Presbyterian Hospital Dallas,Dallas,8200 Walnut Hill Lane,21.3,6.7,5.7
+2019,431000,Texas Health Presbyterian Hospital Dallas,Dallas,8200 Walnut Hill Lane,19.5,6.4,7
+2016,943000,Texas Health Presbyterian Hospital Flower Mound,Flower Mound,4400 Long Prairie Road,17.4,7.7,6.2
+2017,943000,Texas Health Presbyterian Hospital Flower Mound,Flower Mound,4400 Long Prairie Road,18.3,6.1,9.2
+2018,943000,Texas Health Presbyterian Hospital Flower Mound,Flower Mound,4400 Long Prairie Road,16.6,6.5,3.3
+2019,943000,Texas Health Presbyterian Hospital Flower Mound,Flower Mound,4400 Long Prairie Road,15.1,7,1.7
+2016,820800,Texas Health Presbyterian Hospital-Denton,Denton,3000 I-35,13.3,9.9,27.5
+2017,820800,Texas Health Presbyterian Hospital-Denton,Denton,3000 I-35,14.8,9.6,24.9
+2018,820800,Texas Health Presbyterian Hospital-Denton,Denton,3000 I-35,15.1,9.2,21.9
+2019,820800,Texas Health Presbyterian Hospital-Denton,Denton,3000 I-35,14.3,7.4,15.6
+2016,303000,Texas Health Presbyterian Hospital-Kaufman,Kaufman,850 Ed Hall Drive,8.8,4.1,NA
+2016,664000,Texas Health Presbyterian Hospital-Plano,Plano,6200 West Parker Road,22.8,19.1,3.3
+2017,664000,Texas Health Presbyterian Hospital-Plano,Plano,6200 West Parker Road,20.4,18.1,4.8
+2018,664000,Texas Health Presbyterian Hospital-Plano,Plano,6200 West Parker Road,22,11.4,3.8
+2019,664000,Texas Health Presbyterian Hospital-Plano,Plano,6200 West Parker Road,21.8,10.9,3.5
+2016,847000,Texoma Medical Center,Denison,5016 South US Highway 75,22.8,25,2.2
+2017,847000,Texoma Medical Center,Denison,5016 South US Highway 75,18.9,17.4,0.5
+2018,847000,Texoma Medical Center,Denison,5016 South US Highway 75,20.8,11.2,0.5
+2019,847000,Texoma Medical Center,Denison,5016 South US Highway 75,19.2,6.9,3.9
+2016,865000,The Hospitals of Providence East Campus,El Paso,3280 Joe Battle Blvd,17.3,17.2,7.6
+2017,865000,The Hospitals of Providence East Campus,El Paso,3280 Joe Battle Blvd,17.3,15.8,5.9
+2018,865000,The Hospitals of Providence East Campus,El Paso,3280 Joe Battle Blvd,18.2,14.9,5.6
+2019,865000,The Hospitals of Providence East Campus,El Paso,3280 Joe Battle Blvd,15.2,10,5.8
+2016,130000,The Hospitals of Providence Memorial Campus,El Paso,2001 North Oregon Street,26.5,23.6,1.3
+2017,130000,The Hospitals of Providence Memorial Campus,El Paso,2001 North Oregon Street,26.4,22,1.6
+2018,130000,The Hospitals of Providence Memorial Campus,El Paso,2001 North Oregon Street,26.9,20.7,1.7
+2019,130000,The Hospitals of Providence Memorial Campus,El Paso,2001 North Oregon Street,26.2,20.1,6.5
+2016,266000,The Hospitals of Providence Sierra Campus,El Paso,1625 Medical Center Drive,29,21.8,1.7
+2017,266000,The Hospitals of Providence Sierra Campus,El Paso,1625 Medical Center Drive,32.4,16.6,0.9
+2018,266000,The Hospitals of Providence Sierra Campus,El Paso,1625 Medical Center Drive,29.2,22.2,6.9
+2017,975188,The Hospitals of Providence Transmountain Campus,El Paso,2000 Transmountain Road,21.5,24.6,NA
+2018,975188,The Hospitals of Providence Transmountain Campus,El Paso,2000 Transmountain Road,19.9,22.4,3.2
+2019,975188,The Hospitals of Providence Transmountain Campus,El Paso,2000 Transmountain Road,12.5,10.7,11
+2016,137000,Titus Regional Medical Center,Mount Pleasant,2001 North Jefferson,10.7,0.7,15.4
+2017,137000,Titus Regional Medical Center,Mount Pleasant,2001 North Jefferson,13.2,1.3,14.9
+2018,137000,Titus Regional Medical Center,Mount Pleasant,2001 North Jefferson,11.1,0.9,21.1
+2019,137000,Titus Regional Medical Center,Mount Pleasant,2001 North Jefferson,11.9,0.6,17.4
+2016,417000,United Regional Health Care System,Wichita Falls,1600 Eleventh Street,12.6,10,11.3
+2017,417000,United Regional Health Care System,Wichita Falls,1600 Eleventh Street,13.7,10.8,10
+2018,417000,United Regional Health Care System,Wichita Falls,1600 Eleventh Street,12.2,8.5,7.6
+2019,417000,United Regional Health Care System,Wichita Falls,1600 Eleventh Street,11.7,6.5,11.7
+2016,158000,University Hospital,San Antonio,4502 Medical Drive,20.7,14.3,10.7
+2017,158000,University Hospital,San Antonio,4502 Medical Drive,19,6.7,12.2
+2018,158000,University Hospital,San Antonio,4502 Medical Drive,18.2,3.7,12.2
+2019,158000,University Hospital,San Antonio,4502 Medical Drive,16.4,3.2,14.1
+2016,145000,University Medical Center,Lubbock,602 Indiana Avenue,7.8,10.6,31.9
+2017,145000,University Medical Center,Lubbock,602 Indiana Avenue,8.3,9.1,30.6
+2018,145000,University Medical Center,Lubbock,602 Indiana Avenue,8.2,11.3,31.7
+2019,145000,University Medical Center,Lubbock,602 Indiana Avenue,7.1,11.9,34.4
+2016,263000,University Medical Center of El Paso,El Paso,4815 Alameda Avenue,16.7,5,28
+2017,263000,University Medical Center of El Paso,El Paso,4815 Alameda Avenue,13.4,3.8,34.8
+2018,263000,University Medical Center of El Paso,El Paso,4815 Alameda Avenue,12.4,3.1,34.3
+2019,263000,University Medical Center of El Paso,El Paso,4815 Alameda Avenue,9.9,2.4,25.4
+2018,975293,UT Health East Texas Athens Hospital,Athens,2000 South Palestine Street,14.9,10.7,NA
+2019,975293,UT Health East Texas Athens Hospital,Athens,2000 South Palestine Street,13.9,7.2,0.8
+2018,975295,UT Health East Texas Henderson Hospital,Henderson,300 Wilson Street,17.6,14.9,NA
+2019,975295,UT Health East Texas Henderson Hospital,Henderson,300 Wilson Street,16.7,11.3,NA
+2018,975296,UT Health East Texas Jacksonville Hospital,Jacksonville,501 South Ragsdale Street,11.2,3.8,NA
+2019,975296,UT Health East Texas Jacksonville Hospital,Jacksonville,501 South Ragsdale Street,18.3,3.2,NA
+2018,975299,UT Health East Texas Tyler Regional Hospital,Tyler,1000 South Beckham Avenue,15,4.1,10
+2019,975299,UT Health East Texas Tyler Regional Hospital,Tyler,1000 South Beckham Avenue,13.7,2.6,7.1
+2016,000102,UT Medical Branch Hospital,Galveston,301 University Blvd,15.2,3.2,12.4
+2017,000102,UT Medical Branch Hospital,Galveston,301 University Blvd,17,3,12
+2018,000102,UT Medical Branch Hospital,Galveston,301 University Blvd,16.9,1.6,9.9
+2019,000102,UT Medical Branch Hospital,Galveston,301 University Blvd,18.4,2,11
+2016,448001,UT Southwestern University Hospital-Clements University,Dallas,6201 Harry Hines Blvd,16.1,4,13.7
+2017,448001,UT Southwestern University Hospital-Clements University,Dallas,6201 Harry Hines Blvd,18.5,3.1,11.6
+2018,448001,UT Southwestern University Hospital-Clements University,Dallas,6201 Harry Hines Blvd,19.1,3,20.1
+2019,448001,UT Southwestern University Hospital-Clements University,Dallas,6201 Harry Hines Blvd,18,1.4,19.4
+2016,126000,UTMB Angleton Danbury Medical Center,Angleton,132 Hospital Drive,17.9,2.7,3.2
+2017,126000,UTMB Angleton Danbury Medical Center,Angleton,132 Hospital Drive,23,2.7,6
+2018,126000,UTMB Angleton Danbury Medical Center,Angleton,132 Hospital Drive,20.4,1.4,8.3
+2019,126000,UTMB Angleton Danbury Medical Center,Angleton,132 Hospital Drive,18.1,0.4,NA
+2019,975354,UTMB Clear Lake Hospital,Webster,200 Blossom Street,18.5,8.2,8.1
+2016,975140,UTMB League City Campus Hospital,League City,2240 Gulf Freeway South,16.7,12.4,7.4
+2017,975140,UTMB League City Campus Hospital,League City,2240 Gulf Freeway South,20.4,12,7.2
+2018,975140,UTMB League City Campus Hospital,League City,2240 Gulf Freeway South,22.1,12.1,6.5
+2019,975140,UTMB League City Campus Hospital,League City,2240 Gulf Freeway South,18.8,11.5,NA
+2016,063000,Uvalde Memorial Hospital,Uvalde,1025 Garner Field Road,6.8,0.7,5.3
+2017,063000,Uvalde Memorial Hospital,Uvalde,1025 Garner Field Road,8.5,NA,3.2
+2018,063000,Uvalde Memorial Hospital,Uvalde,1025 Garner Field Road,9.7,NA,3.3
+2019,063000,Uvalde Memorial Hospital,Uvalde,1025 Garner Field Road,5.5,0.3,3.6
+2016,462000,Val Verde Regional Medical Center,Del Rio,801 Bedell Avenue,14.8,24.4,NA
+2017,462000,Val Verde Regional Medical Center,Del Rio,801 Bedell Avenue,15.9,25.2,1
+2018,462000,Val Verde Regional Medical Center,Del Rio,801 Bedell Avenue,16.1,21.8,0.7
+2019,462000,Val Verde Regional Medical Center,Del Rio,801 Bedell Avenue,14.5,25.4,1.6
+2016,400000,Valley Baptist Medical Center,Harlingen,2101 Pease Street,17.6,8.2,1.3
+2017,400000,Valley Baptist Medical Center,Harlingen,2101 Pease Street,18.6,7.9,3.1
+2018,400000,Valley Baptist Medical Center,Harlingen,2101 Pease Street,20.7,9.3,1.5
+2019,400000,Valley Baptist Medical Center,Harlingen,2101 Pease Street,24.5,7.9,2.2
+2016,314001,Valley Baptist Medical Center-Brownsville,Brownsville,1040 West Jefferson Street,24.2,14.8,0.8
+2017,314001,Valley Baptist Medical Center-Brownsville,Brownsville,1040 West Jefferson Street,27,10.1,0.4
+2018,314001,Valley Baptist Medical Center-Brownsville,Brownsville,1040 West Jefferson Street,25,10.8,1.2
+2019,314001,Valley Baptist Medical Center-Brownsville,Brownsville,1040 West Jefferson Street,28.2,11.4,1
+2016,019000,Valley Regional Medical Center,Brownsville,100A Alton Gloor Boulevard,32.5,27.7,0.4
+2017,019000,Valley Regional Medical Center,Brownsville,100A Alton Gloor Boulevard,32.4,22.7,0.9
+2018,019000,Valley Regional Medical Center,Brownsville,100A Alton Gloor Boulevard,31.9,18.8,1.5
+2019,019000,Valley Regional Medical Center,Brownsville,100A Alton Gloor Boulevard,30.1,19.8,0.5
+2016,144000,Wadley Regional Medical Center,Texarkana,1000 Pine Street,14.2,15.1,3.3
+2017,144000,Wadley Regional Medical Center,Texarkana,1000 Pine Street,14.7,8.8,6.9
+2018,144000,Wadley Regional Medical Center,Texarkana,1000 Pine Street,14.2,3.8,6.9
+2019,144000,Wadley Regional Medical Center,Texarkana,1000 Pine Street,17.2,1.2,6
+2016,297000,Wilson N Jones Regional Medical Center,Sherman,500 North Highland Avenue,14.6,16.9,5.3
+2017,297000,Wilson N Jones Regional Medical Center,Sherman,500 North Highland Avenue,18.9,21.2,3.3
+2018,297000,Wilson N Jones Regional Medical Center,Sherman,500 North Highland Avenue,14.2,23,3.3
+2019,297000,Wilson N Jones Regional Medical Center,Sherman,500 North Highland Avenue,11.2,21.2,NA
+2016,973840,Wise Health Surgical Hospital,Fort Worth,3200 North Tarrant Parkway,13.1,NA,NA
+2016,254001,Wise Health System,Decatur,609 Medical Center Drive,12.5,2,6.1
+2017,254001,Wise Health System,Decatur,609 Medical Center Drive,13.2,4.4,6.6
+2018,254001,Wise Health System,Decatur,609 Medical Center Drive,9.7,0.5,10.8
+2019,254001,Wise Health System,Decatur,609 Medical Center Drive,10.7,1,22.9
+2016,010000,WJ Mangold Memorial Hospital,Lockney,320 North Main Street/PO Box 37,NA,8.3,NA
+2016,007000,Womans Hospital-Texas,Houston,7600 Fannin Street,27.3,10.1,4.4
+2017,007000,Womans Hospital-Texas,Houston,7600 Fannin Street,26,7.5,6
+2018,007000,Womans Hospital-Texas,Houston,7600 Fannin Street,25.8,8.1,5.2
+2019,007000,Womans Hospital-Texas,Houston,7600 Fannin Street,25.1,8.3,5
+2016,797101,Womens Hospital-Renaissance,Edinburg,5502 South McColl,18.1,18.9,5.7
+2017,797101,Womens Hospital-Renaissance,Edinburg,5502 South McColl,15.9,14.3,6.8
+2018,797101,Womens Hospital-Renaissance,Edinburg,5502 South McColl,15.4,11.5,6
+2019,797101,Womens Hospital-Renaissance,Edinburg,5502 South McColl,14.6,11.2,6.7
+2016,481000,Woodland Heights Medical Center,Lufkin,505 South John Redditt Drive,12.4,22.8,NA
+2017,481000,Woodland Heights Medical Center,Lufkin,505 South John Redditt Drive,12.6,14.8,0.5
+2018,481000,Woodland Heights Medical Center,Lufkin,505 South John Redditt Drive,12.7,9.5,1.8
+2019,481000,Woodland Heights Medical Center,Lufkin,505 South John Redditt Drive,13.1,8.1,1.6
+2016,023000,Yoakum Community Hospital,Yoakum,1200 Carl Ramert Drive,20,5.4,NA
+2017,023000,Yoakum Community Hospital,Yoakum,1200 Carl Ramert Drive,17.6,11.6,NA
+2016,485000,Yoakum County Hospital,Denver City,412 North Mustang Avenue,21.3,8.6,4.3
+2017,485000,Yoakum County Hospital,Denver City,412 North Mustang Avenue,18.2,9.8,13
+2018,485000,Yoakum County Hospital,Denver City,412 North Mustang Avenue,21.7,7.6,3.4
+2019,485000,Yoakum County Hospital,Denver City,412 North Mustang Avenue,17.4,7.6,8.5

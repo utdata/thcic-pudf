@@ -82,9 +82,10 @@ A series of aggregated data that may prove useful. In the `exports/` folder:
 
 ### From 03-analysis-summaries
 
-- table_2019.csv: Data: Hospital, location, episiotomy and primary cesarean rates for 2019 (or more the most up-to-date data available)
-- chart_date.json: Data: Year, ID, Hospital, episiotomy and primary cesarean rates. There is a v2 version as well.
-- summary_data: Summary data for the major categories.
+- table_2019.csv: Data: Hospital, location, episiotomy and primary cesarean rates for 2019.
+- chart_data.json: Data: Year, ID, Hospital, episiotomy and primary cesarean rates. There is a v2 version as well.
+- chart_data_print.csv: Same as `chart_data` but as csv for print.
+- summary_data.csv: Summary data for the major categories.
 
 ### From 0102-process-providers
 

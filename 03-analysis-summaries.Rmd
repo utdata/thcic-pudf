@@ -189,13 +189,29 @@ And write to JSON.
 
 ```{r chart_data}
 chart_data <- chart_texas %>% 
-  rbind(chart_rates)
+  bind_rows(chart_rates)
 
 chart_data %>% 
   write_json("exports/chart_data.json")
 
 # peek
 chart_data %>% head(12)
+```
+
+#### Chart data for print
+
+Right now there are now special needs for print beyond format, but updates can go here if they arise.
+
+```{r chart_data_print}
+# set new df
+chart_data_print <- chart_data
+
+# write the data
+chart_data_print %>% 
+  write_csv("exports/chart_data_print.csv")
+
+# peek at the data
+chart_data_print %>% head(20)
 ```
 
 ### Alt bind method for json
