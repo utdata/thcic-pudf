@@ -1478,6 +1478,55 @@ window.onload = function() {
   PagedTableDoc.initAll();
 };
 </script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+ul > li > .anchor-section {display: none;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '' || x.matches(':empty')) {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -1523,6 +1572,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 
 
@@ -1638,13 +1688,21 @@ summary {
 
 <div id="birth-outcomes-for-texas" class="section level1">
 <h1>Birth outcomes for Texas</h1>
-<p>This is an analysis for a series of birth outcomes. The data used is the <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">Texas Hospital Inpatient Discharge Public Use Data File</a>, [1q2016 - 4q2019]. Texas Department of State Health Services, Center for Health Statistics, Austin, Texas.</p>
+<p>This is an analysis for a series of stories about birth outcomes. The data used is the <a href="https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm">Texas Hospital Inpatient Discharge Public Use Data File</a>, [1q2016 - 4q2019]. Texas Department of State Health Services, Center for Health Statistics, Austin, Texas.</p>
 <p>No raw data is made public through this project. The data is typically sold by the Center for Health Statistics. Details at the link above. This analysis uses files for discharges from 2016 to 2019, though a typically very small number of discharges for the fourth quarter of 2019 may not be included because of allowed reporting delays.</p>
 <p>No patients or doctors have been revealed in the data or analysis. Suppressions have been applied for smaller aggregations to protect privacy.</p>
 <p>This analysis is by:</p>
 <p><a href="https://journalism.utexas.edu/faculty/christian-mcdonald"><strong>CHRISTIAN MCDONALD</strong></a>, Assistant Professor of Practice<br />
 School of Journalism and Media, Moody College of Communication<br />
 The University of Texas at Austin</p>
+<div id="stories" class="section level2">
+<h2>Stories</h2>
+<ul>
+<li><a href="https://www.expressnews.com/projects/2020/off-the-chart/cesarean-texas-mothers/">Birth on demand:</a> Whether a woman delivers by cesarean has less to do with her health than the hospital she goes to. Case in point: Doctors Hospital of Laredo, where rates of surgical intervention during childbirth are way above the norm. Experts say something isn’t right.</li>
+<li><a href="https://www.expressnews.com/projects/2020/off-the-chart/episiotomy-texas-mothers/">More than ‘a little snip’:</a> Two Texas hospitals performed episiotomies at rates four to six times the recommended level last year. But women giving birth should know: You have the final say.</li>
+<li><a href="https://www.expressnews.com/projects/2020/off-the-chart/cesarean-episiotomy-texas-hospitals-database/">Database:</a> C-section and episiotomy rates in Texas hospitals.</li>
+</ul>
+</div>
 <div id="methodology" class="section level2">
 <h2>Methodology</h2>
 <ul>
@@ -1757,7 +1815,7 @@ The University of Texas at Austin</p>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

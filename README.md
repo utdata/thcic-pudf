@@ -12,7 +12,7 @@ knit: (function(inputFile, encoding) { rmarkdown::render(
 
 # Birth outcomes for Texas
 
-This is an analysis for a series of birth outcomes. The data used is the [Texas Hospital Inpatient Discharge Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm), [1q2016 - 4q2019]. Texas Department of State Health Services, Center for Health Statistics, Austin, Texas.
+This is an analysis for a series of stories about birth outcomes. The data used is the [Texas Hospital Inpatient Discharge Public Use Data File](https://www.dshs.texas.gov/thcic/hospitals/Inpatientpudf.shtm), [1q2016 - 4q2019]. Texas Department of State Health Services, Center for Health Statistics, Austin, Texas.
 
 No raw data is made public through this project. The data is typically sold by the Center for Health Statistics. Details at the link above. This analysis uses files for discharges from 2016 to 2019, though a typically very small number of discharges for the fourth quarter of 2019 may not be included because of allowed reporting delays.
 
@@ -23,6 +23,12 @@ This analysis is by:
 [**CHRISTIAN MCDONALD**](https://journalism.utexas.edu/faculty/christian-mcdonald), Assistant Professor of Practice\
 School of Journalism and Media, Moody College of Communication\
 The University of Texas at Austin
+
+## Stories
+
+- [Birth on demand:](https://www.expressnews.com/projects/2020/off-the-chart/cesarean-texas-mothers/) Whether a woman delivers by cesarean has less to do with her health than the hospital she goes to. Case in point: Doctors Hospital of Laredo, where rates of surgical intervention during childbirth are way above the norm. Experts say something isn’t right.
+- [More than ‘a little snip’:](https://www.expressnews.com/projects/2020/off-the-chart/episiotomy-texas-mothers/) Two Texas hospitals performed episiotomies at rates four to six times the recommended level last year. But women giving birth should know: You have the final say.
+- [Database:](https://www.expressnews.com/projects/2020/off-the-chart/cesarean-episiotomy-texas-hospitals-database/) C-section and episiotomy rates in Texas hospitals.
 
 ## Methodology
 
